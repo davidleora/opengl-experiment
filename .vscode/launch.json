@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/davidleora/Projects/media-informatics-experiment/opengl-experiment/week-1",
+      "program": "/Users/davidleora/Projects/media-informatics-experiment/opengl-experiment/week-1/build/Debug/outDebug"
+    }
+  ]
+}

@@ -6,10 +6,11 @@ void display()
     glClear(GL_COLOR_BUFFER_BIT);
 
     glPushMatrix();
-    glTranslatef(0.0, 0.4, 0.0);
+    glTranslatef(0.0, 0.35, 0.0);
 
     drawHand();
     drawHead();
+    drawLegs();
     drawBody();
     drawEyes();
     drawNose();

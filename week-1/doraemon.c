@@ -105,6 +105,50 @@ void drawCircleNoOutline(float x, float y, float radius, float r, float g, float
     glEnd();
 }
 
+// Draw a plain horizontal oval
+void drawPlumpOval(float centerX, float centerY, float radiusX, float radiusY, float plumpFactor, float r, float g, float b)
+{
+    int numSegments = 100;
+    float angle;
+
+    // Fill the oval
+    glColor3f(r, g, b);
+    glBegin(GL_POLYGON);
+    for (int i = 0; i <= numSegments; i++)
+    {
+        angle = 2.0f * 3.14159f * i / numSegments;
+        float x = radiusX * cos(angle);
+        float y = radiusY * sin(angle);
+
+        if (y < 0)
+        {
+            y *= (1.0 + plumpFactor);
+        }
+
+        glVertex2f(centerX + x, centerY + y);
+    }
+    glEnd();
+
+    // Outline the oval
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glLineWidth(3.0f);
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i <= numSegments; i++)
+    {
+        angle = 2.0f * 3.14159f * i / numSegments;
+        float x = radiusX * cos(angle);
+        float y = radiusY * sin(angle);
+
+        if (y < 0)
+        {
+            y *= (1.0 + plumpFactor);
+        }
+
+        glVertex2f(centerX + x, centerY + y);
+    }
+    glEnd();
+}
+
 // Draw Vertical Oval
 void drawVerticalOval(float x, float y, float radiusX, float radiusY, float r, float g, float b)
 {
@@ -511,20 +555,7 @@ void drawBell()
     glEnd();
 }
 
-// 8. Cover the bottom part of the head
-void coverBottomPart()
-{
-    glColor3f(173.0 / 255.0, 203.0 / 255.0, 241.0 / 255.0);
-
-    glBegin(GL_QUADS);
-    glVertex2f(-0.7, -0.61);
-    glVertex2f(0.7, -0.61);
-    glVertex2f(0.7, -0.4);
-    glVertex2f(-0.7, -0.4);
-    glEnd();
-}
-
-// 9. Body
+// 8. Body
 void drawBody()
 {
 
@@ -574,8 +605,6 @@ void drawBody()
         glVertex2f(x, y);
     }
 
-    float b = -0.005f;
-    float m = (a * (1.1f - k) * (1.1f - k) + h + gapWidth / 2) / 2;
     for (float x = -a * (-1.1f - k) * (-1.1f - k) + h2; x <= -gapWidth / 2; x += 0.01f)
     {
         glVertex2f(x, -1.1f);
@@ -591,6 +620,75 @@ void drawBody()
     drawCircleNoOutline(0.0, -0.73, 0.32, 41.0 / 255.0, 134.0 / 255.0, 204.0 / 255.0);
     drawEmphasizedHorizontalOval(0.0, -0.72, 0.4, 0.31, 0.11, 1.0, 1.0, 1.0);
     drawMagicPocket(0.0, -0.73, 0.28, 0.2, 0.05, 1.0, 1.0, 1.0);
+
+    glColor3f(0.0f, 0.0f, 0.0f); // Black color for the outline
+    glLineWidth(3.0f);
+
+    glBegin(GL_LINE_STRIP);
+    for (float y = -0.4f; y >= -1.11f; y -= (1.1f - 0.4f) / numSegments)
+    {
+        if (y <= -0.5f)
+        {
+            float x = a * (y - k) * (y - k) + h;
+            glVertex2f(x, y);
+        }
+    }
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+    for (float x = a * (-1.1f - k) * (-1.1f - k) + h; x >= -a * (-1.1f - k) * (-1.1f - k) + h3 - 0.01; x -= 0.01f)
+    {
+        glVertex2f(x, -1.1f);
+    }
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+    for (float y = -1.1f; y <= -0.4f; y += (1.1f - 0.4f) / numSegments)
+    {
+        if (y <= -1.04f)
+        {
+            float x = -a * (y - k) * (y - k) + h3;
+            glVertex2f(x, y);
+        }
+    }
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+    for (float y = -0.4f; y >= -1.11f; y -= (1.1f - 0.4f) / numSegments)
+    {
+        if (y <= -0.5f)
+        {
+            float x = -a * (y - k) * (y - k) + h2;
+            glVertex2f(x, y);
+        }
+    }
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+    for (float x = -a * (-1.1f - k) * (-1.1f - k) + h2; x <= -gapWidth / 2 + 0.03; x += 0.01f)
+    {
+        glVertex2f(x, -1.1f);
+    }
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+    for (float x = -gapWidth / 2 + 0.02; x <= gapWidth / 2 - 0.02; x += 0.01f)
+    {
+        float y = -1.05f;
+        glVertex2f(x, y);
+    }
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+    for (float y = -1.1f; y <= -0.4f; y += (1.1f - 0.4f) / numSegments)
+    {
+        if (y <= -1.04f)
+        {
+            float x = a * (y - k) * (y - k) + h4;
+            glVertex2f(x, y);
+        }
+    }
+    glEnd();
 }
 
 void drawHand()
@@ -634,4 +732,11 @@ void drawHand()
 
     drawCircle(0.7, -0.65, 0.1, 255 / 255.0, 255.0 / 255.0, 255.0 / 255.0);
     drawCircle(-0.7, -0.2, 0.1, 255 / 255.0, 255.0 / 255.0, 255.0 / 255.0);
+}
+
+// 10. Legs
+void drawLegs()
+{
+    drawPlumpOval(0.265f, -1.145f, 0.265f, 0.1f, 0.3f, 1.0f, 1.0f, 1.0f);  // Right leg
+    drawPlumpOval(-0.265f, -1.145f, 0.265f, 0.1f, 0.3f, 1.0f, 1.0f, 1.0f); // Left leg
 }

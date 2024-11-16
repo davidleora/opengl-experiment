@@ -84,7 +84,7 @@ void drawCircle(float x, float y, float radius, float r, float g, float b)
     glEnd();
 }
 
-// Nose Inner Circle
+// Draw Nose Inner Circle
 void drawCircleNoOutline(float x, float y, float radius, float r, float g, float b)
 {
     int numSegments = 100;
@@ -135,6 +135,72 @@ void drawVerticalOval(float x, float y, float radiusX, float radiusY, float r, f
         float dy = radiusY * sin(angle);
         glVertex2f(x + dx, y + dy);
     }
+    glEnd();
+}
+
+// Draw Rounded Rectangle
+void drawRoundedRect(float x, float y, float width, float height, float borderRadius, float r, float g, float b)
+{
+    int numSegments = 50; // 円の滑らかさを調整
+    float angle;
+
+    // 長方形部分を描画
+    glColor3f(r, g, b);
+    glBegin(GL_POLYGON);
+
+    // 上辺（左から右）
+    glVertex2f(x - width / 2 + borderRadius, y + height / 2);
+    glVertex2f(x + width / 2 - borderRadius, y + height / 2);
+
+    // 右辺（上から下）
+    glVertex2f(x + width / 2, y + height / 2 - borderRadius);
+    glVertex2f(x + width / 2, y - height / 2 + borderRadius);
+
+    // 下辺（右から左）
+    glVertex2f(x + width / 2 - borderRadius, y - height / 2);
+    glVertex2f(x - width / 2 + borderRadius, y - height / 2);
+
+    // 左辺（下から上）
+    glVertex2f(x - width / 2, y - height / 2 + borderRadius);
+    glVertex2f(x - width / 2, y + height / 2 - borderRadius);
+
+    glEnd();
+
+    // 四隅の円を描画
+    glBegin(GL_POLYGON);
+
+    // 左上
+    for (int i = 0; i <= numSegments; i++)
+    {
+        angle = 3.14159f * i / (2 * numSegments); // 0° to 90°
+        glVertex2f(x - width / 2 + borderRadius + borderRadius * cos(angle),
+                   y + height / 2 - borderRadius + borderRadius * sin(angle));
+    }
+
+    // 右上
+    for (int i = 0; i <= numSegments; i++)
+    {
+        angle = 3.14159f * (1 + i / (2.0 * numSegments)); // 90° to 180°
+        glVertex2f(x + width / 2 - borderRadius + borderRadius * cos(angle),
+                   y + height / 2 - borderRadius + borderRadius * sin(angle));
+    }
+
+    // 右下
+    for (int i = 0; i <= numSegments; i++)
+    {
+        angle = 3.14159f * (2 + i / (2.0 * numSegments)); // 180° to 270°
+        glVertex2f(x + width / 2 - borderRadius + borderRadius * cos(angle),
+                   y - height / 2 + borderRadius + borderRadius * sin(angle));
+    }
+
+    // 左下
+    for (int i = 0; i <= numSegments; i++)
+    {
+        angle = 3.14159f * (3 + i / (2.0 * numSegments)); // 270° to 360°
+        glVertex2f(x - width / 2 + borderRadius + borderRadius * cos(angle),
+                   y - height / 2 + borderRadius + borderRadius * sin(angle));
+    }
+
     glEnd();
 }
 
@@ -272,21 +338,19 @@ void drawCollar()
     float radiusX = halfWidth;
     float radiusY = halfHeight;
 
-    float dyStep = 0.001; // Small step for smooth lines
+    float dyStep = 0.001;
 
-    // Loop to draw stacked lines
     for (float j = 0; j <= height; j += dyStep)
     {
         glColor3f(1.0, 0.0, 0.0); // Red color
 
-        // Draw a single horizontal strip
         glBegin(GL_LINE_STRIP);
         for (int i = 0; i <= 100; i++)
         {
             float angle = 3.14159 + (3.14159 * i / 100); // From 180° to 360°
             float dx = radiusX * cos(angle);
             float dy = radiusY * sin(angle);
-            glVertex2f(centerX + dx, centerY + dy - j); // Stack vertically by subtracting j
+            glVertex2f(centerX + dx, centerY + dy - j);
         }
         glEnd();
     }
@@ -338,8 +402,8 @@ void drawBell()
     float centerX = 0.0;
     float centerY = -0.47;
     float width = 0.19;
-    float height = 0.03;  // Arc height
-    float dyStep = 0.001; // Small step for smooth lines
+    float height = 0.03;
+    float dyStep = 0.001;
     int numSegments = 100;
 
     float halfWidth = width / 2.0;
@@ -349,7 +413,7 @@ void drawBell()
     // Loop to draw stacked yellow lines (upside-down)
     for (float j = 0; j <= height; j += dyStep)
     {
-        glColor3f(1.0, 215.0 / 255.0, 0.0); // Yellow color
+        glColor3f(1.0, 215.0 / 255.0, 0.0);
 
         glBegin(GL_LINE_STRIP);
         for (int i = 0; i <= numSegments; i++)
@@ -357,7 +421,7 @@ void drawBell()
             float angle = (3.14159 * i / numSegments); // From 0° to 180°
             float dx = radiusX * cos(angle) * 0.92;
             float dy = radiusY * sin(angle);
-            glVertex2f(centerX + dx, centerY + dy + j); // Stack lines upward
+            glVertex2f(centerX + dx, centerY + dy + j);
         }
         glEnd();
     }
@@ -372,14 +436,14 @@ void drawBell()
         float angle = (3.14159 * i / numSegments); // From 0° to 180°
         float dx = radiusX * cos(angle) * 0.92;
         float dy = radiusY * sin(angle);
-        glVertex2f(centerX + dx, centerY + dy + height); // Top arc
+        glVertex2f(centerX + dx, centerY + dy + height);
     }
     for (int i = 0; i <= numSegments; i++)
     {
         float angle = 3.14159 + (3.14159 * i / numSegments); // From 180° to 360°
         float dx = radiusX * cos(angle);
         float dy = radiusY * sin(angle);
-        glVertex2f(centerX + dx, centerY - dy); // Bottom arc
+        glVertex2f(centerX + dx, centerY - dy);
     }
     glEnd();
 }
@@ -395,4 +459,88 @@ void coverBottomPart()
     glVertex2f(0.7, -0.4);
     glVertex2f(-0.7, -0.4);
     glEnd();
+}
+
+// 9. Body
+void drawBody()
+{
+
+    int numSegments = 50;    // Number of segments for the curve
+    float a = -0.28571f;     // Parabola curvature factor
+    float h = 0.52f;         // X-coordinate of the vertex (right side)
+    float h2 = -0.52f;       // X-coordinate of the vertex (left side)
+    float k = -0.75f;        // Y-coordinate of the vertex
+    float gapWidth = 0.1f;   // Width of the gap between the legs
+    float gapHeight = -1.0f; // Height of the gap (higher than -1.1)
+    float h3 = gapWidth / 2 - 0.035f;
+    float h4 = -gapWidth / 2 + 0.035f;
+
+    glColor3f(41.0f / 255.0f, 134.0f / 255.0f, 204.0f / 255.0f); // Blue color for the body
+
+    // **Right Side of the Body**
+    glBegin(GL_POLYGON);
+
+    // **Step 2:** Move up along the gap to the top edge
+    glVertex2f(gapWidth / 2, -0.4f);
+
+    // **Step 3:** Top horizontal line (from gap to right edge)
+    for (float x = gapWidth / 2; x <= 0.485f; x += 0.01f)
+    {
+        glVertex2f(x, -0.4f);
+    }
+
+    // **Step 4:** Right side curve (from top to bottom)
+    for (float y = -0.4f; y >= -1.1f; y -= (1.1f - 0.4f) / numSegments)
+    {
+        float x = a * (y - k) * (y - k) + h;
+        glVertex2f(x, y);
+    }
+
+    // **Step 5:** Bottom horizontal line (from curve back to gap)
+    for (float x = a * (-1.1f - k) * (-1.1f - k) + h; x >= gapWidth / 2; x -= 0.01f)
+    {
+        glVertex2f(x, -1.1f);
+    }
+
+    for (float y = -1.1f; y <= -0.4f; y += (1.1f - 0.4f) / numSegments)
+    {
+        float x = -a * (y - k) * (y - k) + h3;
+        glVertex2f(x, y);
+    }
+
+    glEnd();
+
+    // **Left Side of the Body**
+    glBegin(GL_POLYGON);
+
+    // **Step 2:** Move up along the gap to the top edge
+    glVertex2f(-gapWidth / 2, -0.4f);
+
+    // **Step 3:** Top horizontal line (from gap to left edge)
+    for (float x = -gapWidth / 2; x >= -0.485f; x -= 0.01f)
+    {
+        glVertex2f(x, -0.4f);
+    }
+
+    // **Step 4:** Left side curve (from top to bottom)
+    for (float y = -0.4f; y >= -1.1f; y -= (1.1f - 0.4f) / numSegments)
+    {
+        float x = -a * (y - k) * (y - k) + h2;
+        glVertex2f(x, y);
+    }
+
+    // **Step 5:** Bottom horizontal line (from curve back to gap)
+    for (float x = -a * (-1.1f - k) * (-1.1f - k) + h2; x <= -gapWidth / 2; x += 0.01f)
+    {
+        glVertex2f(x, -1.1f);
+    }
+
+    for (float y = -1.1f; y <= -0.4f; y += (1.1f - 0.4f) / numSegments)
+    {
+        float x = a * (y - k) * (y - k) + h4;
+        glVertex2f(x, y);
+    }
+    glEnd();
+
+    drawCircleNoOutline(0.0, -0.73, 0.32, 41.0 / 255.0, 134.0 / 255.0, 204.0 / 255.0);
 }

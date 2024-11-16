@@ -5,14 +5,19 @@ void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
+    glPushMatrix();
+    glTranslatef(0.0, 0.4, 0.0);
+
     drawHead();
-    coverBottomPart();
+    drawBody();
     drawEyes();
     drawNose();
     drawMouth();
     drawMoustache();
     drawCollar();
     drawBell();
+
+    glPopMatrix();
 
     glFlush();
 }

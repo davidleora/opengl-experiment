@@ -25,4 +25,7 @@ void drawBell(); // Draws the outer bell and inner bell
 // 8. Cover Bottom Part
 void coverBottomPart(); // Draws the bottom part of the face
 
+// 9. Body
+void drawBody(); // Draws the body
+
 #endif // DORAEMON_H

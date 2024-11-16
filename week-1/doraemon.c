@@ -182,6 +182,7 @@ void drawVerticalOval(float x, float y, float radiusX, float radiusY, float r, f
     glEnd();
 }
 
+// Draw Emphasized Horizontal Oval
 void drawEmphasizedHorizontalOval(float centerX, float centerY, float radiusX, float radiusY, float bulgeFactor, float r, float g, float b)
 {
     int numSegments = 100;
@@ -224,6 +225,7 @@ void drawEmphasizedHorizontalOval(float centerX, float centerY, float radiusX, f
     glEnd();
 }
 
+// Draw Magic Pocket
 void drawMagicPocket(float centerX, float centerY, float radiusX, float radiusY, float pocketDepth, float r, float g, float b)
 {
     int numSegments = 100;
@@ -311,6 +313,7 @@ void drawRoundedRect(float x, float y, float width, float height, float borderRa
     glEnd();
 }
 
+// Draw Right Eye Wink
 void drawWink(float x, float y, float radiusX, float radiusY, int topHalf)
 {
     int numSegments = 50;
@@ -396,7 +399,7 @@ void drawMouth()
     glEnd();
 }
 
-// 5. Moustache
+// 5. Whiskers
 void drawMoustache()
 {
     // TODO: Implement drawing of the moustache
@@ -691,6 +694,7 @@ void drawBody()
     glEnd();
 }
 
+// 9. Hand
 void drawHand()
 {
     glColor3f(41.0f / 255.0f, 134.0f / 255.0f, 204.0f / 255.0f);

@@ -13,8 +13,8 @@ void drawNose(); // Draws the red nose and white inner nose
 // 4. Mouth
 void drawMouth(); // Draws the vertical line and the smile
 
-// 5. Moustache
-void drawMoustache(); // Draws the moustache
+// 5. Whiskers
+void drawMoustache(); // Draws the whiskers
 
 // 6. Collar
 void drawCollar(); // Draws the collar
@@ -22,16 +22,13 @@ void drawCollar(); // Draws the collar
 // 7. Bell
 void drawBell(); // Draws the outer bell and inner bell
 
-// 8. Cover Bottom Part
-void coverBottomPart(); // Draws the bottom part of the face
-
-// 9. Body
+// 8. Body
 void drawBody(); // Draws the body
 
-// 10. Hand
+// 9. Hand
 void drawHand(); // Draws the hand
 
-// 11. Legs
+// 10. Legs
 void drawLegs(); // Draws the legs
 
 #endif // DORAEMON_H

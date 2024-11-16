@@ -6,6 +6,7 @@ void display()
     glClear(GL_COLOR_BUFFER_BIT);
 
     drawHead();
+    coverBottomPart();
     drawEyes();
     drawNose();
     drawMouth();

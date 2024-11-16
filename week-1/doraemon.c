@@ -206,64 +206,47 @@ void drawCollar()
     float halfHeight = height / 2.0;
     float radiusX = halfWidth;
     float radiusY = halfHeight;
-    int numSegments = 50;
 
-    glColor3f(1.0, 0.0, 0.0); // Red color
+    float dyStep = 0.001; // Small step for smooth lines
 
-    glBegin(GL_POLYGON);
-
-    // From top left to top right (downward-facing arc)
-    for (int i = 0; i <= numSegments; i++)
+    // Loop to draw stacked lines
+    for (float j = 0; j <= height; j += dyStep)
     {
-        float angle = 3.14159 + (3.14159 * i / numSegments); // From 180° to 360°
-        float dx = radiusX * cos(angle);
-        float dy = radiusY * sin(angle);
-        glVertex2f(centerX + dx, centerY + dy);
+        glColor3f(1.0, 0.0, 0.0); // Red color
+
+        // Draw a single horizontal strip
+        glBegin(GL_LINE_STRIP);
+        for (int i = 0; i <= 100; i++)
+        {
+            float angle = 3.14159 + (3.14159 * i / 100); // From 180° to 360°
+            float dx = radiusX * cos(angle);
+            float dy = radiusY * sin(angle);
+            glVertex2f(centerX + dx, centerY + dy - j); // Stack vertically by subtracting j
+        }
+        glEnd();
     }
-
-    // From top right to bottom right
-    glVertex2f(centerX + halfWidth, centerY - halfHeight);
-
-    // From bottom right to bottom left (downward-facing arc)
-    for (int i = 0; i <= numSegments; i++)
-    {
-        float angle = (3.14159 * i / numSegments); // From 0° to 180°
-        float dx = radiusX * cos(angle);
-        float dy = radiusY * sin(angle);
-        glVertex2f(centerX + dx, centerY - dy - height);
-    }
-
-    // From bottom left to top left
-    glVertex2f(centerX - halfWidth, centerY - halfHeight);
-
-    glEnd();
 
     // Draw black outline
     glColor3f(0.0, 0.0, 0.0);
     glLineWidth(2.0);
 
     glBegin(GL_LINE_LOOP);
-
-    for (int i = 0; i <= numSegments; i++)
+    for (int i = 0; i <= 100; i++)
     {
-        float angle = 3.14159 + (3.14159 * i / numSegments); // From 180° to 360°
+        float angle = 3.14159 + (3.14159 * i / 100); // From 180° to 360°
         float dx = radiusX * cos(angle);
         float dy = radiusY * sin(angle);
         glVertex2f(centerX + dx, centerY + dy);
     }
-
     glVertex2f(centerX + halfWidth, centerY - halfHeight);
-
-    for (int i = 0; i <= numSegments; i++)
+    for (int i = 0; i <= 100; i++)
     {
-        float angle = (3.14159 * i / numSegments); // From 0° to 180°
+        float angle = (3.14159 * i / 100); // From 0° to 180°
         float dx = radiusX * cos(angle);
         float dy = radiusY * sin(angle);
         glVertex2f(centerX + dx, centerY - dy - height);
     }
-
     glVertex2f(centerX - halfWidth, centerY - halfHeight);
-
     glEnd();
 }
 
@@ -271,4 +254,17 @@ void drawCollar()
 void drawBell()
 {
     // TODO: Implement drawing of the outer bell and inner bell
+}
+
+// 8. Cover the bottom part of the head
+void coverBottomPart()
+{
+    glColor3f(173.0 / 255.0, 203.0 / 255.0, 241.0 / 255.0);
+
+    glBegin(GL_QUADS);
+    glVertex2f(-0.7, -0.61);
+    glVertex2f(0.7, -0.61);
+    glVertex2f(0.7, -0.4);
+    glVertex2f(-0.7, -0.4);
+    glEnd();
 }

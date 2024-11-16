@@ -22,4 +22,7 @@ void drawCollar(); // Draws the collar
 // 7. Bell
 void drawBell(); // Draws the outer bell and inner bell
 
+// 8. Cover Bottom Part
+void coverBottomPart(); // Draws the bottom part of the face
+
 #endif // DORAEMON_H

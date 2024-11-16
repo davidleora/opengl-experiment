@@ -28,4 +28,7 @@ void coverBottomPart(); // Draws the bottom part of the face
 // 9. Body
 void drawBody(); // Draws the body
 
+// 10. Hand
+void drawHand(); // Draws the hand
+
 #endif // DORAEMON_H

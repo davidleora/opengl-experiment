@@ -291,7 +291,7 @@ void drawHead()
 {
     // TODO: Implement drawing of the main blue head and inner white head
     drawFlattenedCircle(0.0, 0.0, 0.6, 41.0 / 255.0, 134.0 / 255.0, 204.0 / 255.0, 0.05);
-    drawFlattenedCircle(0.0, -0.035, 0.555, 1.0, 1.0, 1.0, 0.21);
+    drawFlattenedCircle(0.0, -0.033, 0.56, 1.0, 1.0, 1.0, 0.21);
 }
 
 // 2. Eyes
@@ -528,38 +528,29 @@ void coverBottomPart()
 void drawBody()
 {
 
-    int numSegments = 50;    // Number of segments for the curve
-    float a = -0.28571f;     // Parabola curvature factor
-    float h = 0.52f;         // X-coordinate of the vertex (right side)
-    float h2 = -0.52f;       // X-coordinate of the vertex (left side)
-    float k = -0.75f;        // Y-coordinate of the vertex
-    float gapWidth = 0.1f;   // Width of the gap between the legs
-    float gapHeight = -1.0f; // Height of the gap (higher than -1.1)
+    int numSegments = 50;
+    float a = -0.12245f;
+    float h = 0.50f;
+    float h2 = -0.50f;
+    float k = -0.75f;
+    float gapWidth = 0.1f;
+    float gapHeight = -1.0f;
     float h3 = gapWidth / 2 - 0.035f;
     float h4 = -gapWidth / 2 + 0.035f;
 
     glColor3f(41.0f / 255.0f, 134.0f / 255.0f, 204.0f / 255.0f); // Blue color for the body
 
-    // **Right Side of the Body**
+    // Right Side of the Body
     glBegin(GL_POLYGON);
 
-    // **Step 2:** Move up along the gap to the top edge
     glVertex2f(gapWidth / 2, -0.4f);
 
-    // **Step 3:** Top horizontal line (from gap to right edge)
-    for (float x = gapWidth / 2; x <= 0.485f; x += 0.01f)
-    {
-        glVertex2f(x, -0.4f);
-    }
-
-    // **Step 4:** Right side curve (from top to bottom)
     for (float y = -0.4f; y >= -1.1f; y -= (1.1f - 0.4f) / numSegments)
     {
         float x = a * (y - k) * (y - k) + h;
         glVertex2f(x, y);
     }
 
-    // **Step 5:** Bottom horizontal line (from curve back to gap)
     for (float x = a * (-1.1f - k) * (-1.1f - k) + h; x >= gapWidth / 2; x -= 0.01f)
     {
         glVertex2f(x, -1.1f);
@@ -570,29 +561,21 @@ void drawBody()
         float x = -a * (y - k) * (y - k) + h3;
         glVertex2f(x, y);
     }
-
     glEnd();
 
-    // **Left Side of the Body**
+    // Left Side of the Body
     glBegin(GL_POLYGON);
 
-    // **Step 2:** Move up along the gap to the top edge
     glVertex2f(-gapWidth / 2, -0.4f);
 
-    // **Step 3:** Top horizontal line (from gap to left edge)
-    for (float x = -gapWidth / 2; x >= -0.485f; x -= 0.01f)
-    {
-        glVertex2f(x, -0.4f);
-    }
-
-    // **Step 4:** Left side curve (from top to bottom)
     for (float y = -0.4f; y >= -1.1f; y -= (1.1f - 0.4f) / numSegments)
     {
         float x = -a * (y - k) * (y - k) + h2;
         glVertex2f(x, y);
     }
 
-    // **Step 5:** Bottom horizontal line (from curve back to gap)
+    float b = -0.005f;
+    float m = (a * (1.1f - k) * (1.1f - k) + h + gapWidth / 2) / 2;
     for (float x = -a * (-1.1f - k) * (-1.1f - k) + h2; x <= -gapWidth / 2; x += 0.01f)
     {
         glVertex2f(x, -1.1f);
@@ -606,8 +589,49 @@ void drawBody()
     glEnd();
 
     drawCircleNoOutline(0.0, -0.73, 0.32, 41.0 / 255.0, 134.0 / 255.0, 204.0 / 255.0);
+    drawEmphasizedHorizontalOval(0.0, -0.72, 0.4, 0.31, 0.11, 1.0, 1.0, 1.0);
+    drawMagicPocket(0.0, -0.73, 0.28, 0.2, 0.05, 1.0, 1.0, 1.0);
+}
 
-    drawEmphasizedHorizontalOval(0.0, -0.72, 0.42, 0.31, 0.11, 1.0, 1.0, 1.0);
+void drawHand()
+{
+    glColor3f(41.0f / 255.0f, 134.0f / 255.0f, 204.0f / 255.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(0.7, -0.59);
+    glVertex2f(0.7, -0.72);
+    glVertex2f(0.49, -0.62);
+    glVertex2f(0.487, -0.418);
+    glEnd();
 
-    drawMagicPocket(0.0, -0.73, 0.3, 0.2, 0.05, 1.0, 1.0, 1.0);
+    glBegin(GL_QUADS);
+    glVertex2f(-0.64, -0.18);
+    glVertex2f(-0.72, -0.3);
+    glVertex2f(-0.49, -0.62);
+    glVertex2f(-0.487, -0.3);
+    glEnd();
+
+    glColor3f(0.0, 0.0, 0.0);
+    glLineWidth(3.0);
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(0.68, -0.718);
+    glVertex2f(0.49, -0.62);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(0.69, -0.58);
+    glVertex2f(0.48, -0.41);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(-0.72, -0.3);
+    glVertex2f(-0.49, -0.62);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+    glVertex2f(-0.64, -0.18);
+    glVertex2f(-0.487, -0.3);
+    glEnd();
+
+    drawCircle(0.7, -0.65, 0.1, 255 / 255.0, 255.0 / 255.0, 255.0 / 255.0);
+    drawCircle(-0.7, -0.2, 0.1, 255 / 255.0, 255.0 / 255.0, 255.0 / 255.0);
 }

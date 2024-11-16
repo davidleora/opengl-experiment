@@ -2,7 +2,7 @@
 #include <math.h>
 #include "doraemon.h"
 
-// Draw Circle
+// Draw Flattened Circle (Head)
 void drawFlattenedCircle(float x, float y, float radius, float r, float g, float b, float flattenFactor)
 {
     int numSegments = 100;
@@ -29,7 +29,7 @@ void drawFlattenedCircle(float x, float y, float radius, float r, float g, float
 
     // Draw the black outline
     glColor3f(0.0, 0.0, 0.0);
-    glLineWidth(2.0);
+    glLineWidth(3.0);
     glBegin(GL_LINE_LOOP);
     for (int i = 0; i < numSegments; i++)
     {
@@ -48,6 +48,7 @@ void drawFlattenedCircle(float x, float y, float radius, float r, float g, float
     glEnd();
 }
 
+// Draw Circle
 void drawCircle(float x, float y, float radius, float r, float g, float b)
 {
     int numSegments = 100;
@@ -69,7 +70,7 @@ void drawCircle(float x, float y, float radius, float r, float g, float b)
 
     // Draw the black outline
     glColor3f(0.0, 0.0, 0.0);
-    glLineWidth(2.0);
+    glLineWidth(3.0);
     glBegin(GL_LINE_LOOP);
     for (int i = 0; i < numSegments; i++)
     {
@@ -83,6 +84,7 @@ void drawCircle(float x, float y, float radius, float r, float g, float b)
     glEnd();
 }
 
+// Nose Inner Circle
 void drawCircleNoOutline(float x, float y, float radius, float r, float g, float b)
 {
     int numSegments = 100;
@@ -124,7 +126,7 @@ void drawVerticalOval(float x, float y, float radiusX, float radiusY, float r, f
 
     // Draw black outline
     glColor3f(0.0, 0.0, 0.0);
-    glLineWidth(2.0);
+    glLineWidth(3.0);
     glBegin(GL_LINE_LOOP);
     for (int i = 0; i < numSegments; i++)
     {
@@ -143,7 +145,7 @@ void drawWink(float x, float y, float radiusX, float radiusY, int topHalf)
     float angleEnd = topHalf ? 3.14159 : 2 * 3.14159;
 
     glColor3f(0.0, 0.0, 0.0);
-    glLineWidth(2.5);
+    glLineWidth(3.0);
     glBegin(GL_LINE_STRIP);
     for (int i = 0; i <= numSegments; i++)
     {
@@ -180,18 +182,81 @@ void drawNose()
     // TODO: Implement drawing of the red nose and white inner nose
     drawCircle(0.0, 0.29, 0.067, 1.0, 0.0, 0.0);
     drawCircleNoOutline(-0.02, 0.31, 0.024, 1.0, 1.0, 1.0);
+
+    glColor3f(0.0, 0.0, 0.0);
+    glLineWidth(3.0);
+    glBegin(GL_LINES);
+    glVertex2f(0.0, 0.22);
+    glVertex2f(0.0, -0.23);
+    glEnd();
 }
 
 // 4. Mouth
 void drawMouth()
 {
     // TODO: Implement drawing of the vertical line and the smile
+    glColor3f(0.0, 0.0, 0.0);
+    glLineWidth(3.0);
+    glBegin(GL_LINE_STRIP);
+
+    int numSegments = 100;
+    float centerX = 0.0;
+    float centerY = 0.37;
+    float radius = 0.52;
+    float startAngle = 3.14159 * 2 / 11;
+    float endAngle = 3.14159 * 9 / 11;
+    float deepnessFactor = 1.15;
+
+    for (int i = 0; i <= numSegments; i++)
+    {
+        float angle = startAngle + (endAngle - startAngle) * i / numSegments;
+        float x = radius * cos(angle);
+        float y = radius * sin(angle);
+
+        if (y > 0)
+        {
+            y *= deepnessFactor;
+        }
+
+        glVertex2f(centerX + x, centerY - y);
+    }
+    glEnd();
 }
 
 // 5. Moustache
 void drawMoustache()
 {
     // TODO: Implement drawing of the moustache
+    glColor3f(0.0, 0.0, 0.0);
+    glLineWidth(3.0);
+
+    glBegin(GL_LINES);
+
+    // Top left whisker
+    glVertex2f(-0.1, 0.2);
+    glVertex2f(-0.42, 0.28);
+
+    // Middle left whisker
+    glVertex2f(-0.1, 0.1);
+    glVertex2f(-0.5, 0.11);
+
+    // Bottom left whisker
+    glVertex2f(-0.1, 0.0);
+    glVertex2f(-0.47, -0.07);
+
+    // Top right whisker
+    glVertex2f(0.1, 0.2);
+    glVertex2f(0.42, 0.28);
+
+    // Middle right whisker
+    glVertex2f(0.1, 0.1);
+    glVertex2f(0.5, 0.11);
+
+    // Bottom right whisker
+    glVertex2f(0.1, 0.0);
+    glVertex2f(0.47, -0.07);
+
+    glEnd();
 }
 
 // 6. Collar
@@ -200,7 +265,7 @@ void drawCollar()
     float centerX = 0.0;
     float centerY = -0.35;
     float width = 0.97;
-    float height = 0.05;
+    float height = 0.06;
 
     float halfWidth = width / 2.0;
     float halfHeight = height / 2.0;
@@ -228,7 +293,7 @@ void drawCollar()
 
     // Draw black outline
     glColor3f(0.0, 0.0, 0.0);
-    glLineWidth(2.0);
+    glLineWidth(3.0);
 
     glBegin(GL_LINE_LOOP);
     for (int i = 0; i <= 100; i++)
@@ -254,6 +319,69 @@ void drawCollar()
 void drawBell()
 {
     // TODO: Implement drawing of the outer bell and inner bell
+
+    // Outer bell (yellow)
+    drawCircle(0.0, -0.48, 0.09, 1.0, 215.0 / 255.0, 0.0);
+
+    // Inner black circle
+    drawCircle(0.0, -0.50, 0.023, 0.0, 0.0, 0.0);
+
+    // Small black line
+    glColor3f(0.0, 0.0, 0.0);
+    glLineWidth(3.0);
+    glBegin(GL_LINES);
+    glVertex2f(0.0, -0.485);
+    glVertex2f(0.0, -0.57);
+    glEnd();
+
+    // Inner bell design (yellow, upside-down arc)
+    float centerX = 0.0;
+    float centerY = -0.47;
+    float width = 0.19;
+    float height = 0.03;  // Arc height
+    float dyStep = 0.001; // Small step for smooth lines
+    int numSegments = 100;
+
+    float halfWidth = width / 2.0;
+    float radiusX = halfWidth;
+    float radiusY = height / 2.0;
+
+    // Loop to draw stacked yellow lines (upside-down)
+    for (float j = 0; j <= height; j += dyStep)
+    {
+        glColor3f(1.0, 215.0 / 255.0, 0.0); // Yellow color
+
+        glBegin(GL_LINE_STRIP);
+        for (int i = 0; i <= numSegments; i++)
+        {
+            float angle = (3.14159 * i / numSegments); // From 0° to 180°
+            float dx = radiusX * cos(angle) * 0.92;
+            float dy = radiusY * sin(angle);
+            glVertex2f(centerX + dx, centerY + dy + j); // Stack lines upward
+        }
+        glEnd();
+    }
+
+    // Black outline for the inner bell design
+    glColor3f(0.0, 0.0, 0.0);
+    glLineWidth(3.0);
+
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i <= numSegments; i++)
+    {
+        float angle = (3.14159 * i / numSegments); // From 0° to 180°
+        float dx = radiusX * cos(angle) * 0.92;
+        float dy = radiusY * sin(angle);
+        glVertex2f(centerX + dx, centerY + dy + height); // Top arc
+    }
+    for (int i = 0; i <= numSegments; i++)
+    {
+        float angle = 3.14159 + (3.14159 * i / numSegments); // From 180° to 360°
+        float dx = radiusX * cos(angle);
+        float dy = radiusY * sin(angle);
+        glVertex2f(centerX + dx, centerY - dy); // Bottom arc
+    }
+    glEnd();
 }
 
 // 8. Cover the bottom part of the head

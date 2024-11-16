@@ -138,6 +138,69 @@ void drawVerticalOval(float x, float y, float radiusX, float radiusY, float r, f
     glEnd();
 }
 
+void drawEmphasizedHorizontalOval(float centerX, float centerY, float radiusX, float radiusY, float bulgeFactor, float r, float g, float b)
+{
+    int numSegments = 100;
+    float angle;
+
+    glColor3f(r, g, b);
+    glBegin(GL_POLYGON);
+    for (int i = 0; i <= numSegments; i++)
+    {
+        angle = 2.0f * 3.14159f * i / numSegments;
+        float x = radiusX * cos(angle);
+        float y = radiusY * sin(angle);
+
+        if (y > 0)
+        {
+            x *= (1.0 + bulgeFactor * (y / radiusY));
+        }
+
+        glVertex2f(centerX + x, centerY + y);
+    }
+    glEnd();
+
+    // Draw the outline
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glLineWidth(3.0f);
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i <= numSegments; i++)
+    {
+        angle = 2.0f * 3.14159f * i / numSegments;
+        float x = radiusX * cos(angle);
+        float y = radiusY * sin(angle);
+
+        if (y > 0)
+        {
+            x *= (1.0 + bulgeFactor * (y / radiusY));
+        }
+
+        glVertex2f(centerX + x, centerY + y);
+    }
+    glEnd();
+}
+
+void drawMagicPocket(float centerX, float centerY, float radiusX, float radiusY, float pocketDepth, float r, float g, float b)
+{
+    int numSegments = 100;
+    float angle;
+
+    // Draw the outline
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glLineWidth(3.0f);
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i <= numSegments; i++)
+    {
+        angle = 3.14159f * i / numSegments;
+        float x = radiusX * cos(angle);
+        float y = radiusY * sin(angle);
+        glVertex2f(centerX + x, centerY - y);
+    }
+    glVertex2f(centerX - radiusX, centerY + pocketDepth);
+    glVertex2f(centerX + radiusX, centerY + pocketDepth);
+    glEnd();
+}
+
 // Draw Rounded Rectangle
 void drawRoundedRect(float x, float y, float width, float height, float borderRadius, float r, float g, float b)
 {
@@ -543,4 +606,8 @@ void drawBody()
     glEnd();
 
     drawCircleNoOutline(0.0, -0.73, 0.32, 41.0 / 255.0, 134.0 / 255.0, 204.0 / 255.0);
+
+    drawEmphasizedHorizontalOval(0.0, -0.72, 0.42, 0.31, 0.11, 1.0, 1.0, 1.0);
+
+    drawMagicPocket(0.0, -0.73, 0.3, 0.2, 0.05, 1.0, 1.0, 1.0);
 }

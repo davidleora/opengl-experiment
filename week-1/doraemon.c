@@ -1,6 +1,7 @@
 #include <GL/glut.h>
 #include "doraemon.h"
 #include "shapes.h"
+#include <math.h>
 
 // 1. Head
 void drawHead()

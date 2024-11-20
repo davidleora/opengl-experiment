@@ -1,3 +1,19 @@
+/*
+ * shapes.c
+ *
+ * このソースコードは、ドラえもんの描画に使用される様々な形状を定義した関数を書いています。
+ * 各関数は、特定の形状（円、楕円、ウィンクなど）を描画するために使用されます。
+ *
+ * 主な関数：
+ * - `drawFlattenedCircle()`: 扁平な円（頭部）
+ * - `drawCircle()`: 円
+ * - `drawCircleNoOutline()`: 輪郭なしの円（鼻）
+ * - `drawPlumpOval()`: 水平楕円
+ * - `drawVerticalOval()`: 垂直楕円
+ * - `drawEmphasizedHorizontalOval()`: 強調された水平楕円
+ * - `drawMagicPocket()`: 四次元ポケット
+ *
+ */
 #include <GL/glut.h>
 #include <math.h>
 #include "shapes.h"
@@ -244,72 +260,6 @@ void drawMagicPocket(float centerX, float centerY, float radiusX, float radiusY,
     }
     glVertex2f(centerX - radiusX, centerY + pocketDepth);
     glVertex2f(centerX + radiusX, centerY + pocketDepth);
-    glEnd();
-}
-
-// Draw Rounded Rectangle
-void drawRoundedRect(float x, float y, float width, float height, float borderRadius, float r, float g, float b)
-{
-    int numSegments = 50; // 円の滑らかさを調整
-    float angle;
-
-    // 長方形部分を描画
-    glColor3f(r, g, b);
-    glBegin(GL_POLYGON);
-
-    // 上辺（左から右）
-    glVertex2f(x - width / 2 + borderRadius, y + height / 2);
-    glVertex2f(x + width / 2 - borderRadius, y + height / 2);
-
-    // 右辺（上から下）
-    glVertex2f(x + width / 2, y + height / 2 - borderRadius);
-    glVertex2f(x + width / 2, y - height / 2 + borderRadius);
-
-    // 下辺（右から左）
-    glVertex2f(x + width / 2 - borderRadius, y - height / 2);
-    glVertex2f(x - width / 2 + borderRadius, y - height / 2);
-
-    // 左辺（下から上）
-    glVertex2f(x - width / 2, y - height / 2 + borderRadius);
-    glVertex2f(x - width / 2, y + height / 2 - borderRadius);
-
-    glEnd();
-
-    // 四隅の円を描画
-    glBegin(GL_POLYGON);
-
-    // 左上
-    for (int i = 0; i <= numSegments; i++)
-    {
-        angle = 3.14159f * i / (2 * numSegments); // 0° to 90°
-        glVertex2f(x - width / 2 + borderRadius + borderRadius * cos(angle),
-                   y + height / 2 - borderRadius + borderRadius * sin(angle));
-    }
-
-    // 右上
-    for (int i = 0; i <= numSegments; i++)
-    {
-        angle = 3.14159f * (1 + i / (2.0 * numSegments)); // 90° to 180°
-        glVertex2f(x + width / 2 - borderRadius + borderRadius * cos(angle),
-                   y + height / 2 - borderRadius + borderRadius * sin(angle));
-    }
-
-    // 右下
-    for (int i = 0; i <= numSegments; i++)
-    {
-        angle = 3.14159f * (2 + i / (2.0 * numSegments)); // 180° to 270°
-        glVertex2f(x + width / 2 - borderRadius + borderRadius * cos(angle),
-                   y - height / 2 + borderRadius + borderRadius * sin(angle));
-    }
-
-    // 左下
-    for (int i = 0; i <= numSegments; i++)
-    {
-        angle = 3.14159f * (3 + i / (2.0 * numSegments)); // 270° to 360°
-        glVertex2f(x - width / 2 + borderRadius + borderRadius * cos(angle),
-                   y - height / 2 + borderRadius + borderRadius * sin(angle));
-    }
-
     glEnd();
 }
 

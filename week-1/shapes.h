@@ -22,9 +22,6 @@ void drawEmphasizedHorizontalOval(float centerX, float centerY, float radiusX, f
 // Draw Magic Pocket
 void drawMagicPocket(float centerX, float centerY, float radiusX, float radiusY, float pocketDepth, float r, float g, float b);
 
-// Draw Rounded Rectangle
-void drawRoundedRect(float x, float y, float width, float height, float borderRadius, float r, float g, float b);
-
 // Draw Right Eye Wink
 void drawWink(float x, float y, float radiusX, float radiusY, int topHalf);
 

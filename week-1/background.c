@@ -1,3 +1,16 @@
+/*
+ * background.c
+ *
+ * このソースコードは、家の背景を描画するための関数を書いています。
+ *
+ * 主な背景要素：
+ * - 空
+ * - 道路
+ * - のび太の家
+ * - のび太の家の玄関
+ * - フェンス *
+ */
+
 #include <GL/glut.h>
 #include "background.h"
 #include "shapes.h"

@@ -1,6 +1,9 @@
 #include <GL/glut.h>
 #include "doraemon.h"
 
+// コンパイルコマンド：
+// alias doraemon-run='gcc -o doraemon main.c doraemon.c shapes.c -lglut -lGL -lm && ./doraemon'
+
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);

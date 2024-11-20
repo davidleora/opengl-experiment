@@ -418,3 +418,9 @@ void drawLegs()
     drawPlumpOval(0.265f, -1.145f, 0.265f, 0.1f, 0.3f, 1.0f, 1.0f, 1.0f);  // Right leg
     drawPlumpOval(-0.265f, -1.145f, 0.265f, 0.1f, 0.3f, 1.0f, 1.0f, 1.0f); // Left leg
 }
+
+// 11. Shadow
+void drawShadow()
+{
+    drawEmphasizedHorizontalOval(0.0, -1.15, 0.6, 0.2, 0.1, 100.0 / 255.0, 100.0 / 255.0, 100.0 / 255.0);
+}

@@ -31,4 +31,7 @@ void drawHand(); // Draws the hand
 // 10. Legs
 void drawLegs(); // Draws the legs
 
+// 11. Shadow
+void drawShadow(); // Draws the shadow
+
 #endif // DORAEMON_H

@@ -1,16 +1,21 @@
 #include <GL/glut.h>
 #include "doraemon.h"
+#include "background.h"
 
 // コンパイルコマンド：
-// alias doraemon-run='gcc -o doraemon main.c doraemon.c shapes.c -lglut -lGL -lm && ./doraemon'
+// alias doraemon-run='gcc -o doraemon main.c doraemon.c shapes.c background.c -lglut -lGL -lm && ./doraemon'
 
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glPushMatrix();
-    glTranslatef(0.0, 0.35, 0.0);
+    drawBackground();
 
+    glPushMatrix();
+    glTranslatef(-0.3, 0.0, 0.0);
+    glScalef(0.5, 0.5, 0.5);
+
+    drawShadow();
     drawHand();
     drawHead();
     drawLegs();

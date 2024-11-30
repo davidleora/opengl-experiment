@@ -11,4 +11,8 @@ void drawCustomFloor(float startX, float startZ, float length, float width, floa
 
 void drawCustomCeiling(float startX, float startZ, float length, float width, float heightPosition, float thickness);
 
+void drawCustomTriangleWallWithStartHeight(float startX, float startZ, float endX, float endZ, float thickness, float startHeight, float height);
+
+void drawThickRoofSegment(float startX, float startZ, float endX, float endZ, float widthThickness, float baseHeight, float apexHeight, float heightThickness);
+
 #endif

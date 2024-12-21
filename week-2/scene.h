@@ -7,9 +7,13 @@ void drawCustomWall(float startX, float startZ, float endX, float endZ, float th
 
 void drawCustomWallWithStartHeight(float startX, float startZ, float endX, float endZ, float thickness, float startHeight, float height);
 
-void drawCustomFloor(float startX, float startZ, float length, float width, float height);
+void drawCustomFloor(float startX, float startZ, float endX, float endZ, float startHeight, float endHeight);
 
-void drawCustomCeiling(float startX, float startZ, float length, float width, float heightPosition, float thickness);
+void drawCustomTriangleFloor(float x1, float z1, float x2, float z2, float x3, float z3, float startHeight, float endHeight);
+
+void drawTexturedFloor(float startX, float startZ, float endX, float endZ, float height);
+
+void drawCustomCeiling(float startX, float startZ, float endX, float endZ, float height, float thickness);
 
 void drawCustomTriangleWallWithStartHeight(float startX, float startZ, float endX, float endZ, float thickness, float startHeight, float height);
 

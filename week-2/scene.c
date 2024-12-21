@@ -1,16 +1,17 @@
 #include <GL/glut.h>
 #include <math.h>
-
 #include "scene.h"
+
+GLuint floorTextureID;
 
 void drawFloorWithGrid(float length, float width, float tileSize)
 {
     glColor3f(0.2f, 0.8f, 0.2f);
     glBegin(GL_QUADS);
-    glVertex3f(0, -0.002f, 0);
-    glVertex3f(length, -0.002f, 0);
-    glVertex3f(length, -0.002f, width);
-    glVertex3f(0, -0.002f, width);
+    glVertex3f(-3, -0.002f, -3);
+    glVertex3f(length, -0.002f, -3);
+    glVertex3f(length, -0.002f, width + 3);
+    glVertex3f(-3, -0.002f, width + 3);
     glEnd();
 
     glColor3f(0.0f, 0.0f, 0.0f);
@@ -18,15 +19,15 @@ void drawFloorWithGrid(float length, float width, float tileSize)
 
     glBegin(GL_LINES);
 
-    for (float x = 0; x <= length; x += tileSize)
+    for (float x = -3; x <= length; x += tileSize)
     {
-        glVertex3f(x, -0.001f, 0);
-        glVertex3f(x, -0.001f, width);
+        glVertex3f(x, -0.001f, -3);
+        glVertex3f(x, -0.001f, width + 3);
     }
 
-    for (float z = 0; z <= width; z += tileSize)
+    for (float z = -3; z <= width + 3; z += tileSize)
     {
-        glVertex3f(0, -0.001f, z);
+        glVertex3f(-3, -0.001f, z);
         glVertex3f(length, -0.001f, z);
     }
 
@@ -48,6 +49,7 @@ void drawCustomWall(float startX, float startZ, float endX, float endZ, float th
     glColor3f(1.0f, 1.0f, 1.0f);
     glBegin(GL_QUADS);
 
+    // Bottom vertices
     glVertex3f(startX + perpX, 0.0f, startZ + perpZ); // Bottom-left
     glVertex3f(startX - perpX, 0.0f, startZ - perpZ); // Bottom-right
     glVertex3f(endX - perpX, 0.0f, endZ - perpZ);     // Top-right
@@ -232,46 +234,84 @@ void drawCustomWallWithStartHeight(float startX, float startZ, float endX, float
     glEnd();
 }
 
-void drawCustomFloor(float startX, float startZ, float length, float width, float height)
+void drawCustomFloor(float startX, float startZ, float endX, float endZ, float startHeight, float endHeight)
 {
     glColor3f(0.5f, 0.5f, 0.5f);
     glBegin(GL_QUADS);
 
     // Bottom face
-    glVertex3f(startX, 0.0f, startZ);                  // Bottom-left
-    glVertex3f(startX + length, 0.0f, startZ);         // Bottom-right
-    glVertex3f(startX + length, 0.0f, startZ + width); // Top-right
-    glVertex3f(startX, 0.0f, startZ + width);          // Top-left
+    glVertex3f(startX, startHeight, startZ); // Bottom-left
+    glVertex3f(endX, startHeight, startZ);   // Bottom-right
+    glVertex3f(endX, startHeight, endZ);     // Top-right
+    glVertex3f(startX, startHeight, endZ);   // Top-left
 
     // Top face
-    glVertex3f(startX, height, startZ);                  // Bottom-left
-    glVertex3f(startX + length, height, startZ);         // Bottom-right
-    glVertex3f(startX + length, height, startZ + width); // Top-right
-    glVertex3f(startX, height, startZ + width);          // Top-left
+    glVertex3f(startX, endHeight, startZ); // Bottom-left
+    glVertex3f(endX, endHeight, startZ);   // Bottom-right
+    glVertex3f(endX, endHeight, endZ);     // Top-right
+    glVertex3f(startX, endHeight, endZ);   // Top-left
 
     // Front face
-    glVertex3f(startX, 0.0f, startZ);            // Bottom-left
-    glVertex3f(startX + length, 0.0f, startZ);   // Bottom-right
-    glVertex3f(startX + length, height, startZ); // Top-right
-    glVertex3f(startX, height, startZ);          // Top-left
+    glVertex3f(startX, startHeight, startZ); // Bottom-left
+    glVertex3f(endX, startHeight, startZ);   // Bottom-right
+    glVertex3f(endX, endHeight, startZ);     // Top-right
+    glVertex3f(startX, endHeight, startZ);   // Top-left
 
     // Back face
-    glVertex3f(startX, 0.0f, startZ + width);            // Bottom-left
-    glVertex3f(startX + length, 0.0f, startZ + width);   // Bottom-right
-    glVertex3f(startX + length, height, startZ + width); // Top-right
-    glVertex3f(startX, height, startZ + width);          // Top-left
+    glVertex3f(startX, startHeight, endZ); // Bottom-left
+    glVertex3f(endX, startHeight, endZ);   // Bottom-right
+    glVertex3f(endX, endHeight, endZ);     // Top-right
+    glVertex3f(startX, endHeight, endZ);   // Top-left
 
     // Left face
-    glVertex3f(startX, 0.0f, startZ);           // Bottom-left
-    glVertex3f(startX, 0.0f, startZ + width);   // Bottom-right
-    glVertex3f(startX, height, startZ + width); // Top-right
-    glVertex3f(startX, height, startZ);         // Top-left
+    glVertex3f(startX, startHeight, startZ); // Bottom-left
+    glVertex3f(startX, startHeight, endZ);   // Bottom-right
+    glVertex3f(startX, endHeight, endZ);     // Top-right
+    glVertex3f(startX, endHeight, startZ);   // Top-left
 
     // Right face
-    glVertex3f(startX + length, 0.0f, startZ);           // Bottom-left
-    glVertex3f(startX + length, 0.0f, startZ + width);   // Bottom-right
-    glVertex3f(startX + length, height, startZ + width); // Top-right
-    glVertex3f(startX + length, height, startZ);         // Top-left
+    glVertex3f(endX, startHeight, startZ); // Bottom-left
+    glVertex3f(endX, startHeight, endZ);   // Bottom-right
+    glVertex3f(endX, endHeight, endZ);     // Top-right
+    glVertex3f(endX, endHeight, startZ);   // Top-left
+
+    glEnd();
+}
+
+void drawCustomTriangleFloor(float x1, float z1, float x2, float z2, float x3, float z3, float startHeight, float endHeight)
+{
+    glColor3f(0.5f, 0.5f, 0.5f);
+    glBegin(GL_TRIANGLES);
+
+    // Bottom face (flat at start height)
+    glVertex3f(x1, startHeight, z1); // First point
+    glVertex3f(x2, startHeight, z2); // Second point
+    glVertex3f(x3, startHeight, z3); // Third point
+
+    // Top face (flat at end height)
+    glVertex3f(x1, endHeight, z1); // First point
+    glVertex3f(x2, endHeight, z2); // Second point
+    glVertex3f(x3, endHeight, z3); // Third point
+
+    glEnd();
+
+    glBegin(GL_QUADS);
+
+    // Side faces
+    glVertex3f(x1, startHeight, z1);
+    glVertex3f(x1, endHeight, z1);
+    glVertex3f(x2, endHeight, z2);
+    glVertex3f(x2, startHeight, z2);
+
+    glVertex3f(x2, startHeight, z2);
+    glVertex3f(x2, endHeight, z2);
+    glVertex3f(x3, endHeight, z3);
+    glVertex3f(x3, startHeight, z3);
+
+    glVertex3f(x3, startHeight, z3);
+    glVertex3f(x3, endHeight, z3);
+    glVertex3f(x1, endHeight, z1);
+    glVertex3f(x1, startHeight, z1);
 
     glEnd();
 
@@ -279,88 +319,119 @@ void drawCustomFloor(float startX, float startZ, float length, float width, floa
     glLineWidth(2.0f);
     glBegin(GL_LINES);
 
-    // Bottom edges
-    glVertex3f(startX, 0.0f, startZ);
-    glVertex3f(startX + length, 0.0f, startZ);
+    // Outline of the base
+    glVertex3f(x1, startHeight, z1);
+    glVertex3f(x2, startHeight, z2);
 
-    glVertex3f(startX + length, 0.0f, startZ);
-    glVertex3f(startX + length, 0.0f, startZ + width);
+    glVertex3f(x2, startHeight, z2);
+    glVertex3f(x3, startHeight, z3);
 
-    glVertex3f(startX + length, 0.0f, startZ + width);
-    glVertex3f(startX, 0.0f, startZ + width);
+    glVertex3f(x3, startHeight, z3);
+    glVertex3f(x1, startHeight, z1);
 
-    glVertex3f(startX, 0.0f, startZ + width);
-    glVertex3f(startX, 0.0f, startZ);
+    // Outline of the top
+    glVertex3f(x1, endHeight, z1);
+    glVertex3f(x2, endHeight, z2);
 
-    // Top edges
-    glVertex3f(startX, height, startZ);
-    glVertex3f(startX + length, height, startZ);
+    glVertex3f(x2, endHeight, z2);
+    glVertex3f(x3, endHeight, z3);
 
-    glVertex3f(startX + length, height, startZ);
-    glVertex3f(startX + length, height, startZ + width);
-
-    glVertex3f(startX + length, height, startZ + width);
-    glVertex3f(startX, height, startZ + width);
-
-    glVertex3f(startX, height, startZ + width);
-    glVertex3f(startX, height, startZ);
+    glVertex3f(x3, endHeight, z3);
+    glVertex3f(x1, endHeight, z1);
 
     // Vertical edges
-    glVertex3f(startX, 0.0f, startZ);
-    glVertex3f(startX, height, startZ);
+    glVertex3f(x1, startHeight, z1);
+    glVertex3f(x1, endHeight, z1);
 
-    glVertex3f(startX + length, 0.0f, startZ);
-    glVertex3f(startX + length, height, startZ);
+    glVertex3f(x2, startHeight, z2);
+    glVertex3f(x2, endHeight, z2);
 
-    glVertex3f(startX + length, 0.0f, startZ + width);
-    glVertex3f(startX + length, height, startZ + width);
-
-    glVertex3f(startX, 0.0f, startZ + width);
-    glVertex3f(startX, height, startZ + width);
+    glVertex3f(x3, startHeight, z3);
+    glVertex3f(x3, endHeight, z3);
 
     glEnd();
 }
 
-void drawCustomCeiling(float startX, float startZ, float length, float width, float heightPosition, float thickness)
+void drawTexturedFloor(float startX, float startZ, float endX, float endZ, float height)
+{
+    float tileWidth = 2.0f;
+    float tileLength = 5.0f;
+
+    float width = endX - startX;  // size in X direction
+    float length = endZ - startZ; // size in Z direction
+    float uRepeat = length / tileWidth;
+    float vRepeat = width / tileLength;
+
+    // Set color to white so we see the texture unmodified
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    // Enable texturing
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, floorTextureID);
+
+    // Draw the floor with the correct texture coordinates
+    glBegin(GL_QUADS);
+    // Bottom-left corner
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(startX, height, endZ);
+
+    // Bottom-right corner
+    glTexCoord2f(uRepeat, 0.0f);
+    glVertex3f(startX, height, startZ);
+
+    // Top-right corner
+    glTexCoord2f(uRepeat, vRepeat);
+    glVertex3f(endX, height, startZ);
+
+    // Top-left corner
+    glTexCoord2f(0.0f, vRepeat);
+    glVertex3f(endX, height, endZ);
+    glEnd();
+
+    // Disable texturing (so subsequent objects won’t be textured)
+    glDisable(GL_TEXTURE_2D);
+}
+
+void drawCustomCeiling(float startX, float startZ, float endX, float endZ, float height, float thickness)
 {
     glColor3f(0.8f, 0.8f, 0.8f);
     glBegin(GL_QUADS);
 
     // Bottom face (visible from below)
-    glVertex3f(startX, heightPosition, startZ);                  // Bottom-left
-    glVertex3f(startX + length, heightPosition, startZ);         // Bottom-right
-    glVertex3f(startX + length, heightPosition, startZ + width); // Top-right
-    glVertex3f(startX, heightPosition, startZ + width);          // Top-left
+    glVertex3f(startX, height, startZ); // Bottom-left
+    glVertex3f(endX, height, startZ);   // Bottom-right
+    glVertex3f(endX, height, endZ);     // Top-right
+    glVertex3f(startX, height, endZ);   // Top-left
 
     // Top face (thickness makes this visible from above)
-    glVertex3f(startX, heightPosition + thickness, startZ);                  // Bottom-left
-    glVertex3f(startX + length, heightPosition + thickness, startZ);         // Bottom-right
-    glVertex3f(startX + length, heightPosition + thickness, startZ + width); // Top-right
-    glVertex3f(startX, heightPosition + thickness, startZ + width);          // Top-left
+    glVertex3f(startX, height + thickness, startZ); // Bottom-left
+    glVertex3f(endX, height + thickness, startZ);   // Bottom-right
+    glVertex3f(endX, height + thickness, endZ);     // Top-right
+    glVertex3f(startX, height + thickness, endZ);   // Top-left
 
     // Front face
-    glVertex3f(startX, heightPosition, startZ);                      // Bottom-left
-    glVertex3f(startX + length, heightPosition, startZ);             // Bottom-right
-    glVertex3f(startX + length, heightPosition + thickness, startZ); // Top-right
-    glVertex3f(startX, heightPosition + thickness, startZ);          // Top-left
+    glVertex3f(startX, height, startZ);             // Bottom-left
+    glVertex3f(endX, height, startZ);               // Bottom-right
+    glVertex3f(endX, height + thickness, startZ);   // Top-right
+    glVertex3f(startX, height + thickness, startZ); // Top-left
 
     // Back face
-    glVertex3f(startX, heightPosition, startZ + width);                      // Bottom-left
-    glVertex3f(startX + length, heightPosition, startZ + width);             // Bottom-right
-    glVertex3f(startX + length, heightPosition + thickness, startZ + width); // Top-right
-    glVertex3f(startX, heightPosition + thickness, startZ + width);          // Top-left
+    glVertex3f(startX, height, endZ);             // Bottom-left
+    glVertex3f(endX, height, endZ);               // Bottom-right
+    glVertex3f(endX, height + thickness, endZ);   // Top-right
+    glVertex3f(startX, height + thickness, endZ); // Top-left
 
     // Left face
-    glVertex3f(startX, heightPosition, startZ);                     // Bottom-left
-    glVertex3f(startX, heightPosition, startZ + width);             // Bottom-right
-    glVertex3f(startX, heightPosition + thickness, startZ + width); // Top-right
-    glVertex3f(startX, heightPosition + thickness, startZ);         // Top-left
+    glVertex3f(startX, height, startZ);             // Bottom-left
+    glVertex3f(startX, height, endZ);               // Bottom-right
+    glVertex3f(startX, height + thickness, endZ);   // Top-right
+    glVertex3f(startX, height + thickness, startZ); // Top-left
 
     // Right face
-    glVertex3f(startX + length, heightPosition, startZ);                     // Bottom-left
-    glVertex3f(startX + length, heightPosition, startZ + width);             // Bottom-right
-    glVertex3f(startX + length, heightPosition + thickness, startZ + width); // Top-right
-    glVertex3f(startX + length, heightPosition + thickness, startZ);         // Top-left
+    glVertex3f(endX, height, startZ);             // Bottom-left
+    glVertex3f(endX, height, endZ);               // Bottom-right
+    glVertex3f(endX, height + thickness, endZ);   // Top-right
+    glVertex3f(endX, height + thickness, startZ); // Top-left
 
     glEnd();
 
@@ -369,43 +440,43 @@ void drawCustomCeiling(float startX, float startZ, float length, float width, fl
     glBegin(GL_LINES);
 
     // Bottom edges
-    glVertex3f(startX, heightPosition, startZ);
-    glVertex3f(startX + length, heightPosition, startZ);
+    glVertex3f(startX, height, startZ);
+    glVertex3f(endX, height, startZ);
 
-    glVertex3f(startX + length, heightPosition, startZ);
-    glVertex3f(startX + length, heightPosition, startZ + width);
+    glVertex3f(endX, height, startZ);
+    glVertex3f(endX, height, endZ);
 
-    glVertex3f(startX + length, heightPosition, startZ + width);
-    glVertex3f(startX, heightPosition, startZ + width);
+    glVertex3f(endX, height, endZ);
+    glVertex3f(startX, height, endZ);
 
-    glVertex3f(startX, heightPosition, startZ + width);
-    glVertex3f(startX, heightPosition, startZ);
+    glVertex3f(startX, height, endZ);
+    glVertex3f(startX, height, startZ);
 
     // Top edges
-    glVertex3f(startX, heightPosition + thickness, startZ);
-    glVertex3f(startX + length, heightPosition + thickness, startZ);
+    glVertex3f(startX, height + thickness, startZ);
+    glVertex3f(endX, height + thickness, startZ);
 
-    glVertex3f(startX + length, heightPosition + thickness, startZ);
-    glVertex3f(startX + length, heightPosition + thickness, startZ + width);
+    glVertex3f(endX, height + thickness, startZ);
+    glVertex3f(endX, height + thickness, endZ);
 
-    glVertex3f(startX + length, heightPosition + thickness, startZ + width);
-    glVertex3f(startX, heightPosition + thickness, startZ + width);
+    glVertex3f(endX, height + thickness, endZ);
+    glVertex3f(startX, height + thickness, endZ);
 
-    glVertex3f(startX, heightPosition + thickness, startZ + width);
-    glVertex3f(startX, heightPosition + thickness, startZ);
+    glVertex3f(startX, height + thickness, endZ);
+    glVertex3f(startX, height + thickness, startZ);
 
     // Vertical edges
-    glVertex3f(startX, heightPosition, startZ);
-    glVertex3f(startX, heightPosition + thickness, startZ);
+    glVertex3f(startX, height, startZ);
+    glVertex3f(startX, height + thickness, startZ);
 
-    glVertex3f(startX + length, heightPosition, startZ);
-    glVertex3f(startX + length, heightPosition + thickness, startZ);
+    glVertex3f(endX, height, startZ);
+    glVertex3f(endX, height + thickness, startZ);
 
-    glVertex3f(startX + length, heightPosition, startZ + width);
-    glVertex3f(startX + length, heightPosition + thickness, startZ + width);
+    glVertex3f(endX, height, endZ);
+    glVertex3f(endX, height + thickness, endZ);
 
-    glVertex3f(startX, heightPosition, startZ + width);
-    glVertex3f(startX, heightPosition + thickness, startZ + width);
+    glVertex3f(startX, height, endZ);
+    glVertex3f(startX, height + thickness, endZ);
 
     glEnd();
 }

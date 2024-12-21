@@ -77,7 +77,7 @@ void renderText(float x, float y, const char *text)
 
 void init()
 {
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glEnable(GL_DEPTH_TEST);
 
     glMatrixMode(GL_PROJECTION);
@@ -163,7 +163,30 @@ void update()
     {
         cameraY -= movementSpeed;
     }
-
+    if (cameraY < 1.3f)
+    {
+        cameraY = 1.3f;
+    }
+    if (cameraY > 6.0f)
+    {
+        cameraY = 6.0f;
+    }
+    if (cameraX < -1.0f)
+    {
+        cameraX = -1.0f;
+    }
+    if (cameraX > 16.5f)
+    {
+        cameraX = 16.5f;
+    }
+    if (cameraZ < -1.0f)
+    {
+        cameraZ = -1.0f;
+    }
+    if (cameraZ > 11.5f)
+    {
+        cameraZ = 11.5f;
+    }
     glutPostRedisplay();
 }
 

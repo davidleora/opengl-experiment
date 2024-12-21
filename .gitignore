@@ -1,9 +1,14 @@
+# ビルド成果物やログファイル
 *.o
 *.log
-/build/
+*.exe
 
+# week-X ディレクトリ配下のバイナルファイル
 week-1/doraemon
 week-2/main
+
+# VSCode 設定ディレクトリ
 .vscode
 
+# macOS の隠しファイル
 .DS_Store

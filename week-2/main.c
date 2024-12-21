@@ -4,12 +4,12 @@
 #include <math.h>
 #include "scene.h"
 
+#define _USE_MATH_DEFINES
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 860
 #define TEXWIDTH 256
 #define TEXHEIGHT 256
-
-static const char *textureFilename = "assets/textures/bricks.raw";
+#define M_PI 3.14159265358979323846
 
 float cameraX = 16.0f;
 float cameraY = 1.3f;
@@ -18,37 +18,8 @@ float cameraYaw = 180.0f;
 float cameraPitch = 0.0f;
 
 GLuint textureID;
-GLuint floorTextureID;
 bool keyStates[256] = {false};
-float movementSpeed = 0.1f;
-
-void loadTexture()
-{
-    GLubyte texture[TEXHEIGHT][TEXWIDTH][4];
-
-    FILE *fp = fopen(textureFilename, "rb");
-    if (!fp)
-    {
-        perror(textureFilename);
-        return;
-    }
-
-    size_t bytesRead = fread(texture, sizeof(texture), 1, fp);
-    if (bytesRead != 1)
-    {
-        fprintf(stderr, "Error reading texture data.\n");
-    }
-    fclose(fp);
-
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXWIDTH, TEXHEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-}
+float movementSpeed = 0.003f;
 
 void loadFloorTexture(const char *filename)
 {
@@ -118,7 +89,6 @@ void init()
 
     glutSetCursor(GLUT_CURSOR_NONE);
     glutWarpPointer(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
-    loadTexture();
     loadFloorTexture("assets/textures/flooring.raw");
 }
 
@@ -137,7 +107,7 @@ void keyboardUp(unsigned char key, int x, int y)
 void update()
 {
     float radYaw = cameraYaw * M_PI / 180.0f;
-    float rotationSpeed = 1.3f;
+    float rotationSpeed = 0.03f;
 
     float dirX = cos(radYaw);
     float dirZ = sin(radYaw);
@@ -241,49 +211,50 @@ void display()
 
     // Main Grid
     drawFloorWithGrid(22.0f, 13.0f, 1.0f);
+    drawCustomFloor(18.5f, 3.0f, 22.0f, 6.0f, 0.0f, 0.01f);
 
     // First Floor Walls
-    drawCustomWall(0.0f, 3.0f, 0.0f, 7.0f, 0.1f, 2.8f);                          // 1
-    drawCustomWallWithStartHeight(0.0f, 7.0f, 0.0f, 9.0f, 0.1f, 0.0f, 0.9f);     // 2
-    drawCustomWallWithStartHeight(0.0f, 7.0f, 0.0f, 9.0f, 0.1f, 2.0f, 0.8f);     // 3
-    drawCustomWall(0.0f, 9.0f, 0.0f, 11.0f, 0.1f, 2.8f);                         // 4
-    drawCustomWall(0.0f, 3.0f, 0.5f, 3.0f, 0.1f, 2.8f);                          // 5
-    drawCustomWallWithStartHeight(0.5f, 3.0f, 2.0f, 3.0f, 0.1f, 2.0f, 0.8f);     // 6
-    drawCustomWall(0.0f, 11.0f, 1.8f, 11.0f, 0.1f, 2.8f);                        // 7
-    drawCustomWallWithStartHeight(1.8f, 11.0f, 4.4f, 11.0f, 0.1f, 2.0f, 0.8f);   // 8
-    drawCustomWall(4.4f, 11.0f, 6.0f, 11.0f, 0.1f, 2.8f);                        // 9
-    drawCustomWall(2.0f, 3.0f, 3.0f, 3.0f, 0.1f, 2.8f);                          // 10
-    drawCustomWallWithStartHeight(3.0f, 3.0f, 5.0f, 3.0f, 0.1f, 0.0f, 0.9f);     // 11
-    drawCustomWallWithStartHeight(3.0f, 3.0f, 5.0f, 3.0f, 0.1f, 2.0f, 0.8f);     // 12
-    drawCustomWall(5.0f, 3.0f, 9.2f, 3.0f, 0.1f, 2.8f);                          // 13
-    drawCustomWall(6.0f, 3.0f, 6.0f, 0.0f, 0.1f, 2.8f);                          // 14
-    drawCustomWall(6.0f, 0.0f, 7.3f, 0.0f, 0.1f, 2.8f);                          // 15
-    drawCustomWallWithStartHeight(7.3f, 0.0f, 8.3f, 0.0f, 0.1f, 0.0f, 0.9f);     // 16
-    drawCustomWallWithStartHeight(7.3f, 0.0f, 8.3f, 0.0f, 0.1f, 2.0f, 0.8f);     // 17
-    drawCustomWall(8.3f, 0.0f, 10.5f, 0.0f, 0.1f, 2.8f);                         // 18
-    drawCustomWallWithStartHeight(10.5f, 0.0f, 11.7f, 0.0f, 0.1f, 0.0f, 0.9f);   // 19
-    drawCustomWallWithStartHeight(10.5f, 0.0f, 11.7f, 0.0f, 0.1f, 2.0f, 0.8f);   // 20
-    drawCustomWall(11.7f, 0.0f, 12.2f, 0.0f, 0.1f, 2.8f);                        // 21
-    drawCustomWallWithStartHeight(12.2f, 0.0f, 13.5f, 0.0f, 0.1f, 0.0f, 0.9f);   // 22
-    drawCustomWallWithStartHeight(12.2f, 0.0f, 13.5f, 0.0f, 0.1f, 2.0f, 0.8f);   // 23
-    drawCustomWall(13.5f, 0.0f, 13.8f, 0.0f, 0.1f, 2.8f);                        // 24
-    drawCustomWall(9.1f, 0.0f, 9.1f, 1.5f, 0.1f, 2.8f);                          // 25
-    drawCustomWallWithStartHeight(9.1f, 1.5f, 9.1f, 3.0f, 0.1f, 2.0f, 0.8f);     // 26
-    drawCustomWallWithStartHeight(9.2f, 3.0f, 10.8f, 3.0f, 0.1f, 2.0f, 0.8f);    // 27
-    drawCustomWall(10.8f, 3.0f, 12.2f, 3.0f, 0.1f, 2.8f);                        // 28
-    drawCustomWall(12.2f, 3.0f, 12.2f, 0.0f, 0.1f, 2.8f);                        // 29
-    drawCustomWall(13.8f, 0.0f, 13.8f, 3.0f, 0.1f, 2.8f);                        // 30
-    drawCustomWallWithStartHeight(12.2f, 3.0f, 13.8f, 3.0f, 0.1f, 2.0f, 0.8f);   // 31
-    drawCustomWall(13.8f, 3.0f, 18.5f, 3.0f, 0.1f, 2.8f);                        // 32
-    drawCustomWall(18.5f, 3.0f, 18.5f, 3.4f, 0.1f, 2.8f);                        // 33
-    drawCustomWallWithStartHeight(18.5f, 3.4f, 18.5f, 5.6f, 0.1f, 2.3f, 0.5f);   // 34
-    drawCustomWall(18.5f, 5.6f, 18.5f, 7.2f, 0.1f, 2.8f);                        // 35
-    drawCustomWallWithStartHeight(18.5f, 7.2f, 18.5f, 10.6f, 0.1f, 0.0f, 0.9f);  // 36
-    drawCustomWallWithStartHeight(18.5f, 7.2f, 18.5f, 10.6f, 0.1f, 2.1f, 0.7f);  // 37
-    drawCustomWall(18.5f, 10.6f, 18.5f, 12.4f, 0.1f, 2.8f);                      // 38
-    drawCustomWall(16.8f, 12.4f, 18.5f, 12.4f, 0.1f, 2.8f);                      // 39
-    drawCustomWallWithStartHeight(14.8f, 12.4f, 16.8f, 12.4f, 0.1f, 0.0f, 0.9f); // 40
-    drawCustomWallWithStartHeight(14.8f, 12.4f, 16.8f, 12.4f, 0.1f, 2.0f, 0.8f); // 41
+    drawCustomWall(0.0f, 3.0f, 0.0f, 7.0f, 0.1f, 2.8f);                         // 1
+    drawCustomWallWithStartHeight(0.0f, 7.0f, 0.0f, 9.0f, 0.1f, 0.0f, 0.9f);    // 2
+    drawCustomWallWithStartHeight(0.0f, 7.0f, 0.0f, 9.0f, 0.1f, 2.1f, 0.7f);    // 3
+    drawCustomWall(0.0f, 9.0f, 0.0f, 11.0f, 0.1f, 2.8f);                        // 4
+    drawCustomWall(0.0f, 3.0f, 0.5f, 3.0f, 0.1f, 2.8f);                         // 5
+    drawCustomWallWithStartHeight(0.5f, 3.0f, 2.0f, 3.0f, 0.1f, 2.0f, 0.8f);    // 6
+    drawCustomWall(0.0f, 11.0f, 1.8f, 11.0f, 0.1f, 2.8f);                       // 7
+    drawCustomWallWithStartHeight(1.8f, 11.0f, 4.4f, 11.0f, 0.1f, 2.0f, 0.8f);  // 8
+    drawCustomWall(4.4f, 11.0f, 6.0f, 11.0f, 0.1f, 2.8f);                       // 9
+    drawCustomWall(2.0f, 3.0f, 3.0f, 3.0f, 0.1f, 2.8f);                         // 10
+    drawCustomWallWithStartHeight(3.0f, 3.0f, 5.0f, 3.0f, 0.1f, 0.0f, 0.9f);    // 11
+    drawCustomWallWithStartHeight(3.0f, 3.0f, 5.0f, 3.0f, 0.1f, 2.0f, 0.8f);    // 12
+    drawCustomWall(5.0f, 3.0f, 9.2f, 3.0f, 0.1f, 2.8f);                         // 13
+    drawCustomWall(6.0f, 3.0f, 6.0f, 0.0f, 0.1f, 2.8f);                         // 14
+    drawCustomWall(6.0f, 0.0f, 7.0f, 0.0f, 0.1f, 2.8f);                         // 15
+    drawCustomWallWithStartHeight(7.0f, 0.0f, 8.3f, 0.0f, 0.1f, 0.0f, 0.9f);    // 16
+    drawCustomWallWithStartHeight(7.0f, 0.0f, 8.3f, 0.0f, 0.1f, 2.1f, 0.7f);    // 17
+    drawCustomWall(8.3f, 0.0f, 10.4f, 0.0f, 0.1f, 2.8f);                        // 18
+    drawCustomWallWithStartHeight(10.4f, 0.0f, 11.7f, 0.0f, 0.1f, 0.0f, 0.9f);  // 19
+    drawCustomWallWithStartHeight(10.4f, 0.0f, 11.7f, 0.0f, 0.1f, 2.1f, 0.7f);  // 20
+    drawCustomWall(11.7f, 0.0f, 12.2f, 0.0f, 0.1f, 2.8f);                       // 21
+    drawCustomWallWithStartHeight(12.2f, 0.0f, 13.5f, 0.0f, 0.1f, 0.0f, 0.9f);  // 22
+    drawCustomWallWithStartHeight(12.2f, 0.0f, 13.5f, 0.0f, 0.1f, 2.1f, 0.7f);  // 23
+    drawCustomWall(13.5f, 0.0f, 13.8f, 0.0f, 0.1f, 2.8f);                       // 24
+    drawCustomWall(9.1f, 0.0f, 9.1f, 1.5f, 0.1f, 2.8f);                         // 25
+    drawCustomWallWithStartHeight(9.1f, 1.5f, 9.1f, 3.0f, 0.1f, 2.0f, 0.8f);    // 26
+    drawCustomWallWithStartHeight(9.2f, 3.0f, 10.8f, 3.0f, 0.1f, 2.0f, 0.8f);   // 27
+    drawCustomWall(10.8f, 3.0f, 12.2f, 3.0f, 0.1f, 2.8f);                       // 28
+    drawCustomWall(12.2f, 3.0f, 12.2f, 0.0f, 0.1f, 2.8f);                       // 29
+    drawCustomWall(13.8f, 0.0f, 13.8f, 3.0f, 0.1f, 2.8f);                       // 30
+    drawCustomWallWithStartHeight(12.2f, 3.0f, 13.8f, 3.0f, 0.1f, 2.0f, 0.8f);  // 31
+    drawCustomWall(13.8f, 3.0f, 18.5f, 3.0f, 0.1f, 2.8f);                       // 32
+    drawCustomWall(18.5f, 3.0f, 18.5f, 3.4f, 0.1f, 2.8f);                       // 33
+    drawCustomWallWithStartHeight(18.5f, 3.4f, 18.5f, 5.6f, 0.1f, 2.3f, 0.5f);  // 34
+    drawCustomWall(18.5f, 5.6f, 18.5f, 7.2f, 0.1f, 2.8f);                       // 35
+    drawCustomWallWithStartHeight(18.5f, 7.2f, 18.5f, 10.6f, 0.1f, 0.0f, 0.9f); // 36
+    drawCustomWallWithStartHeight(18.5f, 7.2f, 18.5f, 10.6f, 0.1f, 2.1f, 0.7f); // 37
+    drawCustomWall(18.5f, 10.6f, 18.5f, 12.4f, 0.1f, 2.8f);                     // 38
+    drawCustomWall(17.8f, 12.4f, 18.5f, 12.4f, 0.1f, 2.8f);                     // 39
+    // drawCustomWallWithStartHeight(14.8f, 12.4f, 16.8f, 12.4f, 0.1f, 0.0f, 0.9f); // 40
+    drawCustomWallWithStartHeight(14.8f, 12.4f, 17.8f, 12.4f, 0.1f, 2.0f, 0.8f); // 41
     drawCustomWall(11.0f, 12.4f, 14.8f, 12.4f, 0.1f, 2.8f);                      // 42
     drawCustomWallWithStartHeight(8.0f, 12.4f, 11.0f, 12.4f, 0.1f, 2.0f, 0.8f);  // 43
     drawCustomWall(6.0f, 12.4f, 8.0f, 12.4f, 0.1f, 2.8f);                        // 44
@@ -299,21 +270,39 @@ void display()
     drawCustomWallWithStartHeight(6.0f, 3.0f, 6.0f, 4.6f, 0.1f, 2.0f, 0.8f);   // 54
 
     // First Floor Floors & Ceilings
-    drawCustomCeiling(0.0f, 3.0f, 6.0f, 11.0f, 2.6f, 0.1f);  // Dining Room CEILING
-    drawCustomCeiling(6.0f, 0.0f, 13.8f, 3.0f, 2.6f, 0.1f);  // Shower Room, Powder Room, Toilet CEILING
-    drawCustomCeiling(6.0f, 3.0f, 10.4f, 4.6f, 2.6f, 0.1f);  // Hallway CEILING 1
-    drawCustomCeiling(10.4f, 3.0f, 18.5f, 6.0f, 2.6f, 0.1f); // Hallway CEILING 2
-    drawCustomCeiling(6.0f, 6.0f, 13.8f, 12.4f, 2.6f, 0.1f); // Living Room CEILING
-    drawCustomCeiling(13.8f, 6.0f, 18.5f, 12.4, 2.6f, 0.1f); // Meeting Room CEILING
-    drawCustomFloor(0.0f, 3.0f, 2.0f, 4.5f, 0.0f, 0.125f);   // Dining Room FLOOR 1
-    drawCustomFloor(2.0f, 3.0f, 6.0f, 11.0f, 0.0f, 0.25f);   // Dining Room FLOOR 2
-    drawCustomFloor(0.0f, 4.5f, 2.0f, 11.0f, 0.0f, 0.25f);   // Dining Room FLOOR 3
-    drawCustomFloor(6.0f, 0.0f, 13.8f, 3.0f, 0.0f, 0.25f);   // Shower Room, Powder Room, Toilet FLOOR
-    drawCustomFloor(6.0f, 3.0f, 17.0f, 6.0f, 0.0f, 0.25f);   // Hallway FLOOR
-    drawCustomFloor(6.0f, 6.0f, 18.5f, 12.4f, 0.0f, 0.25f);  // Living Room & Meeting Room FLOOR
+    drawCustomCeiling(0.0f, 3.0f, 6.0f, 11.0f, 2.6f, 0.1f);   // Dining Room CEILING
+    drawCustomCeiling(6.0f, 0.0f, 13.8f, 3.0f, 2.6f, 0.1f);   // Shower Room, Powder Room, Toilet CEILING
+    drawCustomCeiling(6.0f, 3.0f, 10.4f, 4.6f, 2.6f, 0.1f);   // Hallway CEILING 1
+    drawCustomCeiling(10.4f, 3.0f, 18.5f, 6.0f, 2.6f, 0.1f);  // Hallway CEILING 2
+    drawCustomCeiling(6.0f, 6.0f, 13.8f, 12.4f, 2.6f, 0.1f);  // Living Room CEILING
+    drawCustomCeiling(13.8f, 6.0f, 18.5f, 12.4, 2.6f, 0.1f);  // Meeting Room CEILING
+    drawCustomFloor(0.0f, 3.0f, 2.0f, 4.5f, 0.0f, 0.125f);    // Dining Room FLOOR 1
+    drawCustomFloor(2.0f, 3.0f, 6.0f, 11.0f, 0.0f, 0.25f);    // Dining Room FLOOR 2
+    drawCustomFloor(0.0f, 4.5f, 2.0f, 11.0f, 0.0f, 0.25f);    // Dining Room FLOOR 3
+    drawCustomFloor(6.0f, 0.0f, 13.8f, 3.0f, 0.0f, 0.25f);    // Shower Room, Powder Room, Toilet FLOOR
+    drawCustomFloor(6.0f, 3.0f, 17.0f, 6.0f, 0.0f, 0.25f);    // Hallway FLOOR
+    drawCustomFloor(17.0f, 3.0f, 18.5f, 6.0f, 0.0f, 0.01f);   // Hallway FLOOR 2
+    drawCustomFloor(6.0f, 6.0f, 18.5f, 12.4f, 0.0f, 0.25f);   // Living Room & Meeting Room FLOOR
+    drawCustomFloor(1.8f, 11.0f, 4.4f, 11.6f, 0.0f, 0.25f);   // Kitchen Backyard FLOOR
+    drawCustomFloor(0.5, 2.4f, 2.0f, 3.0f, 0.0f, 0.125f);     // Kitchen Backyard FLOOR 2
+    drawCustomFloor(8.0f, 12.4f, 11.0f, 13.0f, 0.0f, 0.25f);  // Living Room Backyard FLOOR
+    drawCustomFloor(14.8f, 12.4f, 17.8f, 13.0f, 0.0f, 0.25f); // Meeting Room Backyard FLOOR
 
     drawTexturedFloor(6.0f, 3.0f, 17.0f, 6.0f, 0.251f);   // Hallway Floor TEXTURE
     drawTexturedFloor(13.8f, 6.0f, 18.5f, 12.4f, 0.251f); // Living Room TEXTURE
+
+    // First Floor Glass Sliding Doors
+    drawGlassSlidingDoor(1.8f, 11.0f, 4.4f, 11.0f, 0.15f, 2.0f, 0.1f);   // Kitchen Backyard SLIDING DOOR
+    drawGlassSlidingDoor(8.0f, 12.4f, 11.0f, 12.4f, 0.15f, 2.0f, 0.1f);  // Living Room Backyard SLIDING DOOR
+    drawGlassSlidingDoor(14.8f, 12.4f, 17.8f, 12.4f, 0.15f, 2.0f, 0.1f); // Meeting Room Backyard SLIDING DOOR
+
+    // First Floor Windows
+    drawCustomWindowA(18.5f, 7.2f, 18.5f, 10.6f, 0.9f, 2.1f, 0.3f);
+    drawCustomWindowB(12.2f, 0.0f, 13.5f, 0.0f, 0.9f, 2.1f, 0.3f);
+    drawCustomWindowB(10.4f, 0.0f, 11.7f, 0.0f, 0.9f, 2.1f, 0.3f);
+    drawCustomWindowB(7.0f, 0.0f, 8.3f, 0.0f, 0.9f, 2.1f, 0.3f);
+    drawCustomWindowB(3.0f, 3.0f, 5.0f, 3.0f, 0.9f, 2.1f, 0.3f);
+    drawCustomWindowB(0.0f, 7.0f, 0.0f, 9.0f, 0.9f, 2.1f, 0.3f);
 
     // Stair
     drawCustomFloor(10.2f, 4.6f, 10.6f, 6.0f, 0.0f, 0.5375f);
@@ -338,10 +327,10 @@ void display()
     drawCustomWallWithStartHeight(6.2f, 12.4f, 7.3f, 12.4f, 0.1f, 2.8f, 1.8f);   // 60
     drawCustomWallWithStartHeight(6.2f, 12.4f, 7.3f, 12.4f, 0.1f, 5.5f, 0.5f);   // 61
     drawCustomWallWithStartHeight(7.3f, 12.4f, 13.8f, 12.4f, 0.1f, 2.8f, 3.2f);  // 62
-    drawCustomWallWithStartHeight(13.8f, 6.0f, 13.8f, 7.2f, 0.1f, 2.8f, 3.2f);   // 63
-    drawCustomWallWithStartHeight(13.8f, 7.2f, 13.8f, 9.5f, 0.1f, 2.8f, 1.8f);   // 64
-    drawCustomWallWithStartHeight(13.8f, 7.2f, 13.8f, 9.5f, 0.1f, 5.5f, 0.5f);   // 65
-    drawCustomWallWithStartHeight(13.8f, 9.5f, 13.8f, 12.4f, 0.1f, 2.8f, 3.2f);  // 66
+    drawCustomWallWithStartHeight(13.8f, 6.0f, 13.8f, 7.45f, 0.1f, 2.8f, 3.2f);  // 63
+    drawCustomWallWithStartHeight(13.8f, 7.45f, 13.8f, 9.75f, 0.1f, 2.8f, 1.8f); // 64
+    drawCustomWallWithStartHeight(13.8f, 7.45f, 13.8f, 9.75f, 0.1f, 5.5f, 0.5f); // 65
+    drawCustomWallWithStartHeight(13.8f, 9.75f, 13.8f, 12.4f, 0.1f, 2.8f, 3.2f); // 66
     drawCustomWallWithStartHeight(13.8f, 6.0f, 12.45f, 6.0f, 0.1f, 2.8f, 3.2f);  // 67
     drawCustomWallWithStartHeight(12.45f, 6.0f, 11.25f, 6.0f, 0.1f, 2.8f, 1.8f); // 68
     drawCustomWallWithStartHeight(12.45f, 6.0f, 11.25f, 6.0f, 0.1f, 5.5f, 0.5f); // 69
@@ -356,7 +345,7 @@ void display()
     drawCustomWallWithStartHeight(12.0f, 11.2f, 13.8f, 11.2f, 0.1f, 2.8f, 3.2f); // 78
     drawCustomWallWithStartHeight(8.0f, 4.6f, 6.0f, 4.6f, 0.1f, 2.8f, 3.2f);     // 79
     drawCustomWallWithStartHeight(9.0f, 4.6f, 8.0f, 4.6f, 0.1f, 2.8f, 1.8f);     // 80
-    drawCustomWallWithStartHeight(9.0f, 4.6f, 8.0f, 4.6f, 0.1f, 5.8f, 0.2f);     // 81
+    drawCustomWallWithStartHeight(9.0f, 4.6f, 8.0f, 4.6f, 0.1f, 5.5f, 0.5f);     // 81
     drawCustomWallWithStartHeight(9.9f, 4.6f, 9.0f, 4.6f, 0.1f, 2.8f, 3.2f);     // 82
     drawCustomWallWithStartHeight(9.9f, 6.0f, 9.9f, 4.6f, 0.1f, 2.8f, 3.2f);     // 83
 
@@ -364,6 +353,13 @@ void display()
     drawCustomFloor(6.0f, 6.0f, 13.8f, 12.4f, 2.8f, 3.7f);
     drawCustomCeiling(6.0f, 6.0f, 13.8f, 12.4f, 5.95f, 0.1f);
     drawCustomCeiling(6.0f, 4.6f, 9.9f, 6.0f, 5.95f, 0.1f);
+
+    // Second Floor Windows
+    drawCustomWindowA(13.8f, 7.45f, 13.8f, 9.75f, 4.6f, 5.5f, 0.3f);
+    drawCustomWindowB(11.25f, 6.0f, 12.45f, 6.0f, 4.6f, 5.5f, 0.3f);
+    drawCustomWindowA(6.0f, 7.2f, 6.0f, 9.4f, 4.6f, 5.5f, 0.3f);
+    drawCustomWindowB(6.2f, 12.4f, 7.3f, 12.4f, 4.6f, 5.5f, 0.3f);
+    drawCustomWindowC(8.0f, 4.6f, 9.0f, 4.6f, 4.6f, 5.5f, 0.3f);
 
     // Triangle Walls
     drawCustomTriangleWallWithStartHeight(0.0f, 3.0f, 0.0f, 11.0f, 0.1f, 2.8f, 1.2f);

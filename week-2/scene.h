@@ -1,6 +1,10 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include <GL/glut.h>
+
+extern GLuint floorTextureID;
+
 void drawFloorWithGrid(float length, float width, float tileSize);
 
 void drawCustomWall(float startX, float startZ, float endX, float endZ, float thickness, float height);
@@ -18,5 +22,15 @@ void drawCustomCeiling(float startX, float startZ, float endX, float endZ, float
 void drawCustomTriangleWallWithStartHeight(float startX, float startZ, float endX, float endZ, float thickness, float startHeight, float height);
 
 void drawThickRoofSegment(float startX, float startZ, float endX, float endZ, float widthThickness, float baseHeight, float apexHeight, float heightThickness);
+
+void drawCustomWindowA(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
+
+void drawCustomWindowB(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
+
+void drawCustomWindowB(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
+
+void drawCustomWindowC(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
+
+void drawGlassSlidingDoor(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
 
 #endif

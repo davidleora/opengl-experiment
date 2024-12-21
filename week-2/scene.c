@@ -645,3 +645,238 @@ void drawThickRoofSegment(float startX, float startZ, float endX, float endZ, fl
 
     glEnd();
 }
+
+void drawCustomBlock(float startX, float startZ, float endX, float endZ, float thickness, float startHeight, float height)
+{
+    float dx = endX - startX;
+    float dz = endZ - startZ;
+    float length = sqrt(dx * dx + dz * dz);
+
+    dx /= length;
+    dz /= length;
+
+    float perpX = -dz * thickness / 2.0f;
+    float perpZ = dx * thickness / 2.0f;
+
+    float topHeight = startHeight + height;
+
+    glColor3f(0.75f, 0.75f, 0.75f);
+    glBegin(GL_QUADS);
+
+    // Bottom face
+    glVertex3f(startX + perpX, startHeight, startZ + perpZ); // Bottom-left
+    glVertex3f(startX - perpX, startHeight, startZ - perpZ); // Bottom-right
+    glVertex3f(endX - perpX, startHeight, endZ - perpZ);     // Top-right
+    glVertex3f(endX + perpX, startHeight, endZ + perpZ);     // Top-left
+
+    // Top face
+    glVertex3f(startX + perpX, topHeight, startZ + perpZ); // Top-left
+    glVertex3f(startX - perpX, topHeight, startZ - perpZ); // Top-right
+    glVertex3f(endX - perpX, topHeight, endZ - perpZ);     // Bottom-right
+    glVertex3f(endX + perpX, topHeight, endZ + perpZ);     // Bottom-left
+
+    // Front face
+    glVertex3f(startX + perpX, startHeight, startZ + perpZ); // Bottom-left
+    glVertex3f(startX - perpX, startHeight, startZ - perpZ); // Bottom-right
+    glVertex3f(startX - perpX, topHeight, startZ - perpZ);   // Top-right
+    glVertex3f(startX + perpX, topHeight, startZ + perpZ);   // Top-left
+
+    // Back face
+    glVertex3f(endX + perpX, startHeight, endZ + perpZ); // Bottom-left
+    glVertex3f(endX - perpX, startHeight, endZ - perpZ); // Bottom-right
+    glVertex3f(endX - perpX, topHeight, endZ - perpZ);   // Top-right
+    glVertex3f(endX + perpX, topHeight, endZ + perpZ);   // Top-left
+
+    // Left face
+    glVertex3f(startX + perpX, startHeight, startZ + perpZ); // Bottom-left
+    glVertex3f(endX + perpX, startHeight, endZ + perpZ);     // Bottom-right
+    glVertex3f(endX + perpX, topHeight, endZ + perpZ);       // Top-right
+    glVertex3f(startX + perpX, topHeight, startZ + perpZ);   // Top-left
+
+    // Right face
+    glVertex3f(startX - perpX, startHeight, startZ - perpZ); // Bottom-left
+    glVertex3f(endX - perpX, startHeight, endZ - perpZ);     // Bottom-right
+    glVertex3f(endX - perpX, topHeight, endZ - perpZ);       // Top-right
+    glVertex3f(startX - perpX, topHeight, startZ - perpZ);   // Top-left
+
+    glEnd();
+
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glLineWidth(2.0f);
+    glBegin(GL_LINES);
+
+    // Bottom edges
+    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
+    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
+
+    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
+    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
+
+    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
+    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
+
+    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
+    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
+
+    // Top edges
+    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
+    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
+
+    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
+    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
+
+    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
+    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
+
+    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
+    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
+
+    // Vertical edges
+    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
+    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
+
+    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
+    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
+
+    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
+    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
+
+    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
+    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
+
+    glEnd();
+}
+
+void drawOuterWindowFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
+{
+    if (startX == endX)
+    {
+        drawCustomBlock(startX, startZ, endX, endZ, thickness, endY - 0.1f, 0.1f);
+        drawCustomBlock(startX, startZ, endX, endZ, thickness, startY, 0.1f);
+        drawCustomBlock(startX, startZ, endX, startZ + 0.1f, thickness, startY, endY - startY);
+        drawCustomBlock(startX, endZ - 0.1f, endX, endZ, thickness, startY, endY - startY);
+    }
+    else if (startZ == endZ)
+    {
+        drawCustomBlock(startX, startZ, endX, endZ, thickness, endY - 0.1f, 0.1f);
+        drawCustomBlock(startX, startZ, endX, endZ, thickness, startY, 0.1f);
+        drawCustomBlock(startX, startZ, startX + 0.1f, endZ, thickness, startY, endY - startY);
+        drawCustomBlock(endX - 0.1f, startZ, endX, endZ, thickness, startY, endY - startY);
+    }
+}
+
+void drawInnerWindowFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness, char windowType)
+{
+    if (startX == endX)
+    {
+        float midZ = (startZ + endZ) / 2.0f;
+        drawCustomBlock(startX, startZ + 0.1f, endX, midZ, thickness / 2.0f, startY + 0.1f, 0.05f);
+        drawCustomBlock(startX, startZ + 0.1f, endX, midZ, thickness / 2.0f, endY - 0.15f, 0.05f);
+        if (windowType == 'A' || windowType == 'B')
+        {
+            drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.2f, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+            drawCustomBlock(startX, midZ, endX, midZ - 0.1f, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+        }
+        if (windowType == 'A' || windowType == 'C')
+        {
+            drawCustomBlock(startX, startZ + 0.1f, endX, midZ, thickness / 2.0f, (endY + startY) / 2 - 0.05f, 0.1f);
+        }
+
+        drawCustomBlock(startX, midZ, endX, endZ - 0.1f, thickness / 2.0f, startY + 0.1f, 0.05f);
+        drawCustomBlock(startX, midZ, endX, endZ - 0.1f, thickness / 2.0f, endY - 0.15f, 0.05f);
+        if (windowType == 'A' || windowType == 'B')
+        {
+            drawCustomBlock(startX, midZ, endX, midZ + 0.1f, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+            drawCustomBlock(startX, endZ - 0.2f, endX, endZ - 0.1f, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+        }
+        if (windowType == 'A' || windowType == 'C')
+        {
+            drawCustomBlock(startX, midZ, endX, endZ - 0.1f, thickness / 2.0f, (endY + startY) / 2 - 0.05f, 0.1f);
+        }
+    }
+    else if (startZ == endZ)
+    {
+        float midX = (startX + endX) / 2.0f;
+        drawCustomBlock(startX + 0.1f, startZ, midX, endZ, thickness / 2.0f, startY + 0.1f, 0.05f);
+        drawCustomBlock(startX + 0.1f, startZ, midX, endZ, thickness / 2.0f, endY - 0.15f, 0.05f);
+        if (windowType == 'A' || windowType == 'B')
+        {
+            drawCustomBlock(startX + 0.1f, startZ, startX + 0.2f, endZ, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+            drawCustomBlock(midX, startZ, midX - 0.1f, endZ, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+        }
+        if (windowType == 'A' || windowType == 'C')
+        {
+            drawCustomBlock(startX + 0.1f, startZ, midX, endZ, thickness / 2.0f, (endY + startY) / 2 - 0.05f, 0.1f);
+        }
+
+        drawCustomBlock(midX, startZ, endX - 0.1f, endZ, thickness / 2.0f, startY + 0.1f, 0.05f);
+        drawCustomBlock(midX, startZ, endX - 0.1f, endZ, thickness / 2.0f, endY - 0.15f, 0.05f);
+        if (windowType == 'A' || windowType == 'B')
+        {
+            drawCustomBlock(midX, startZ, midX + 0.1f, endZ, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+            drawCustomBlock(endX - 0.2f, startZ, endX - 0.1f, endZ, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+        }
+        if (windowType == 'A' || windowType == 'C')
+        {
+            drawCustomBlock(midX, startZ, endX - 0.1f, endZ, thickness / 2.0f, (endY + startY) / 2 - 0.05f, 0.1f);
+        }
+    }
+}
+
+void drawInnerWindowFrame2(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
+{
+    if (startX == endX)
+    {
+        float midZ = (startZ + endZ) / 2.0f;
+        drawCustomBlock(startX, startZ + 0.1f, endX, midZ, thickness / 2.0f, startY + 0.1f, 0.05f);
+        drawCustomBlock(startX, startZ + 0.1f, endX, midZ, thickness / 2.0f, endY - 0.15f, 0.05f);
+        drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.2f, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+        drawCustomBlock(startX, midZ, endX, midZ - 0.1f, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+        drawCustomBlock(startX, startZ + 0.1f, endX, midZ, thickness / 2.0f, (endY + startY) / 2 - 0.1f, 0.2f);
+
+        drawCustomBlock(startX, midZ, endX, endZ - 0.1f, thickness / 2.0f, startY + 0.1f, 0.05f);
+        drawCustomBlock(startX, midZ, endX, endZ - 0.1f, thickness / 2.0f, endY - 0.15f, 0.05f);
+        drawCustomBlock(startX, midZ, endX, midZ + 0.1f, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+        drawCustomBlock(startX, endZ - 0.2f, endX, endZ - 0.1f, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+        drawCustomBlock(startX, midZ, endX, endZ - 0.1f, thickness / 2.0f, (endY + startY) / 2 - 0.1f, 0.2f);
+    }
+    else if (startZ == endZ)
+    {
+        float midX = (startX + endX) / 2.0f;
+        drawCustomBlock(startX + 0.1f, startZ, midX, endZ, thickness / 2.0f, startY + 0.1f, 0.05f);
+        drawCustomBlock(startX + 0.1f, startZ, midX, endZ, thickness / 2.0f, endY - 0.15f, 0.05f);
+        drawCustomBlock(startX + 0.1f, startZ, startX + 0.2f, endZ, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+        drawCustomBlock(midX, startZ, midX - 0.1f, endZ, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+        drawCustomBlock(startX + 0.1f, startZ, midX, endZ, thickness / 2.0f, (endY + startY) / 2 - 0.1f, 0.2f);
+
+        drawCustomBlock(midX, startZ, endX - 0.1f, endZ, thickness / 2.0f, startY + 0.1f, 0.05f);
+        drawCustomBlock(midX, startZ, endX - 0.1f, endZ, thickness / 2.0f, endY - 0.15f, 0.05f);
+        drawCustomBlock(midX, startZ, midX + 0.1f, endZ, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+        drawCustomBlock(endX - 0.2f, startZ, endX - 0.1f, endZ, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
+        drawCustomBlock(midX, startZ, endX - 0.1f, endZ, thickness / 2.0f, (endY + startY) / 2 - 0.1f, 0.2f);
+    }
+}
+
+void drawCustomWindowA(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
+{
+    drawOuterWindowFrame(startX, startZ, endX, endZ, startY, endY, thickness);
+    drawInnerWindowFrame(startX, startZ, endX, endZ, startY, endY, thickness, 'A');
+}
+
+void drawCustomWindowB(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
+{
+    drawOuterWindowFrame(startX, startZ, endX, endZ, startY, endY, thickness);
+    drawInnerWindowFrame(startX, startZ, endX, endZ, startY, endY, thickness, 'B');
+}
+
+void drawCustomWindowC(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
+{
+    drawOuterWindowFrame(startX, startZ, endX, endZ, startY, endY, thickness);
+    drawInnerWindowFrame(startX, startZ, endX, endZ, startY, endY, thickness, 'C');
+}
+
+void drawGlassSlidingDoor(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
+{
+    drawOuterWindowFrame(startX, startZ, endX, endZ, startY, endY, thickness);
+    drawInnerWindowFrame2(startX, startZ, endX, endZ, startY, endY, thickness);
+}

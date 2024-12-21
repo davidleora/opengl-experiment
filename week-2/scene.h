@@ -33,4 +33,6 @@ void drawCustomWindowC(float startX, float startZ, float endX, float endZ, float
 
 void drawGlassSlidingDoor(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
 
+void drawMainDoor(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
+
 #endif

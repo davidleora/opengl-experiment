@@ -880,3 +880,20 @@ void drawGlassSlidingDoor(float startX, float startZ, float endX, float endZ, fl
     drawOuterWindowFrame(startX, startZ, endX, endZ, startY, endY, thickness);
     drawInnerWindowFrame2(startX, startZ, endX, endZ, startY, endY, thickness);
 }
+
+void drawMainDoor(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
+{
+    float midZ = (startZ + endZ) / 2.0f;
+    drawOuterWindowFrame(startX, startZ, endX, endZ, startY, endY, thickness);
+    drawCustomBlock(startX, startZ + 0.1f, endX, endZ - 0.1f, thickness / 2, 1.8f, 0.1f);
+    drawCustomBlock(startX, midZ - 0.05f, endX, midZ + 0.05f, thickness / 2, 1.9f, 0.3f);
+    drawCustomBlock(startX, startZ + 0.66f, endX, startZ + 0.76f, thickness / 2, 0.0f, 1.8f);
+    drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 1.6f, 0.05f);
+    drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 1.4f, 0.05);
+    drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 1.2f, 0.05);
+    drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 1.0f, 0.05);
+    drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 0.8f, 0.05);
+    drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 0.6f, 0.05);
+    drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 0.4f, 0.05);
+    drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 0.0f, 0.25);
+}

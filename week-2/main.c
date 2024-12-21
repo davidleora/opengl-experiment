@@ -213,6 +213,9 @@ void display()
     drawFloorWithGrid(22.0f, 13.0f, 1.0f);
     drawCustomFloor(18.5f, 3.0f, 22.0f, 6.0f, 0.0f, 0.01f);
 
+    // First Floor Main Door
+    drawMainDoor(18.5f, 3.4f, 18.5f, 5.6f, -0.089f, 2.3f, 0.2f);
+
     // First Floor Walls
     drawCustomWall(0.0f, 3.0f, 0.0f, 7.0f, 0.1f, 2.8f);                         // 1
     drawCustomWallWithStartHeight(0.0f, 7.0f, 0.0f, 9.0f, 0.1f, 0.0f, 0.9f);    // 2

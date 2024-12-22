@@ -211,24 +211,8 @@ void drawTexturedCube(float size)
     glDisable(GL_TEXTURE_2D);
 }
 
-void display()
+void renderScene()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glLoadIdentity();
-
-    float radYaw = cameraYaw * M_PI / 180.0f;
-    float radPitch = cameraPitch * M_PI / 180.0f;
-    float dirX = cos(radYaw) * cos(radPitch);
-    float dirY = sin(radPitch);
-    float dirZ = sin(radYaw) * cos(radPitch);
-    float targetX = cameraX + dirX;
-    float targetY = cameraY + dirY;
-    float targetZ = cameraZ + dirZ;
-
-    // Camera Initial Settings
-    gluLookAt(cameraX, cameraY, cameraZ, targetX, targetY, targetZ, 0.0f, 1.0f, 0.0f);
-
     glPushMatrix();
     glScalef(0.75f, 1.0f, 0.75f);
 
@@ -460,6 +444,38 @@ void display()
     drawCustomWindowC(8.0f, 4.6f, 9.0f, 4.6f, 4.6f, 5.5f, 0.2f);
 
     glPopMatrix();
+}
+
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glLoadIdentity();
+
+    float radYaw = cameraYaw * M_PI / 180.0f;
+    float radPitch = cameraPitch * M_PI / 180.0f;
+    float dirX = cos(radYaw) * cos(radPitch);
+    float dirY = sin(radPitch);
+    float dirZ = sin(radYaw) * cos(radPitch);
+    float targetX = cameraX + dirX;
+    float targetY = cameraY + dirY;
+    float targetZ = cameraZ + dirZ;
+
+    gluLookAt(cameraX, cameraY, cameraZ, targetX, targetY, targetZ, 0.0f, 1.0f, 0.0f);
+
+    glEnable(GL_POLYGON_OFFSET_FILL);
+    glPolygonOffset(1.0, 1.0);
+    renderScene();
+    glDisable(GL_POLYGON_OFFSET_FILL);
+
+    // Render the outlines
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glLineWidth(1.5);
+    glColor3f(0.0f, 0.0f, 0.0f);
+
+    renderScene();
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     // Coordinates UI
     // Reset transformations for UI rendering

@@ -88,50 +88,50 @@ void drawCustomWall(float startX, float startZ, float endX, float endZ, float th
 
     glEnd();
 
-    glColor3f(0.0f, 0.0f, 0.0f);
-    glLineWidth(2.0f);
-    glBegin(GL_LINES);
+    // glColor3f(0.0f, 0.0f, 0.0f);
+    // glLineWidth(2.0f);
+    // glBegin(GL_LINES);
 
-    // Bottom edges
-    glVertex3f(startX + perpX, 0.0f, startZ + perpZ);
-    glVertex3f(startX - perpX, 0.0f, startZ - perpZ);
+    // // Bottom edges
+    // glVertex3f(startX + perpX, 0.0f, startZ + perpZ);
+    // glVertex3f(startX - perpX, 0.0f, startZ - perpZ);
 
-    glVertex3f(startX - perpX, 0.0f, startZ - perpZ);
-    glVertex3f(endX - perpX, 0.0f, endZ - perpZ);
+    // glVertex3f(startX - perpX, 0.0f, startZ - perpZ);
+    // glVertex3f(endX - perpX, 0.0f, endZ - perpZ);
 
-    glVertex3f(endX - perpX, 0.0f, endZ - perpZ);
-    glVertex3f(endX + perpX, 0.0f, endZ + perpZ);
+    // glVertex3f(endX - perpX, 0.0f, endZ - perpZ);
+    // glVertex3f(endX + perpX, 0.0f, endZ + perpZ);
 
-    glVertex3f(endX + perpX, 0.0f, endZ + perpZ);
-    glVertex3f(startX + perpX, 0.0f, startZ + perpZ);
+    // glVertex3f(endX + perpX, 0.0f, endZ + perpZ);
+    // glVertex3f(startX + perpX, 0.0f, startZ + perpZ);
 
-    // Top edges
-    glVertex3f(startX + perpX, height, startZ + perpZ);
-    glVertex3f(startX - perpX, height, startZ - perpZ);
+    // // Top edges
+    // glVertex3f(startX + perpX, height, startZ + perpZ);
+    // glVertex3f(startX - perpX, height, startZ - perpZ);
 
-    glVertex3f(startX - perpX, height, startZ - perpZ);
-    glVertex3f(endX - perpX, height, endZ - perpZ);
+    // glVertex3f(startX - perpX, height, startZ - perpZ);
+    // glVertex3f(endX - perpX, height, endZ - perpZ);
 
-    glVertex3f(endX - perpX, height, endZ - perpZ);
-    glVertex3f(endX + perpX, height, endZ + perpZ);
+    // glVertex3f(endX - perpX, height, endZ - perpZ);
+    // glVertex3f(endX + perpX, height, endZ + perpZ);
 
-    glVertex3f(endX + perpX, height, endZ + perpZ);
-    glVertex3f(startX + perpX, height, startZ + perpZ);
+    // glVertex3f(endX + perpX, height, endZ + perpZ);
+    // glVertex3f(startX + perpX, height, startZ + perpZ);
 
-    // Vertical edges
-    glVertex3f(startX + perpX, 0.0f, startZ + perpZ);
-    glVertex3f(startX + perpX, height, startZ + perpZ);
+    // // Vertical edges
+    // glVertex3f(startX + perpX, 0.0f, startZ + perpZ);
+    // glVertex3f(startX + perpX, height, startZ + perpZ);
 
-    glVertex3f(startX - perpX, 0.0f, startZ - perpZ);
-    glVertex3f(startX - perpX, height, startZ - perpZ);
+    // glVertex3f(startX - perpX, 0.0f, startZ - perpZ);
+    // glVertex3f(startX - perpX, height, startZ - perpZ);
 
-    glVertex3f(endX + perpX, 0.0f, endZ + perpZ);
-    glVertex3f(endX + perpX, height, endZ + perpZ);
+    // glVertex3f(endX + perpX, 0.0f, endZ + perpZ);
+    // glVertex3f(endX + perpX, height, endZ + perpZ);
 
-    glVertex3f(endX - perpX, 0.0f, endZ - perpZ);
-    glVertex3f(endX - perpX, height, endZ - perpZ);
+    // glVertex3f(endX - perpX, 0.0f, endZ - perpZ);
+    // glVertex3f(endX - perpX, height, endZ - perpZ);
 
-    glEnd();
+    // glEnd();
 }
 
 void drawCustomWallWithStartHeight(float startX, float startZ, float endX, float endZ, float thickness, float startHeight, float height)
@@ -189,50 +189,50 @@ void drawCustomWallWithStartHeight(float startX, float startZ, float endX, float
 
     glEnd();
 
-    glColor3f(0.0f, 0.0f, 0.0f);
-    glLineWidth(2.0f);
-    glBegin(GL_LINES);
+    // glColor3f(0.0f, 0.0f, 0.0f);
+    // glLineWidth(2.0f);
+    // glBegin(GL_LINES);
 
-    // Bottom edges
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
+    // // Bottom edges
+    // glVertex3f(startX + perpX, startHeight, startZ + perpZ);
+    // glVertex3f(startX - perpX, startHeight, startZ - perpZ);
 
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
+    // glVertex3f(startX - perpX, startHeight, startZ - perpZ);
+    // glVertex3f(endX - perpX, startHeight, endZ - perpZ);
 
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
+    // glVertex3f(endX - perpX, startHeight, endZ - perpZ);
+    // glVertex3f(endX + perpX, startHeight, endZ + perpZ);
 
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
+    // glVertex3f(endX + perpX, startHeight, endZ + perpZ);
+    // glVertex3f(startX + perpX, startHeight, startZ + perpZ);
 
-    // Top edges
-    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
-    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
+    // // Top edges
+    // glVertex3f(startX + perpX, topHeight, startZ + perpZ);
+    // glVertex3f(startX - perpX, topHeight, startZ - perpZ);
 
-    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
-    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
+    // glVertex3f(startX - perpX, topHeight, startZ - perpZ);
+    // glVertex3f(endX - perpX, topHeight, endZ - perpZ);
 
-    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
-    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
+    // glVertex3f(endX - perpX, topHeight, endZ - perpZ);
+    // glVertex3f(endX + perpX, topHeight, endZ + perpZ);
 
-    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
-    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
+    // glVertex3f(endX + perpX, topHeight, endZ + perpZ);
+    // glVertex3f(startX + perpX, topHeight, startZ + perpZ);
 
-    // Vertical edges
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
-    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
+    // // Vertical edges
+    // glVertex3f(startX + perpX, startHeight, startZ + perpZ);
+    // glVertex3f(startX + perpX, topHeight, startZ + perpZ);
 
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
-    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
+    // glVertex3f(startX - perpX, startHeight, startZ - perpZ);
+    // glVertex3f(startX - perpX, topHeight, startZ - perpZ);
 
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
-    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
+    // glVertex3f(endX + perpX, startHeight, endZ + perpZ);
+    // glVertex3f(endX + perpX, topHeight, endZ + perpZ);
 
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
-    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
+    // glVertex3f(endX - perpX, startHeight, endZ - perpZ);
+    // glVertex3f(endX - perpX, topHeight, endZ - perpZ);
 
-    glEnd();
+    // glEnd();
 }
 
 void drawCustomFloor(float startX, float startZ, float endX, float endZ, float startHeight, float endHeight)
@@ -316,41 +316,41 @@ void drawCustomTriangleFloor(float x1, float z1, float x2, float z2, float x3, f
 
     glEnd();
 
-    glColor3f(0.0f, 0.0f, 0.0f); // Black outline
-    glLineWidth(2.0f);
-    glBegin(GL_LINES);
+    // glColor3f(0.0f, 0.0f, 0.0f); // Black outline
+    // glLineWidth(2.0f);
+    // glBegin(GL_LINES);
 
-    // Outline of the base
-    glVertex3f(x1, startHeight, z1);
-    glVertex3f(x2, startHeight, z2);
+    // // Outline of the base
+    // glVertex3f(x1, startHeight, z1);
+    // glVertex3f(x2, startHeight, z2);
 
-    glVertex3f(x2, startHeight, z2);
-    glVertex3f(x3, startHeight, z3);
+    // glVertex3f(x2, startHeight, z2);
+    // glVertex3f(x3, startHeight, z3);
 
-    glVertex3f(x3, startHeight, z3);
-    glVertex3f(x1, startHeight, z1);
+    // glVertex3f(x3, startHeight, z3);
+    // glVertex3f(x1, startHeight, z1);
 
-    // Outline of the top
-    glVertex3f(x1, endHeight, z1);
-    glVertex3f(x2, endHeight, z2);
+    // // Outline of the top
+    // glVertex3f(x1, endHeight, z1);
+    // glVertex3f(x2, endHeight, z2);
 
-    glVertex3f(x2, endHeight, z2);
-    glVertex3f(x3, endHeight, z3);
+    // glVertex3f(x2, endHeight, z2);
+    // glVertex3f(x3, endHeight, z3);
 
-    glVertex3f(x3, endHeight, z3);
-    glVertex3f(x1, endHeight, z1);
+    // glVertex3f(x3, endHeight, z3);
+    // glVertex3f(x1, endHeight, z1);
 
-    // Vertical edges
-    glVertex3f(x1, startHeight, z1);
-    glVertex3f(x1, endHeight, z1);
+    // // Vertical edges
+    // glVertex3f(x1, startHeight, z1);
+    // glVertex3f(x1, endHeight, z1);
 
-    glVertex3f(x2, startHeight, z2);
-    glVertex3f(x2, endHeight, z2);
+    // glVertex3f(x2, startHeight, z2);
+    // glVertex3f(x2, endHeight, z2);
 
-    glVertex3f(x3, startHeight, z3);
-    glVertex3f(x3, endHeight, z3);
+    // glVertex3f(x3, startHeight, z3);
+    // glVertex3f(x3, endHeight, z3);
 
-    glEnd();
+    // glEnd();
 }
 
 void drawCustomBlock(float startX, float startZ, float endX, float endZ, float thickness, float startHeight, float height)
@@ -523,50 +523,50 @@ void drawCustomCeiling(float startX, float startZ, float endX, float endZ, float
 
     glEnd();
 
-    glColor3f(0.0f, 0.0f, 0.0f); // Black outline
-    glLineWidth(2.0f);
-    glBegin(GL_LINES);
+    // glColor3f(0.0f, 0.0f, 0.0f); // Black outline
+    // glLineWidth(2.0f);
+    // glBegin(GL_LINES);
 
-    // Bottom edges
-    glVertex3f(startX, height, startZ);
-    glVertex3f(endX, height, startZ);
+    // // Bottom edges
+    // glVertex3f(startX, height, startZ);
+    // glVertex3f(endX, height, startZ);
 
-    glVertex3f(endX, height, startZ);
-    glVertex3f(endX, height, endZ);
+    // glVertex3f(endX, height, startZ);
+    // glVertex3f(endX, height, endZ);
 
-    glVertex3f(endX, height, endZ);
-    glVertex3f(startX, height, endZ);
+    // glVertex3f(endX, height, endZ);
+    // glVertex3f(startX, height, endZ);
 
-    glVertex3f(startX, height, endZ);
-    glVertex3f(startX, height, startZ);
+    // glVertex3f(startX, height, endZ);
+    // glVertex3f(startX, height, startZ);
 
-    // Top edges
-    glVertex3f(startX, height + thickness, startZ);
-    glVertex3f(endX, height + thickness, startZ);
+    // // Top edges
+    // glVertex3f(startX, height + thickness, startZ);
+    // glVertex3f(endX, height + thickness, startZ);
 
-    glVertex3f(endX, height + thickness, startZ);
-    glVertex3f(endX, height + thickness, endZ);
+    // glVertex3f(endX, height + thickness, startZ);
+    // glVertex3f(endX, height + thickness, endZ);
 
-    glVertex3f(endX, height + thickness, endZ);
-    glVertex3f(startX, height + thickness, endZ);
+    // glVertex3f(endX, height + thickness, endZ);
+    // glVertex3f(startX, height + thickness, endZ);
 
-    glVertex3f(startX, height + thickness, endZ);
-    glVertex3f(startX, height + thickness, startZ);
+    // glVertex3f(startX, height + thickness, endZ);
+    // glVertex3f(startX, height + thickness, startZ);
 
-    // Vertical edges
-    glVertex3f(startX, height, startZ);
-    glVertex3f(startX, height + thickness, startZ);
+    // // Vertical edges
+    // glVertex3f(startX, height, startZ);
+    // glVertex3f(startX, height + thickness, startZ);
 
-    glVertex3f(endX, height, startZ);
-    glVertex3f(endX, height + thickness, startZ);
+    // glVertex3f(endX, height, startZ);
+    // glVertex3f(endX, height + thickness, startZ);
 
-    glVertex3f(endX, height, endZ);
-    glVertex3f(endX, height + thickness, endZ);
+    // glVertex3f(endX, height, endZ);
+    // glVertex3f(endX, height + thickness, endZ);
 
-    glVertex3f(startX, height, endZ);
-    glVertex3f(startX, height + thickness, endZ);
+    // glVertex3f(startX, height, endZ);
+    // glVertex3f(startX, height + thickness, endZ);
 
-    glEnd();
+    // glEnd();
 }
 
 void drawCustomTriangleWallWithStartHeight(float startX, float startZ, float endX, float endZ, float thickness, float startHeight, float height)
@@ -619,39 +619,39 @@ void drawCustomTriangleWallWithStartHeight(float startX, float startZ, float end
 
     glEnd();
 
-    // Draw the outline (edges)
-    glColor3f(0.0f, 0.0f, 0.0f); // Black outline
-    glLineWidth(2.0f);
-    glBegin(GL_LINES);
+    // // Draw the outline (edges)
+    // glColor3f(0.0f, 0.0f, 0.0f); // Black outline
+    // glLineWidth(2.0f);
+    // glBegin(GL_LINES);
 
-    // Base edges
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
+    // // Base edges
+    // glVertex3f(startX + perpX, startHeight, startZ + perpZ);
+    // glVertex3f(startX - perpX, startHeight, startZ - perpZ);
 
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
+    // glVertex3f(startX - perpX, startHeight, startZ - perpZ);
+    // glVertex3f(endX - perpX, startHeight, endZ - perpZ);
 
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
+    // glVertex3f(endX - perpX, startHeight, endZ - perpZ);
+    // glVertex3f(endX + perpX, startHeight, endZ + perpZ);
 
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
+    // glVertex3f(endX + perpX, startHeight, endZ + perpZ);
+    // glVertex3f(startX + perpX, startHeight, startZ + perpZ);
 
-    // Left edge to apex
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
-    glVertex3f(apexX + apexOffsetX, topHeight, apexZ + apexOffsetZ);
+    // // Left edge to apex
+    // glVertex3f(startX + perpX, startHeight, startZ + perpZ);
+    // glVertex3f(apexX + apexOffsetX, topHeight, apexZ + apexOffsetZ);
 
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
-    glVertex3f(apexX + apexOffsetX, topHeight, apexZ + apexOffsetZ);
+    // glVertex3f(endX + perpX, startHeight, endZ + perpZ);
+    // glVertex3f(apexX + apexOffsetX, topHeight, apexZ + apexOffsetZ);
 
-    // Right edge to apex
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
-    glVertex3f(apexX - apexOffsetX, topHeight, apexZ - apexOffsetZ);
+    // // Right edge to apex
+    // glVertex3f(startX - perpX, startHeight, startZ - perpZ);
+    // glVertex3f(apexX - apexOffsetX, topHeight, apexZ - apexOffsetZ);
 
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
-    glVertex3f(apexX - apexOffsetX, topHeight, apexZ - apexOffsetZ);
+    // glVertex3f(endX - perpX, startHeight, endZ - perpZ);
+    // glVertex3f(apexX - apexOffsetX, topHeight, apexZ - apexOffsetZ);
 
-    glEnd();
+    // glEnd();
 }
 
 void drawQuadRoofSegment(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, float roofThickness, float colorRed, float colorGreen, float colorBlue)
@@ -711,39 +711,39 @@ void drawQuadRoofSegment(float x1, float y1, float z1, float x2, float y2, float
     glVertex3f(x4t, y4t, z4t);
     glEnd();
 
-    glColor3f(0.0f, 0.0f, 0.0f);
-    glLineWidth(2.0f);
-    glBegin(GL_LINES);
-    // Top edges
-    glVertex3f(x1t, y1t, z1t);
-    glVertex3f(x2t, y2t, z2t);
-    glVertex3f(x2t, y2t, z2t);
-    glVertex3f(x3t, y3t, z3t);
-    glVertex3f(x3t, y3t, z3t);
-    glVertex3f(x4t, y4t, z4t);
-    glVertex3f(x4t, y4t, z4t);
-    glVertex3f(x1t, y1t, z1t);
+    // glColor3f(0.0f, 0.0f, 0.0f);
+    // glLineWidth(2.0f);
+    // glBegin(GL_LINES);
+    // // Top edges
+    // glVertex3f(x1t, y1t, z1t);
+    // glVertex3f(x2t, y2t, z2t);
+    // glVertex3f(x2t, y2t, z2t);
+    // glVertex3f(x3t, y3t, z3t);
+    // glVertex3f(x3t, y3t, z3t);
+    // glVertex3f(x4t, y4t, z4t);
+    // glVertex3f(x4t, y4t, z4t);
+    // glVertex3f(x1t, y1t, z1t);
 
-    // Bottom edges
-    glVertex3f(x1, y1, z1);
-    glVertex3f(x2, y2, z2);
-    glVertex3f(x2, y2, z2);
-    glVertex3f(x3, y3, z3);
-    glVertex3f(x3, y3, z3);
-    glVertex3f(x4, y4, z4);
-    glVertex3f(x4, y4, z4);
-    glVertex3f(x1, y1, z1);
+    // // Bottom edges
+    // glVertex3f(x1, y1, z1);
+    // glVertex3f(x2, y2, z2);
+    // glVertex3f(x2, y2, z2);
+    // glVertex3f(x3, y3, z3);
+    // glVertex3f(x3, y3, z3);
+    // glVertex3f(x4, y4, z4);
+    // glVertex3f(x4, y4, z4);
+    // glVertex3f(x1, y1, z1);
 
-    // Verticals
-    glVertex3f(x1, y1, z1);
-    glVertex3f(x1t, y1t, z1t);
-    glVertex3f(x2, y2, z2);
-    glVertex3f(x2t, y2t, z2t);
-    glVertex3f(x3, y3, z3);
-    glVertex3f(x3t, y3t, z3t);
-    glVertex3f(x4, y4, z4);
-    glVertex3f(x4t, y4t, z4t);
-    glEnd();
+    // // Verticals
+    // glVertex3f(x1, y1, z1);
+    // glVertex3f(x1t, y1t, z1t);
+    // glVertex3f(x2, y2, z2);
+    // glVertex3f(x2t, y2t, z2t);
+    // glVertex3f(x3, y3, z3);
+    // glVertex3f(x3t, y3t, z3t);
+    // glVertex3f(x4, y4, z4);
+    // glVertex3f(x4t, y4t, z4t);
+    // glEnd();
 }
 
 void drawOuterWindowFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)

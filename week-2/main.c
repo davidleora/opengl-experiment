@@ -323,14 +323,6 @@ void display()
     drawGlassSlidingDoor(8.0f, 12.4f, 11.0f, 12.4f, 0.15f, 2.0f, 0.1f);  // Living Room Backyard SLIDING DOOR
     drawGlassSlidingDoor(14.8f, 12.4f, 17.8f, 12.4f, 0.15f, 2.0f, 0.1f); // Meeting Room Backyard SLIDING DOOR
 
-    // First Floor Windows
-    drawCustomWindowA(18.5f, 7.2f, 18.5f, 10.6f, 0.9f, 2.1f, 0.2f);
-    drawCustomWindowB(12.4f, 0.0f, 13.7f, 0.0f, 0.9f, 2.1f, 0.2f);
-    drawCustomWindowB(10.4f, 0.0f, 11.7f, 0.0f, 0.9f, 2.1f, 0.2f);
-    drawCustomWindowB(7.0f, 0.0f, 8.3f, 0.0f, 0.9f, 2.1f, 0.2f);
-    drawCustomWindowB(3.0f, 3.0f, 5.0f, 3.0f, 0.9f, 2.1f, 0.2f);
-    drawCustomWindowB(0.0f, 7.0f, 0.0f, 9.0f, 0.9f, 2.1f, 0.2f);
-
     // First Floor Door Frames
     drawOuterDoorFrame(14.0f, 6.0f, 15.2f, 6.0f, 0.16f, 2.0f, 0.2f);
     drawOuterDoorFrame(10.6f, 6.0f, 13.4f, 6.0f, 0.16f, 2.0f, 0.2f);
@@ -400,13 +392,6 @@ void display()
     drawCustomCeiling(6.0f, 6.0f, 13.8f, 12.4f, 5.95f, 0.1f);
     drawCustomCeiling(6.0f, 4.6f, 9.9f, 6.0f, 5.95f, 0.1f);
 
-    // Second Floor Windows
-    drawCustomWindowA(13.8f, 7.45f, 13.8f, 9.75f, 4.6f, 5.5f, 0.2f);
-    drawCustomWindowB(11.25f, 6.0f, 12.45f, 6.0f, 4.6f, 5.5f, 0.2f);
-    drawCustomWindowA(6.0f, 7.2f, 6.0f, 9.4f, 4.6f, 5.5f, 0.2f);
-    drawCustomWindowB(6.2f, 12.4f, 7.3f, 12.4f, 4.6f, 5.5f, 0.2f);
-    drawCustomWindowC(8.0f, 4.6f, 9.0f, 4.6f, 4.6f, 5.5f, 0.2f);
-
     // Second Floor Door Frames
     drawOuterDoorFrame(7.4f, 7.8f, 7.4f, 9.4f, 3.61f, 5.5f, 0.2f);
     drawOuterDoorFrame(9.0f, 11.2f, 12.0f, 11.2f, 3.61f, 5.5f, 0.2f);
@@ -426,18 +411,6 @@ void display()
     drawCustomTriangleWallWithStartHeight(13.8f, 6.0f, 13.8f, 12.4f, 0.1f, 6.0f, 1.2f);
 
     // Roofs
-    // drawThickRoofSegment(16.55f, 2.0f, 16.55f, 7.7f, 5.5f, 2.545f, 4.0f, 0.1f);
-    // drawThickRoofSegment(12.1f, 2.0f, 12.1f, 6.0f, 3.4f, 2.545f, 3.566f, 0.1f);
-    // drawThickRoofSegment(16.55f, 7.7f, 16.55f, 13.4f, 5.5f, 4.0f, 2.545f, 0.1f);
-    // drawThickRoofSegment(9.9f, 12.4f, 9.9f, 13.4f, 7.8f, 2.8f, 2.545f, 0.1f);
-    // drawThickRoofSegment(5.0f, 1.8f, 9.9f, 1.8f, 5.6f, 2.492f, 4.0f, 0.1f);
-    // drawThickRoofSegment(9.9f, 2.5f, 14.8f, 2.5f, 7.0f, 4.0f, 2.492f, 0.1f);
-    // drawThickRoofSegment(2.5f, 2.0f, 2.5f, 7.0f, 7.0f, 2.5f, 4.0f, 0.1f);
-    // drawThickRoofSegment(2.5f, 7.0f, 2.5f, 12.0f, 7.0f, 4.0f, 2.5f, 0.1f);
-    // drawThickRoofSegment(9.9f, 5.0f, 9.9f, 9.2f, 9.8f, 5.625f, 7.2f, 0.1f);
-    // drawThickRoofSegment(9.9f, 13.4f, 9.9f, 9.2f, 9.8f, 5.625f, 7.2f, 0.1f);
-    // drawThickRoofSegment(10.631f, 6.4f, 7.95f, 6.4f, 5.6f, 5.625f, 7.0f, 0.1f);
-    // drawThickRoofSegment(5.269f, 6.4f, 7.95f, 6.4f, 5.6f, 5.625f, 7.0f, 0.1f);
     drawQuadRoofSegment(9.9f, 7.2f, 9.2f, 14.3f, 7.2f, 9.2f, 14.3f, 5.825f, 5.5f, 9.9f, 5.825f, 5.5f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
     drawQuadRoofSegment(5.5f, 7.2f, 9.2f, 6.0f, 7.2f, 9.2f, 6.0f, 5.825f, 5.5f, 5.5f, 5.825f, 5.5f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
     drawQuadRoofSegment(6.0f, 7.2f, 9.2f, 9.9f, 7.2f, 9.2f, 9.9f, 6.0f, 5.971f, 6.0f, 6.0f, 5.971f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
@@ -470,6 +443,21 @@ void display()
     drawQuadRoofSegment(6.0f, 4.11f, 7.0f, 6.0f, 2.757f, 11.5f, -0.5f, 2.757f, 11.5f, -0.5f, 4.11f, 7.0f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
     drawQuadRoofSegment(6.0f, 2.757f, 2.5f, -0.5f, 2.757f, 2.5f, -0.5f, 4.11f, 7.0f, 6.0f, 4.11f, 7.0f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
     drawQuadRoofSegment(-0.5f, 2.757f, 2.5f, 6.0f, 2.757f, 2.5f, 9.9f, 3.39f, 4.6f, -0.5f, 3.39f, 4.6f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+
+    // First Floor Windows
+    drawCustomWindowA(18.5f, 7.2f, 18.5f, 10.6f, 0.9f, 2.1f, 0.2f);
+    drawCustomWindowB(12.4f, 0.0f, 13.7f, 0.0f, 0.9f, 2.1f, 0.2f);
+    drawCustomWindowB(10.4f, 0.0f, 11.7f, 0.0f, 0.9f, 2.1f, 0.2f);
+    drawCustomWindowB(7.0f, 0.0f, 8.3f, 0.0f, 0.9f, 2.1f, 0.2f);
+    drawCustomWindowB(3.0f, 3.0f, 5.0f, 3.0f, 0.9f, 2.1f, 0.2f);
+    drawCustomWindowB(0.0f, 7.0f, 0.0f, 9.0f, 0.9f, 2.1f, 0.2f);
+
+    // Second Floor Windows
+    drawCustomWindowA(13.8f, 7.45f, 13.8f, 9.75f, 4.6f, 5.5f, 0.2f);
+    drawCustomWindowB(11.25f, 6.0f, 12.45f, 6.0f, 4.6f, 5.5f, 0.2f);
+    drawCustomWindowA(6.0f, 7.2f, 6.0f, 9.4f, 4.6f, 5.5f, 0.2f);
+    drawCustomWindowB(6.2f, 12.4f, 7.3f, 12.4f, 4.6f, 5.5f, 0.2f);
+    drawCustomWindowC(8.0f, 4.6f, 9.0f, 4.6f, 4.6f, 5.5f, 0.2f);
 
     glPopMatrix();
 

@@ -353,6 +353,107 @@ void drawCustomTriangleFloor(float x1, float z1, float x2, float z2, float x3, f
     glEnd();
 }
 
+void drawCustomBlock(float startX, float startZ, float endX, float endZ, float thickness, float startHeight, float height)
+{
+    float dx = endX - startX;
+    float dz = endZ - startZ;
+    float length = sqrt(dx * dx + dz * dz);
+
+    dx /= length;
+    dz /= length;
+
+    float perpX = -dz * thickness / 2.0f;
+    float perpZ = dx * thickness / 2.0f;
+
+    float topHeight = startHeight + height;
+
+    glColor3f(0.75f, 0.75f, 0.75f);
+    glBegin(GL_QUADS);
+
+    // Bottom face
+    glVertex3f(startX + perpX, startHeight, startZ + perpZ); // Bottom-left
+    glVertex3f(startX - perpX, startHeight, startZ - perpZ); // Bottom-right
+    glVertex3f(endX - perpX, startHeight, endZ - perpZ);     // Top-right
+    glVertex3f(endX + perpX, startHeight, endZ + perpZ);     // Top-left
+
+    // Top face
+    glVertex3f(startX + perpX, topHeight, startZ + perpZ); // Top-left
+    glVertex3f(startX - perpX, topHeight, startZ - perpZ); // Top-right
+    glVertex3f(endX - perpX, topHeight, endZ - perpZ);     // Bottom-right
+    glVertex3f(endX + perpX, topHeight, endZ + perpZ);     // Bottom-left
+
+    // Front face
+    glVertex3f(startX + perpX, startHeight, startZ + perpZ); // Bottom-left
+    glVertex3f(startX - perpX, startHeight, startZ - perpZ); // Bottom-right
+    glVertex3f(startX - perpX, topHeight, startZ - perpZ);   // Top-right
+    glVertex3f(startX + perpX, topHeight, startZ + perpZ);   // Top-left
+
+    // Back face
+    glVertex3f(endX + perpX, startHeight, endZ + perpZ); // Bottom-left
+    glVertex3f(endX - perpX, startHeight, endZ - perpZ); // Bottom-right
+    glVertex3f(endX - perpX, topHeight, endZ - perpZ);   // Top-right
+    glVertex3f(endX + perpX, topHeight, endZ + perpZ);   // Top-left
+
+    // Left face
+    glVertex3f(startX + perpX, startHeight, startZ + perpZ); // Bottom-left
+    glVertex3f(endX + perpX, startHeight, endZ + perpZ);     // Bottom-right
+    glVertex3f(endX + perpX, topHeight, endZ + perpZ);       // Top-right
+    glVertex3f(startX + perpX, topHeight, startZ + perpZ);   // Top-left
+
+    // Right face
+    glVertex3f(startX - perpX, startHeight, startZ - perpZ); // Bottom-left
+    glVertex3f(endX - perpX, startHeight, endZ - perpZ);     // Bottom-right
+    glVertex3f(endX - perpX, topHeight, endZ - perpZ);       // Top-right
+    glVertex3f(startX - perpX, topHeight, startZ - perpZ);   // Top-left
+
+    glEnd();
+
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glLineWidth(2.0f);
+    glBegin(GL_LINES);
+
+    // Bottom edges
+    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
+    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
+
+    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
+    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
+
+    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
+    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
+
+    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
+    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
+
+    // Top edges
+    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
+    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
+
+    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
+    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
+
+    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
+    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
+
+    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
+    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
+
+    // Vertical edges
+    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
+    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
+
+    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
+    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
+
+    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
+    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
+
+    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
+    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
+
+    glEnd();
+}
+
 void drawTexturedFloor(float startX, float startZ, float endX, float endZ, float height)
 {
     float tileWidth = 2.0f;
@@ -391,6 +492,31 @@ void drawTexturedFloor(float startX, float startZ, float endX, float endZ, float
 
     // Disable texturing (so subsequent objects won’t be textured)
     glDisable(GL_TEXTURE_2D);
+}
+
+void drawGlassPanel(
+    float startX, float startZ,
+    float endX, float endZ,
+    float bottomHeight,
+    float topHeight)
+{
+    // Enable blending for transparency
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // Pastel light-blue color, semi-transparent (alpha=0.5)
+    glColor4f(0.7f, 0.85f, 1.0f, 0.5f);
+
+    // Draw a single quad - no thickness, just one "layer"
+    glBegin(GL_QUADS);
+    glVertex3f(startX, bottomHeight, startZ);
+    glVertex3f(startX, topHeight, startZ);
+    glVertex3f(endX, topHeight, endZ);
+    glVertex3f(endX, bottomHeight, endZ);
+    glEnd();
+
+    // Disable blending for subsequent objects
+    glDisable(GL_BLEND);
 }
 
 void drawCustomCeiling(float startX, float startZ, float endX, float endZ, float height, float thickness)
@@ -739,107 +865,6 @@ void drawQuadRoofSegment(float x1, float y1, float z1, float x2, float y2, float
     glEnd();
 }
 
-void drawCustomBlock(float startX, float startZ, float endX, float endZ, float thickness, float startHeight, float height)
-{
-    float dx = endX - startX;
-    float dz = endZ - startZ;
-    float length = sqrt(dx * dx + dz * dz);
-
-    dx /= length;
-    dz /= length;
-
-    float perpX = -dz * thickness / 2.0f;
-    float perpZ = dx * thickness / 2.0f;
-
-    float topHeight = startHeight + height;
-
-    glColor3f(0.75f, 0.75f, 0.75f);
-    glBegin(GL_QUADS);
-
-    // Bottom face
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ); // Bottom-left
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ); // Bottom-right
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);     // Top-right
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);     // Top-left
-
-    // Top face
-    glVertex3f(startX + perpX, topHeight, startZ + perpZ); // Top-left
-    glVertex3f(startX - perpX, topHeight, startZ - perpZ); // Top-right
-    glVertex3f(endX - perpX, topHeight, endZ - perpZ);     // Bottom-right
-    glVertex3f(endX + perpX, topHeight, endZ + perpZ);     // Bottom-left
-
-    // Front face
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ); // Bottom-left
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ); // Bottom-right
-    glVertex3f(startX - perpX, topHeight, startZ - perpZ);   // Top-right
-    glVertex3f(startX + perpX, topHeight, startZ + perpZ);   // Top-left
-
-    // Back face
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ); // Bottom-left
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ); // Bottom-right
-    glVertex3f(endX - perpX, topHeight, endZ - perpZ);   // Top-right
-    glVertex3f(endX + perpX, topHeight, endZ + perpZ);   // Top-left
-
-    // Left face
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ); // Bottom-left
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);     // Bottom-right
-    glVertex3f(endX + perpX, topHeight, endZ + perpZ);       // Top-right
-    glVertex3f(startX + perpX, topHeight, startZ + perpZ);   // Top-left
-
-    // Right face
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ); // Bottom-left
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);     // Bottom-right
-    glVertex3f(endX - perpX, topHeight, endZ - perpZ);       // Top-right
-    glVertex3f(startX - perpX, topHeight, startZ - perpZ);   // Top-left
-
-    glEnd();
-
-    glColor3f(0.0f, 0.0f, 0.0f);
-    glLineWidth(2.0f);
-    glBegin(GL_LINES);
-
-    // Bottom edges
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
-
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
-
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
-
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
-
-    // Top edges
-    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
-    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
-
-    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
-    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
-
-    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
-    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
-
-    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
-    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
-
-    // Vertical edges
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
-    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
-
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
-    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
-
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
-    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
-
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
-    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
-
-    glEnd();
-}
-
 void drawOuterWindowFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
 {
     if (startX == endX)
@@ -904,6 +929,9 @@ void drawInnerWindowFrame(float startX, float startZ, float endX, float endZ, fl
         {
             drawCustomBlock(startX, midZ, endX, endZ - 0.1f, thickness / 8.0f, (endY + startY) / 2 - thickness / 8.0f, thickness / 4.0f);
         }
+
+        drawGlassPanel(startX, startZ, endX, midZ, startY, endY);
+        drawGlassPanel(startX, midZ, endX, endZ, startY, endY);
     }
     else if (startZ == endZ)
     {
@@ -931,6 +959,9 @@ void drawInnerWindowFrame(float startX, float startZ, float endX, float endZ, fl
         {
             drawCustomBlock(midX, startZ, endX - 0.1f, endZ, thickness / 4.0f, (endY + startY) / 2 - thickness / 8.0f, thickness / 4.0f);
         }
+
+        drawGlassPanel(startX, startZ, midX, endZ, startY, endY);
+        drawGlassPanel(midX, startZ, endX, endZ, startY, endY);
     }
 }
 
@@ -948,6 +979,9 @@ void drawInnerWindowFrame2(float startX, float startZ, float endX, float endZ, f
     drawCustomBlock(midX, startZ, midX + thickness / 2.0f, endZ, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
     drawCustomBlock(endX - 0.1f - thickness / 2.0f, startZ, endX - 0.1f, endZ, thickness / 2.0f, startY + 0.1f, endY - startY - 0.2f);
     drawCustomBlock(midX, startZ, endX - 0.1f, endZ, thickness / 2.0f, (endY + startY) / 2 - thickness / 4.0f, thickness / 2.0f);
+
+    drawGlassPanel(startX, startZ, midX, endZ, startY, endY);
+    drawGlassPanel(midX, startZ, endX, endZ, startY, endY);
 }
 
 void drawCustomWindowA(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)

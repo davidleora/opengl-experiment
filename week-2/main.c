@@ -341,7 +341,7 @@ void display()
     drawDoorTypeC(14.0f, 6.0f, 15.2f, 6.0f, 0.25f, 1.9f, 0.1f);   // Meeting Room DOOR
     drawDoorTypeB(0.6f, 3.0f, 1.9f, 3.0f, 0.125f, 1.9f, 0.1f);    // Dining Room Backyard DOOR
     drawSlidingDoor(10.7f, 6.0f, 13.3f, 6.0f, 0.25f, 1.9f, 0.1f); // Living Room DOOR
-
+    drawDoorTypeA(9.1f, 1.6f, 9.1f, 2.9f, 0.25f, 1.9f, 0.1f);     // Shower DOOR
     // Stair
     drawCustomFloor(10.2f, 4.6f, 10.599f, 6.0f, 0.0f, 0.5375f);
     drawCustomFloor(9.8f, 4.6f, 10.2f, 6.0f, 0.0f, 0.825f);
@@ -398,9 +398,9 @@ void display()
     drawOuterDoorFrame(7.4f, 11.2f, 7.4f, 12.4f, 3.61f, 5.0f, 0.2f);
 
     // Second Floor Doors
-    drawDoorTypeC(7.4f, 7.9f, 7.4f, 9.3f, 3.7f, 5.4f, 0.f);       // Bedroom 1 DOOR
-    drawDoorTypeC(7.4f, 11.3f, 7.4f, 12.3f, 3.7f, 4.9f, 0.1f);    // Storage Room DOOR
-    drawSlidingDoor(12.0f, 11.2f, 9.0f, 11.2f, 3.7f, 5.4f, 0.1f); // Bedroom 2 DOOR
+    drawDoorTypeC(7.4f, 7.9f, 7.4f, 9.3f, 3.7f, 5.4f, 0.f);         // Bedroom 1 DOOR
+    drawDoorTypeC(7.4f, 11.3f, 7.4f, 12.3f, 3.7f, 4.9f, 0.1f);      // Storage Room DOOR
+    drawSlidingDoor(11.85f, 11.2f, 9.15f, 11.2f, 3.7f, 5.4f, 0.1f); // Bedroom 2 DOOR
 
     // Triangle Walls
     drawCustomTriangleWallWithStartHeight(0.0f, 3.0f, 0.0f, 11.0f, 0.1f, 2.8f, 1.2f);

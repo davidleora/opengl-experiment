@@ -21,8 +21,6 @@ void drawCustomCeiling(float startX, float startZ, float endX, float endZ, float
 
 void drawCustomTriangleWallWithStartHeight(float startX, float startZ, float endX, float endZ, float thickness, float startHeight, float height);
 
-void drawThickRoofSegment(float startX, float startZ, float endX, float endZ, float widthThickness, float baseHeight, float apexHeight, float heightThickness);
-
 void drawCustomWindowA(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
 
 void drawCustomWindowB(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);

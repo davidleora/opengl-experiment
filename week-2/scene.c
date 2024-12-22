@@ -367,7 +367,6 @@ void drawCustomBlock(float startX, float startZ, float endX, float endZ, float t
 
     float topHeight = startHeight + height;
 
-    glColor3f(0.75f, 0.75f, 0.75f);
     glBegin(GL_QUADS);
 
     // Bottom face
@@ -405,51 +404,6 @@ void drawCustomBlock(float startX, float startZ, float endX, float endZ, float t
     glVertex3f(endX - perpX, startHeight, endZ - perpZ);     // Bottom-right
     glVertex3f(endX - perpX, topHeight, endZ - perpZ);       // Top-right
     glVertex3f(startX - perpX, topHeight, startZ - perpZ);   // Top-left
-
-    glEnd();
-
-    glColor3f(0.0f, 0.0f, 0.0f);
-    glLineWidth(2.0f);
-    glBegin(GL_LINES);
-
-    // Bottom edges
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
-
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
-
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
-
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
-
-    // Top edges
-    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
-    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
-
-    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
-    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
-
-    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
-    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
-
-    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
-    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
-
-    // Vertical edges
-    glVertex3f(startX + perpX, startHeight, startZ + perpZ);
-    glVertex3f(startX + perpX, topHeight, startZ + perpZ);
-
-    glVertex3f(startX - perpX, startHeight, startZ - perpZ);
-    glVertex3f(startX - perpX, topHeight, startZ - perpZ);
-
-    glVertex3f(endX + perpX, startHeight, endZ + perpZ);
-    glVertex3f(endX + perpX, topHeight, endZ + perpZ);
-
-    glVertex3f(endX - perpX, startHeight, endZ - perpZ);
-    glVertex3f(endX - perpX, topHeight, endZ - perpZ);
 
     glEnd();
 }
@@ -494,28 +448,35 @@ void drawTexturedFloor(float startX, float startZ, float endX, float endZ, float
     glDisable(GL_TEXTURE_2D);
 }
 
-void drawGlassPanel(
-    float startX, float startZ,
-    float endX, float endZ,
-    float bottomHeight,
-    float topHeight)
+void drawGlassPanel(float startX, float startZ, float endX, float endZ, float bottomHeight, float topHeight)
 {
-    // Enable blending for transparency
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    // Pastel light-blue color, semi-transparent (alpha=0.5)
-    glColor4f(0.7f, 0.85f, 1.0f, 0.5f);
-
-    // Draw a single quad - no thickness, just one "layer"
+    // glDepthMask(GL_FALSE);
+    glColor4f(0.7f, 0.85f, 1.0f, 1.0f);
     glBegin(GL_QUADS);
     glVertex3f(startX, bottomHeight, startZ);
     glVertex3f(startX, topHeight, startZ);
     glVertex3f(endX, topHeight, endZ);
     glVertex3f(endX, bottomHeight, endZ);
     glEnd();
+    // glDepthMask(GL_TRUE);
+    glDisable(GL_BLEND);
+}
 
-    // Disable blending for subsequent objects
+void drawOpaquePanel(float startX, float startZ, float endX, float endZ, float bottomHeight, float topHeight)
+{
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // glDepthMask(GL_FALSE);
+    glColor4f(0.9f, 0.9f, 0.9f, 1.0f);
+    glBegin(GL_QUADS);
+    glVertex3f(startX, bottomHeight, startZ);
+    glVertex3f(startX, topHeight, startZ);
+    glVertex3f(endX, topHeight, endZ);
+    glVertex3f(endX, bottomHeight, endZ);
+    glEnd();
+    // glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
 }
 
@@ -693,86 +654,6 @@ void drawCustomTriangleWallWithStartHeight(float startX, float startZ, float end
     glEnd();
 }
 
-void drawThickRoofSegment(float startX, float startZ, float endX, float endZ, float widthThickness, float baseHeight, float apexHeight, float heightThickness)
-{
-    float dx = endX - startX;
-    float dz = endZ - startZ;
-    float length = sqrt(dx * dx + dz * dz);
-
-    dx /= length;
-    dz /= length;
-
-    float perpX = -dz * widthThickness / 2.0f;
-    float perpZ = dx * widthThickness / 2.0f;
-
-    float baseHeightTop = baseHeight + heightThickness;
-    float apexHeightTop = apexHeight + heightThickness;
-
-    glColor3f(1.0f, 0.5f, 0.0f); // Roof color (orange)
-
-    glBegin(GL_QUADS);
-
-    // Bottom face
-    glVertex3f(startX + perpX, baseHeight, startZ + perpZ); // Bottom-left
-    glVertex3f(startX - perpX, baseHeight, startZ - perpZ); // Bottom-right
-    glVertex3f(endX - perpX, apexHeight, endZ - perpZ);     // Top-right
-    glVertex3f(endX + perpX, apexHeight, endZ + perpZ);     // Top-left
-
-    // Top face
-    glVertex3f(startX + perpX, baseHeightTop, startZ + perpZ); // Bottom-left (top)
-    glVertex3f(startX - perpX, baseHeightTop, startZ - perpZ); // Bottom-right (top)
-    glVertex3f(endX - perpX, apexHeightTop, endZ - perpZ);     // Top-right (top)
-    glVertex3f(endX + perpX, apexHeightTop, endZ + perpZ);     // Top-left (top)
-
-    // Front face
-    glVertex3f(startX + perpX, baseHeight, startZ + perpZ);    // Bottom-left
-    glVertex3f(startX - perpX, baseHeight, startZ - perpZ);    // Bottom-right
-    glVertex3f(startX - perpX, baseHeightTop, startZ - perpZ); // Top-right
-    glVertex3f(startX + perpX, baseHeightTop, startZ + perpZ); // Top-left
-
-    // Back face
-    glVertex3f(endX + perpX, apexHeight, endZ + perpZ);    // Bottom-left
-    glVertex3f(endX - perpX, apexHeight, endZ - perpZ);    // Bottom-right
-    glVertex3f(endX - perpX, apexHeightTop, endZ - perpZ); // Top-right
-    glVertex3f(endX + perpX, apexHeightTop, endZ + perpZ); // Top-left
-
-    glEnd();
-
-    glColor3f(0.0f, 0.0f, 0.0f); // Outline color (black)
-
-    glLineWidth(2.0f);
-    glBegin(GL_LINES);
-
-    // Base edges
-    glVertex3f(startX + perpX, baseHeight, startZ + perpZ);
-    glVertex3f(endX + perpX, apexHeight, endZ + perpZ);
-
-    glVertex3f(startX - perpX, baseHeight, startZ - perpZ);
-    glVertex3f(endX - perpX, apexHeight, endZ - perpZ);
-
-    // Top edges
-    glVertex3f(startX + perpX, baseHeightTop, startZ + perpZ);
-    glVertex3f(endX + perpX, apexHeightTop, endZ + perpZ);
-
-    glVertex3f(startX - perpX, baseHeightTop, startZ - perpZ);
-    glVertex3f(endX - perpX, apexHeightTop, endZ - perpZ);
-
-    // Connecting edges
-    glVertex3f(startX + perpX, baseHeight, startZ + perpZ);
-    glVertex3f(startX + perpX, baseHeightTop, startZ + perpZ);
-
-    glVertex3f(startX - perpX, baseHeight, startZ - perpZ);
-    glVertex3f(startX - perpX, baseHeightTop, startZ - perpZ);
-
-    glVertex3f(endX + perpX, apexHeight, endZ + perpZ);
-    glVertex3f(endX + perpX, apexHeightTop, endZ + perpZ);
-
-    glVertex3f(endX - perpX, apexHeight, endZ - perpZ);
-    glVertex3f(endX - perpX, apexHeightTop, endZ - perpZ);
-
-    glEnd();
-}
-
 void drawQuadRoofSegment(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, float roofThickness, float colorRed, float colorGreen, float colorBlue)
 {
     float x1t = x1, y1t = y1 + roofThickness, z1t = z1;
@@ -867,6 +748,8 @@ void drawQuadRoofSegment(float x1, float y1, float z1, float x2, float y2, float
 
 void drawOuterWindowFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
 {
+    glColor3f(112.0f / 255.0f, 123.0f / 255.0f, 124.0f / 255.0f);
+
     if (startX == endX)
     {
         drawCustomBlock(startX, startZ, endX, endZ, thickness, endY - 0.1f, 0.1f);
@@ -885,6 +768,8 @@ void drawOuterWindowFrame(float startX, float startZ, float endX, float endZ, fl
 
 void drawOuterDoorFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
 {
+    glColor3f(135.0f / 255.0f, 54.0f / 255.0f, 0.0f);
+
     if (startX == endX)
     {
         drawCustomBlock(startX, startZ, endX, endZ, thickness, endY - 0.1f, 0.1f);
@@ -903,6 +788,8 @@ void drawOuterDoorFrame(float startX, float startZ, float endX, float endZ, floa
 
 void drawInnerWindowFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness, char windowType)
 {
+    glColor3f(153.0f / 255.0f, 163.0f / 255.0f, 164.0f / 255.0f);
+
     if (startX == endX)
     {
         float midZ = (startZ + endZ) / 2.0f;
@@ -967,6 +854,8 @@ void drawInnerWindowFrame(float startX, float startZ, float endX, float endZ, fl
 
 void drawInnerWindowFrame2(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
 {
+    glColor3f(153.0f / 255.0f, 163.0f / 255.0f, 164.0f / 255.0f);
+
     float midX = (startX + endX) / 2.0f;
     drawCustomBlock(startX + 0.1f, startZ, midX, endZ, thickness / 2.0f, startY + 0.1f, thickness / 2.0f);
     drawCustomBlock(startX + 0.1f, startZ, midX, endZ, thickness / 2.0f, endY - 0.1f - thickness / 2.0f, thickness / 2.0f);
@@ -1010,8 +899,25 @@ void drawGlassSlidingDoor(float startX, float startZ, float endX, float endZ, fl
 
 void drawMainDoorFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
 {
+
     float midZ = (startZ + endZ) / 2.0f;
-    drawOuterWindowFrame(startX, startZ, endX, endZ, startY, endY, thickness);
+    glColor3f(123.0f / 255.0f, 36.0f / 255.0f, 28.0f / 255.0f);
+    if (startX == endX)
+    {
+        drawCustomBlock(startX, startZ, endX, endZ, thickness, endY - 0.1f, 0.1f);
+        drawCustomBlock(startX, startZ, endX, endZ, thickness, startY, 0.1f);
+        drawCustomBlock(startX, startZ, endX, startZ + 0.1f, thickness, startY, endY - startY);
+        drawCustomBlock(startX, endZ - 0.1f, endX, endZ, thickness, startY, endY - startY);
+    }
+    else if (startZ == endZ)
+    {
+        drawCustomBlock(startX, startZ, endX, endZ, thickness, endY - 0.1f, 0.1f);
+        drawCustomBlock(startX, startZ, endX, endZ, thickness, startY, 0.1f);
+        drawCustomBlock(startX, startZ, startX + 0.1f, endZ, thickness, startY, endY - startY);
+        drawCustomBlock(endX - 0.1f, startZ, endX, endZ, thickness, startY, endY - startY);
+    }
+
+    glColor3f(169.0f / 255.0f, 50.0f / 255.0f, 38.0f / 255.0f);
     drawCustomBlock(startX, startZ + 0.1f, endX, endZ - 0.1f, thickness / 2, 1.8f, 0.1f);
     drawCustomBlock(startX, midZ - 0.05f, endX, midZ + 0.05f, thickness / 2, 1.9f, 0.3f);
     drawCustomBlock(startX, startZ + 0.66f, endX, startZ + 0.76f, thickness / 2, 0.0f, 1.8f);
@@ -1023,6 +929,9 @@ void drawMainDoorFrame(float startX, float startZ, float endX, float endZ, float
     drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 0.6f, 0.05);
     drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 0.4f, 0.05);
     drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 0.0f, 0.25);
+
+    drawGlassPanel(startX, startZ + 0.1f, endX, startZ + 0.66f, 0.0f, 1.8f);
+    drawGlassPanel(startX, startZ, endX, endZ, 1.9f, 2.2f);
 }
 
 void drawDoorTypeA(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
@@ -1036,6 +945,7 @@ void drawDoorTypeA(float startX, float startZ, float endX, float endZ, float sta
 
         drawCustomBlock(startX + thickness, startZ, endX - thickness, startZ, thickness, startY + (endY - startY) / 3.0f, thickness / 2.0f);
         drawCustomBlock(startX + thickness, startZ, endX - thickness, startZ, thickness, startY + 2.0f * (endY - startY) / 3.0f, thickness / 2.0f);
+        drawOpaquePanel(startX + thickness, startZ, endX - thickness, endZ, startY, endY);
     }
     else if (startX == endX)
     {
@@ -1046,11 +956,13 @@ void drawDoorTypeA(float startX, float startZ, float endX, float endZ, float sta
 
         drawCustomBlock(startX, startZ + thickness, startX, endZ - thickness, thickness, startY + (endY - startY) / 3.0f, thickness / 2.0f);
         drawCustomBlock(startX, startZ + thickness, startX, endZ - thickness, thickness, startY + 2.0f * (endY - startY) / 3.0f, thickness / 2.0f);
+        drawOpaquePanel(startX, startZ + thickness, endX, endZ - thickness, startY, endY);
     }
 }
 
 void drawDoorTypeB(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
 {
+    glColor3f(205.0f / 255.0f, 97.0f / 255.0f, 85.0f / 255.0f);
     bool vertical = (startX == endX);
     float doorWidth = vertical ? fabsf(endZ - startZ) : fabsf(endX - startX);
     float doorHeight = endY - startY;
@@ -1064,6 +976,7 @@ void drawDoorTypeB(float startX, float startZ, float endX, float endZ, float sta
         drawCustomBlock(startX, doorZ, endX, doorZ, thickness, startY, cutOutStartY - startY);
         drawCustomBlock(startX, doorZ, startX + cutOutWidth, doorZ, thickness, cutOutStartY, (cutOutTopY - cutOutStartY));
         drawCustomBlock(endX - cutOutWidth, doorZ, endX, doorZ, thickness, cutOutStartY, (cutOutTopY - cutOutStartY));
+        drawGlassPanel(startX, doorZ, endX, doorZ, cutOutStartY, cutOutTopY);
     }
     else
     {
@@ -1072,11 +985,13 @@ void drawDoorTypeB(float startX, float startZ, float endX, float endZ, float sta
         drawCustomBlock(doorX, endZ, doorX, startZ, thickness, startY, cutOutStartY - startY);
         drawCustomBlock(doorX, startZ, doorX, startZ + cutOutWidth, thickness, cutOutStartY, (cutOutTopY - cutOutStartY));
         drawCustomBlock(doorX, endZ - cutOutWidth, doorX, endZ, thickness, cutOutStartY, (cutOutTopY - cutOutStartY));
+        drawGlassPanel(doorX, endZ, doorX, startZ, cutOutStartY, cutOutTopY);
     }
 }
 
 void drawDoorTypeC(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
 {
+    glColor3f(211.0 / 255.0f, 84.0 / 255.0f, 0.0f);
     drawCustomBlock(startX, startZ, endX, endZ, thickness, startY, endY - startY);
 }
 
@@ -1086,20 +1001,30 @@ void drawSlidingDoor(float startX, float startZ, float endX, float endZ, float s
     if (startZ == endZ)
     {
         float mid = (startX + endX) / 2.0f;
-        drawCustomBlock(startX, startZ + 0.025f, mid, endZ + 0.025f, thickness, startY, thickness);
-        drawCustomBlock(startX, startZ + 0.025f, mid, endZ + 0.025f, thickness, endY - thickness, thickness);
-        drawCustomBlock(startX, startZ + 0.025f, startX + thickness, endZ + 0.025f, thickness, startY, endY - startY);
-        drawCustomBlock(mid - thickness, startZ + 0.025f, mid, endZ + 0.025f, thickness, startY, endY - startY);
-        drawCustomBlock(startX + thickness, startZ + 0.025f, mid - thickness, endZ + 0.025f, thickness, startY + thickness, (endY - startY) / 3.0f);
-        drawCustomBlock(startX + thickness, startZ + 0.025f, mid - thickness, endZ + 0.025f, thickness, startY + thickness + (endY - startY) / 3.0f, (endY - startY) / 3.0f);
-        drawCustomBlock(startX + thickness, startZ + 0.025f, mid - thickness, endZ + 0.025f, thickness, startY + thickness + 2.0f * (endY - startY) / 3.0f, (endY - startY) / 3.0f);
+        glColor3f(0.0f, 0.0f, 0.0f);
+        drawCustomBlock(startX, startZ + 0.03f, mid, endZ + 0.03f, thickness + 0.1f, startY, thickness);
+        drawCustomBlock(startX, startZ + 0.03f, mid, endZ + 0.03f, thickness + 0.1f, endY - thickness, thickness);
+        drawCustomBlock(startX, startZ + 0.03f, startX + thickness, endZ + 0.03f, thickness + 0.1f, startY, endY - startY);
+        drawCustomBlock(mid - thickness, startZ + 0.03f, mid, endZ + 0.03f, thickness + 0.1f, startY, endY - startY);
 
-        drawCustomBlock(mid, startZ - 0.025f, endX, endZ - 0.025f, thickness, startY, thickness);
-        drawCustomBlock(mid, startZ - 0.025f, endX, endZ - 0.025f, thickness, endY - thickness, thickness);
-        drawCustomBlock(mid, startZ - 0.025f, mid + thickness, endZ - 0.025f, thickness, startY, endY - startY);
-        drawCustomBlock(endX - thickness, startZ - 0.025f, endX, endZ - 0.025f, thickness, startY, endY - startY);
-        drawCustomBlock(mid + thickness, startZ - 0.025f, endX - thickness, endZ - 0.025f, thickness, startY + thickness, (endY - startY) / 3.0f);
-        drawCustomBlock(mid + thickness, startZ - 0.025f, endX - thickness, endZ - 0.025f, thickness, startY + thickness + (endY - startY) / 3.0f, (endY - startY) / 3.0f);
-        drawCustomBlock(mid + thickness, startZ - 0.025f, endX - thickness, endZ - 0.025f, thickness, startY + thickness + 2.0f * (endY - startY) / 3.0f, (endY - startY) / 3.0f);
+        glColor3f(1.0f, 1.0f, 1.0f);
+        drawCustomBlock(startX + thickness - 0.01f, startZ + 0.03f, mid - thickness + 0.01f, endZ + 0.03f, thickness, startY + thickness, (endY - startY) / 3.0f);
+        drawCustomBlock(startX + thickness - 0.01f, startZ + 0.03f, mid - thickness + 0.01f, endZ + 0.03f, thickness, startY + thickness + 2.0f * (endY - startY) / 3.0f, (endY - startY) / 3.0f);
+
+        glColor3f(236.0f / 255.0f, 112.0f / 255.0f, 99.0f / 255.0f);
+        drawCustomBlock(startX + thickness - 0.01f, startZ + 0.03f, mid - thickness + 0.01f, endZ + 0.03f, thickness, startY + thickness + (endY - startY) / 3.0f, (endY - startY) / 3.0f);
+
+        glColor3f(0.0f, 0.0f, 0.0f);
+        drawCustomBlock(mid, startZ - 0.03f, endX, endZ - 0.03f, thickness + 0.1f, startY, thickness);
+        drawCustomBlock(mid, startZ - 0.03f, endX, endZ - 0.03f, thickness + 0.1f, endY - thickness, thickness);
+        drawCustomBlock(mid, startZ - 0.03f, mid + thickness, endZ - 0.03f, thickness + 0.1f, startY, endY - startY);
+        drawCustomBlock(endX - thickness, startZ - 0.03f, endX, endZ - 0.03f, thickness + 0.1f, startY, endY - startY);
+
+        glColor3f(1.0f, 1.0f, 1.0f);
+        drawCustomBlock(mid + thickness - 0.01f, startZ - 0.03f, endX - thickness + 0.01f, endZ - 0.03f, thickness, startY + thickness, (endY - startY) / 3.0f);
+        drawCustomBlock(mid + thickness - 0.01f, startZ - 0.03f, endX - thickness + 0.01f, endZ - 0.03f, thickness, startY + thickness + 2.0f * (endY - startY) / 3.0f, (endY - startY) / 3.0f);
+
+        glColor3f(236.0f / 255.0f, 112.0f / 255.0f, 99.0f / 255.0f);
+        drawCustomBlock(mid + thickness - 0.01f, startZ - 0.03f, endX - thickness + 0.01f, endZ - 0.03f, thickness, startY + thickness + (endY - startY) / 3.0f, (endY - startY) / 3.0f);
     }
 }

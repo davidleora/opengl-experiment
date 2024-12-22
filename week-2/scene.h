@@ -47,4 +47,6 @@ void drawDoorTypeC(float startX, float startZ, float endX, float endZ, float sta
 
 void drawSlidingDoor(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
 
+void drawQuadRoofSegment(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, float roofThickness, float colorRed, float colorGreen, float colorBlue);
+
 #endif

@@ -421,23 +421,55 @@ void display()
     drawCustomTriangleWallWithStartHeight(0.0f, 3.0f, 0.0f, 11.0f, 0.1f, 2.8f, 1.2f);
     drawCustomTriangleWallWithStartHeight(18.5f, 3.0f, 18.5f, 12.4f, 0.1f, 2.8f, 1.2f);
     drawCustomTriangleWallWithStartHeight(6.0f, 6.0f, 6.0f, 12.4f, 0.1f, 6.0f, 1.2f);
-    drawCustomTriangleWallWithStartHeight(6.0f, 0.0f, 13.8f, 0.0f, 0.1f, 2.8f, 1.2f);
+    drawCustomTriangleWallWithStartHeight(6.0f, 0.0f, 13.8f, 0.0f, 0.1f, 2.8f, 0.766f);
     drawCustomTriangleWallWithStartHeight(6.0f, 4.6f, 9.9f, 4.6f, 0.1f, 6.0f, 1.0f);
     drawCustomTriangleWallWithStartHeight(13.8f, 6.0f, 13.8f, 12.4f, 0.1f, 6.0f, 1.2f);
 
     // Roofs
-    drawThickRoofSegment(16.55f, 2.0f, 16.55f, 7.7f, 5.5f, 2.545f, 4.0f, 0.1f);
-    drawThickRoofSegment(12.1f, 2.0f, 12.1f, 6.0f, 3.4f, 2.545f, 3.566f, 0.1f);
-    drawThickRoofSegment(16.55f, 7.7f, 16.55f, 13.4f, 5.5f, 4.0f, 2.545f, 0.1f);
-    drawThickRoofSegment(9.9f, 12.4f, 9.9f, 13.4f, 7.8f, 2.8f, 2.545f, 0.1f);
-    drawThickRoofSegment(5.0f, 1.8f, 9.9f, 1.8f, 5.6f, 2.492f, 4.0f, 0.1f);
-    drawThickRoofSegment(9.9f, 2.5f, 14.8f, 2.5f, 7.0f, 4.0f, 2.492f, 0.1f);
-    drawThickRoofSegment(2.5f, 2.0f, 2.5f, 7.0f, 7.0f, 2.5f, 4.0f, 0.1f);
-    drawThickRoofSegment(2.5f, 7.0f, 2.5f, 12.0f, 7.0f, 4.0f, 2.5f, 0.1f);
-    drawThickRoofSegment(9.9f, 5.0f, 9.9f, 9.2f, 9.8f, 5.625f, 7.2f, 0.1f);
-    drawThickRoofSegment(9.9f, 13.4f, 9.9f, 9.2f, 9.8f, 5.625f, 7.2f, 0.1f);
-    drawThickRoofSegment(10.631f, 6.4f, 7.95f, 6.4f, 5.6f, 5.625f, 7.0f, 0.1f);
-    drawThickRoofSegment(5.269f, 6.4f, 7.95f, 6.4f, 5.6f, 5.625f, 7.0f, 0.1f);
+    // drawThickRoofSegment(16.55f, 2.0f, 16.55f, 7.7f, 5.5f, 2.545f, 4.0f, 0.1f);
+    // drawThickRoofSegment(12.1f, 2.0f, 12.1f, 6.0f, 3.4f, 2.545f, 3.566f, 0.1f);
+    // drawThickRoofSegment(16.55f, 7.7f, 16.55f, 13.4f, 5.5f, 4.0f, 2.545f, 0.1f);
+    // drawThickRoofSegment(9.9f, 12.4f, 9.9f, 13.4f, 7.8f, 2.8f, 2.545f, 0.1f);
+    // drawThickRoofSegment(5.0f, 1.8f, 9.9f, 1.8f, 5.6f, 2.492f, 4.0f, 0.1f);
+    // drawThickRoofSegment(9.9f, 2.5f, 14.8f, 2.5f, 7.0f, 4.0f, 2.492f, 0.1f);
+    // drawThickRoofSegment(2.5f, 2.0f, 2.5f, 7.0f, 7.0f, 2.5f, 4.0f, 0.1f);
+    // drawThickRoofSegment(2.5f, 7.0f, 2.5f, 12.0f, 7.0f, 4.0f, 2.5f, 0.1f);
+    // drawThickRoofSegment(9.9f, 5.0f, 9.9f, 9.2f, 9.8f, 5.625f, 7.2f, 0.1f);
+    // drawThickRoofSegment(9.9f, 13.4f, 9.9f, 9.2f, 9.8f, 5.625f, 7.2f, 0.1f);
+    // drawThickRoofSegment(10.631f, 6.4f, 7.95f, 6.4f, 5.6f, 5.625f, 7.0f, 0.1f);
+    // drawThickRoofSegment(5.269f, 6.4f, 7.95f, 6.4f, 5.6f, 5.625f, 7.0f, 0.1f);
+    drawQuadRoofSegment(9.9f, 7.2f, 9.2f, 14.3f, 7.2f, 9.2f, 14.3f, 5.825f, 5.5f, 9.9f, 5.825f, 5.5f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+    drawQuadRoofSegment(5.5f, 7.2f, 9.2f, 6.0f, 7.2f, 9.2f, 6.0f, 5.825f, 5.5f, 5.5f, 5.825f, 5.5f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+    drawQuadRoofSegment(6.0f, 7.2f, 9.2f, 9.9f, 7.2f, 9.2f, 9.9f, 6.0f, 5.971f, 6.0f, 6.0f, 5.971f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+    drawQuadRoofSegment(5.5f, 7.2f, 9.2f, 14.3f, 7.2f, 9.2f, 14.3f, 5.825f, 12.9f, 5.5f, 5.825f, 12.9f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+    drawQuadRoofSegment(7.95f, 7.0f, 4.1f, 10.241f, 5.825f, 4.1f, 10.241f, 5.825f, 5.5f, 7.95f, 7.0f, 8.661f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+    drawQuadRoofSegment(5.659f, 5.825f, 4.1f, 7.95f, 7.0f, 4.1f, 7.95f, 7.0f, 8.661f, 5.659f, 5.825f, 5.5f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+
+    drawQuadRoofSegment(5.5f, 2.647f, -0.5f, 9.9f, 3.566f, -0.5f, 9.9f, 3.566f, 4.6f, 5.5f, 2.647f, 4.6f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+    drawQuadRoofSegment(9.9f, 3.566f, -0.5f, 9.9f, 3.566f, 6.0f, 14.3f, 2.647f, 2.5f, 14.3f, 2.647f, -0.5f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+    drawQuadRoofSegment(9.9f, 3.566f, 6.0f, 14.3f, 2.647f, 2.5f, 19.0f, 2.647f, 2.5f, 19.0f, 3.566f, 6.0f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+    drawQuadRoofSegment(13.8f, 3.566f, 6.0f, 19.0f, 3.566f, 6.0f, 19.0f, 4.0f, 7.7f, 13.8f, 4.0f, 7.7f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+    drawQuadRoofSegment(13.8f, 2.647f, 12.9f, 19.0f, 2.647f, 12.9f, 19.0f, 4.0f, 7.7f, 13.9f, 4.0f, 7.7f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+    drawQuadRoofSegment(6.0f, 2.77f, 12.4f, 13.8f, 2.77f, 12.4f, 13.8f, 2.647f, 12.9f, 6.0f, 2.647f, 12.9f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+    drawQuadRoofSegment(6.0f, 4.0f, 7.0f, 6.0f, 2.647f, 11.5f, -0.5f, 2.647f, 11.5f, -0.5f, 4.0f, 7.0f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+    drawQuadRoofSegment(6.0f, 2.647f, 2.5f, -0.5f, 2.647f, 2.5f, -0.5f, 4.0f, 7.0f, 6.0f, 4.0f, 7.0f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+    drawQuadRoofSegment(-0.5f, 2.647f, 2.5f, 6.0f, 2.647f, 2.5f, 9.9f, 3.28f, 4.6f, -0.5f, 3.28f, 4.6f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
+
+    drawQuadRoofSegment(9.9f, 7.31f, 9.2f, 14.3f, 7.31f, 9.2f, 14.3f, 5.935f, 5.5f, 9.9f, 5.935f, 5.5f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(5.5f, 7.31f, 9.2f, 6.0f, 7.31f, 9.2f, 6.0f, 5.935f, 5.5f, 5.5f, 5.935f, 5.5f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(6.0f, 7.31f, 9.2f, 9.9f, 7.31f, 9.2f, 9.9f, 6.11f, 5.971f, 6.0f, 6.11f, 5.971f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(5.5f, 7.31f, 9.2f, 14.3f, 7.31f, 9.2f, 14.3f, 5.935f, 12.9f, 5.5f, 5.935f, 12.9f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(7.95f, 7.11f, 4.1f, 10.241f, 5.935f, 4.1f, 10.241f, 5.935f, 5.5f, 7.95f, 7.11f, 8.661f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(5.659f, 5.935f, 4.1f, 7.95f, 7.11f, 4.1f, 7.95f, 7.11f, 8.661f, 5.659f, 5.935f, 5.5f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(5.5f, 2.757f, -0.5f, 9.9f, 3.676f, -0.5f, 9.9f, 3.676f, 4.6f, 5.5f, 2.757f, 4.6f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(9.9f, 3.676f, -0.5f, 9.9f, 3.676f, 6.0f, 14.3f, 2.757f, 2.5f, 14.3f, 2.757f, -0.5f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(9.9f, 3.676f, 6.0f, 14.3f, 2.757f, 2.5f, 19.0f, 2.757f, 2.5f, 19.0f, 3.676f, 6.0f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(13.8f, 3.676f, 6.0f, 19.0f, 3.676f, 6.0f, 19.0f, 4.11f, 7.7f, 13.8f, 4.11f, 7.7f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(13.8f, 2.757f, 12.9f, 19.0f, 2.757f, 12.9f, 19.0f, 4.11f, 7.7f, 13.9f, 4.11f, 7.7f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(6.0f, 2.88f, 12.4f, 13.8f, 2.88f, 12.4f, 13.8f, 2.757f, 12.9f, 6.0f, 2.757f, 12.9f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(6.0f, 4.11f, 7.0f, 6.0f, 2.757f, 11.5f, -0.5f, 2.757f, 11.5f, -0.5f, 4.11f, 7.0f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(6.0f, 2.757f, 2.5f, -0.5f, 2.757f, 2.5f, -0.5f, 4.11f, 7.0f, 6.0f, 4.11f, 7.0f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
+    drawQuadRoofSegment(-0.5f, 2.757f, 2.5f, 6.0f, 2.757f, 2.5f, 9.9f, 3.39f, 4.6f, -0.5f, 3.39f, 4.6f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
 
     glPopMatrix();
 

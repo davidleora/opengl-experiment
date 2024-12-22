@@ -647,6 +647,98 @@ void drawThickRoofSegment(float startX, float startZ, float endX, float endZ, fl
     glEnd();
 }
 
+void drawQuadRoofSegment(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, float roofThickness, float colorRed, float colorGreen, float colorBlue)
+{
+    float x1t = x1, y1t = y1 + roofThickness, z1t = z1;
+    float x2t = x2, y2t = y2 + roofThickness, z2t = z2;
+    float x3t = x3, y3t = y3 + roofThickness, z3t = z3;
+    float x4t = x4, y4t = y4 + roofThickness, z4t = z4;
+
+    glColor3f(colorRed, colorGreen, colorBlue);
+
+    // Top face
+    glBegin(GL_QUADS);
+    glVertex3f(x1t, y1t, z1t);
+    glVertex3f(x2t, y2t, z2t);
+    glVertex3f(x3t, y3t, z3t);
+    glVertex3f(x4t, y4t, z4t);
+    glEnd();
+
+    // Bottom face
+    glBegin(GL_QUADS);
+    glVertex3f(x1, y1, z1);
+    glVertex3f(x4, y4, z4);
+    glVertex3f(x3, y3, z3);
+    glVertex3f(x2, y2, z2);
+    glEnd();
+
+    // Side #1 (corners 1-2)
+    glBegin(GL_QUADS);
+    glVertex3f(x1, y1, z1);
+    glVertex3f(x2, y2, z2);
+    glVertex3f(x2t, y2t, z2t);
+    glVertex3f(x1t, y1t, z1t);
+    glEnd();
+
+    // Side #2 (corners 2-3)
+    glBegin(GL_QUADS);
+    glVertex3f(x2, y2, z2);
+    glVertex3f(x3, y3, z3);
+    glVertex3f(x3t, y3t, z3t);
+    glVertex3f(x2t, y2t, z2t);
+    glEnd();
+
+    // Side #3 (corners 3-4)
+    glBegin(GL_QUADS);
+    glVertex3f(x3, y3, z3);
+    glVertex3f(x4, y4, z4);
+    glVertex3f(x4t, y4t, z4t);
+    glVertex3f(x3t, y3t, z3t);
+    glEnd();
+
+    // Side #4 (corners 4-1)
+    glBegin(GL_QUADS);
+    glVertex3f(x4, y4, z4);
+    glVertex3f(x1, y1, z1);
+    glVertex3f(x1t, y1t, z1t);
+    glVertex3f(x4t, y4t, z4t);
+    glEnd();
+
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glLineWidth(2.0f);
+    glBegin(GL_LINES);
+    // Top edges
+    glVertex3f(x1t, y1t, z1t);
+    glVertex3f(x2t, y2t, z2t);
+    glVertex3f(x2t, y2t, z2t);
+    glVertex3f(x3t, y3t, z3t);
+    glVertex3f(x3t, y3t, z3t);
+    glVertex3f(x4t, y4t, z4t);
+    glVertex3f(x4t, y4t, z4t);
+    glVertex3f(x1t, y1t, z1t);
+
+    // Bottom edges
+    glVertex3f(x1, y1, z1);
+    glVertex3f(x2, y2, z2);
+    glVertex3f(x2, y2, z2);
+    glVertex3f(x3, y3, z3);
+    glVertex3f(x3, y3, z3);
+    glVertex3f(x4, y4, z4);
+    glVertex3f(x4, y4, z4);
+    glVertex3f(x1, y1, z1);
+
+    // Verticals
+    glVertex3f(x1, y1, z1);
+    glVertex3f(x1t, y1t, z1t);
+    glVertex3f(x2, y2, z2);
+    glVertex3f(x2t, y2t, z2t);
+    glVertex3f(x3, y3, z3);
+    glVertex3f(x3t, y3t, z3t);
+    glVertex3f(x4, y4, z4);
+    glVertex3f(x4t, y4t, z4t);
+    glEnd();
+}
+
 void drawCustomBlock(float startX, float startZ, float endX, float endZ, float thickness, float startHeight, float height)
 {
     float dx = endX - startX;

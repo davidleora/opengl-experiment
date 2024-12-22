@@ -1,5 +1,6 @@
 #include <GL/glut.h>
 #include <math.h>
+#include <stdbool.h>
 #include "scene.h"
 
 GLuint floorTextureID;
@@ -881,7 +882,7 @@ void drawGlassSlidingDoor(float startX, float startZ, float endX, float endZ, fl
     drawInnerWindowFrame2(startX, startZ, endX, endZ, startY, endY, thickness);
 }
 
-void drawMainDoor(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
+void drawMainDoorFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
 {
     float midZ = (startZ + endZ) / 2.0f;
     drawOuterWindowFrame(startX, startZ, endX, endZ, startY, endY, thickness);
@@ -896,4 +897,83 @@ void drawMainDoor(float startX, float startZ, float endX, float endZ, float star
     drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 0.6f, 0.05);
     drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 0.4f, 0.05);
     drawCustomBlock(startX, startZ + 0.1f, endX, startZ + 0.66f, thickness / 2, 0.0f, 0.25);
+}
+
+void drawDoorTypeA(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
+{
+    if (startZ == endZ)
+    {
+        drawCustomBlock(startX, startZ, endX, endZ, thickness, startY, thickness);
+        drawCustomBlock(startX, startZ, endX, endZ, thickness, endY - thickness, thickness);
+        drawCustomBlock(startX, startZ, startX + thickness, endZ, thickness, startY, endY - startY);
+        drawCustomBlock(endX - thickness, startZ, endX, endZ, thickness, startY, endY - startY);
+
+        drawCustomBlock(startX + thickness, startZ, endX - thickness, startZ, thickness, startY + (endY - startY) / 3.0f, thickness / 2.0f);
+        drawCustomBlock(startX + thickness, startZ, endX - thickness, startZ, thickness, startY + 2.0f * (endY - startY) / 3.0f, thickness / 2.0f);
+    }
+    else if (startX == endX)
+    {
+        drawCustomBlock(startX, startZ, endX, endZ, thickness, startY, thickness);
+        drawCustomBlock(startX, startZ, endX, endZ, thickness, endY - thickness, thickness);
+        drawCustomBlock(startX, startZ, startX, startZ + thickness, thickness, startY, endY - startY);
+        drawCustomBlock(startX, endZ - thickness, endX, endZ, thickness, startY, endY - startY);
+
+        drawCustomBlock(startX, startZ + thickness, startX, endZ - thickness, thickness, startY + (endY - startY) / 3.0f, thickness / 2.0f);
+        drawCustomBlock(startX, startZ + thickness, startX, endZ - thickness, thickness, startY + 2.0f * (endY - startY) / 3.0f, thickness / 2.0f);
+    }
+}
+
+void drawDoorTypeB(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
+{
+    bool vertical = (startX == endX);
+    float doorWidth = vertical ? fabsf(endZ - startZ) : fabsf(endX - startX);
+    float doorHeight = endY - startY;
+    float cutOutStartY = startY + doorHeight * 0.55f;
+    float cutOutTopY = endY - 0.3f;
+    float cutOutWidth = doorWidth * 0.375f;
+    if (!vertical)
+    {
+        float doorZ = startZ;
+        drawCustomBlock(startX, doorZ, endX, doorZ, thickness, cutOutTopY, endY - cutOutTopY);
+        drawCustomBlock(startX, doorZ, endX, doorZ, thickness, startY, cutOutStartY - startY);
+        drawCustomBlock(startX, doorZ, startX + cutOutWidth, doorZ, thickness, cutOutStartY, (cutOutTopY - cutOutStartY));
+        drawCustomBlock(endX - cutOutWidth, doorZ, endX, doorZ, thickness, cutOutStartY, (cutOutTopY - cutOutStartY));
+    }
+    else
+    {
+        float doorX = startX;
+        drawCustomBlock(doorX, endZ, doorX, startZ, thickness, cutOutTopY, endY - cutOutTopY);
+        drawCustomBlock(doorX, endZ, doorX, startZ, thickness, startY, cutOutStartY - startY);
+        drawCustomBlock(doorX, startZ, doorX, startZ + cutOutWidth, thickness, cutOutStartY, (cutOutTopY - cutOutStartY));
+        drawCustomBlock(doorX, endZ - cutOutWidth, doorX, endZ, thickness, cutOutStartY, (cutOutTopY - cutOutStartY));
+    }
+}
+
+void drawDoorTypeC(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
+{
+    drawCustomBlock(startX, startZ, endX, endZ, thickness, startY, endY - startY);
+}
+
+void drawSlidingDoor(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness)
+{
+    thickness = thickness / 2.0f;
+    if (startZ == endZ)
+    {
+        float mid = (startX + endX) / 2.0f;
+        drawCustomBlock(startX, startZ + 0.025f, mid, endZ + 0.025f, thickness, startY, thickness);
+        drawCustomBlock(startX, startZ + 0.025f, mid, endZ + 0.025f, thickness, endY - thickness, thickness);
+        drawCustomBlock(startX, startZ + 0.025f, startX + thickness, endZ + 0.025f, thickness, startY, endY - startY);
+        drawCustomBlock(mid - thickness, startZ + 0.025f, mid, endZ + 0.025f, thickness, startY, endY - startY);
+        drawCustomBlock(startX + thickness, startZ + 0.025f, mid - thickness, endZ + 0.025f, thickness, startY + thickness, (endY - startY) / 3.0f);
+        drawCustomBlock(startX + thickness, startZ + 0.025f, mid - thickness, endZ + 0.025f, thickness, startY + thickness + (endY - startY) / 3.0f, (endY - startY) / 3.0f);
+        drawCustomBlock(startX + thickness, startZ + 0.025f, mid - thickness, endZ + 0.025f, thickness, startY + thickness + 2.0f * (endY - startY) / 3.0f, (endY - startY) / 3.0f);
+
+        drawCustomBlock(mid, startZ - 0.025f, endX, endZ - 0.025f, thickness, startY, thickness);
+        drawCustomBlock(mid, startZ - 0.025f, endX, endZ - 0.025f, thickness, endY - thickness, thickness);
+        drawCustomBlock(mid, startZ - 0.025f, mid + thickness, endZ - 0.025f, thickness, startY, endY - startY);
+        drawCustomBlock(endX - thickness, startZ - 0.025f, endX, endZ - 0.025f, thickness, startY, endY - startY);
+        drawCustomBlock(mid + thickness, startZ - 0.025f, endX - thickness, endZ - 0.025f, thickness, startY + thickness, (endY - startY) / 3.0f);
+        drawCustomBlock(mid + thickness, startZ - 0.025f, endX - thickness, endZ - 0.025f, thickness, startY + thickness + (endY - startY) / 3.0f, (endY - startY) / 3.0f);
+        drawCustomBlock(mid + thickness, startZ - 0.025f, endX - thickness, endZ - 0.025f, thickness, startY + thickness + 2.0f * (endY - startY) / 3.0f, (endY - startY) / 3.0f);
+    }
 }

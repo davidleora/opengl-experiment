@@ -33,10 +33,18 @@ void drawCustomWindowC(float startX, float startZ, float endX, float endZ, float
 
 void drawGlassSlidingDoor(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
 
-void drawMainDoor(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
+void drawMainDoorFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
 
 void drawOuterWindowFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
 
 void drawOuterDoorFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
+
+void drawDoorTypeA(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
+
+void drawDoorTypeB(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
+
+void drawDoorTypeC(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
+
+void drawSlidingDoor(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
 
 #endif

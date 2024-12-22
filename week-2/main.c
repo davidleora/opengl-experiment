@@ -237,7 +237,8 @@ void display()
     drawCustomFloor(18.5f, 3.0f, 22.0f, 6.0f, 0.0f, 0.01f);
 
     // First Floor Main Door
-    drawMainDoor(18.5f, 3.4f, 18.5f, 5.6f, -0.089f, 2.3f, 0.2f);
+    drawMainDoorFrame(18.5f, 3.4f, 18.5f, 5.6f, -0.089f, 2.3f, 0.2f);
+    drawDoorTypeB(18.5f, 4.16f, 18.5f, 5.5f, 0.0f, 1.8f, 0.1f);
 
     // First Floor Walls
     drawCustomWall(0.0f, 3.0f, 0.0f, 7.0f, 0.1f, 2.8f);                         // 1
@@ -339,6 +340,15 @@ void display()
     drawOuterDoorFrame(9.2f, 2.95f, 10.8f, 2.95f, 0.16f, 2.0f, 0.1f);
     drawOuterDoorFrame(7.8f, 3.05f, 10.8f, 3.05f, 0.16f, 2.0f, 0.1f);
     drawOuterDoorFrame(9.1f, 1.5f, 9.1f, 3.0f, 0.16f, 2.0f, 0.2f);
+    drawOuterDoorFrame(0.5f, 3.0f, 2.0f, 3.0f, 0.025f, 2.0f, 0.1f);
+
+    // First Floor Doors
+    drawDoorTypeA(9.2f, 3.05f, 10.7f, 3.05f, 0.25f, 1.9f, 0.1f);  // Powder Room DOOR
+    drawDoorTypeA(5.9f, 3.15f, 5.9f, 4.45f, 0.25f, 1.9f, 0.1f);   // Kitchen DOOR
+    drawDoorTypeB(12.2f, 3.0f, 13.8f, 3.0f, 0.25f, 1.9f, 0.1f);   // Toilet DOOR
+    drawDoorTypeC(14.0f, 6.0f, 15.2f, 6.0f, 0.25f, 1.9f, 0.1f);   // Meeting Room DOOR
+    drawDoorTypeB(0.6f, 3.0f, 1.9f, 3.0f, 0.125f, 1.9f, 0.1f);    // Dining Room Backyard DOOR
+    drawSlidingDoor(10.7f, 6.0f, 13.3f, 6.0f, 0.25f, 1.9f, 0.1f); // Living Room DOOR
 
     // Stair
     drawCustomFloor(10.2f, 4.6f, 10.599f, 6.0f, 0.0f, 0.5375f);
@@ -400,6 +410,12 @@ void display()
     // Second Floor Door Frames
     drawOuterDoorFrame(7.4f, 7.8f, 7.4f, 9.4f, 3.61f, 5.5f, 0.2f);
     drawOuterDoorFrame(9.0f, 11.2f, 12.0f, 11.2f, 3.61f, 5.5f, 0.2f);
+    drawOuterDoorFrame(7.4f, 11.2f, 7.4f, 12.4f, 3.61f, 5.0f, 0.2f);
+
+    // Second Floor Doors
+    drawDoorTypeC(7.4f, 7.9f, 7.4f, 9.3f, 3.7f, 5.4f, 0.f);       // Bedroom 1 DOOR
+    drawDoorTypeC(7.4f, 11.3f, 7.4f, 12.3f, 3.7f, 4.9f, 0.1f);    // Storage Room DOOR
+    drawSlidingDoor(12.0f, 11.2f, 9.0f, 11.2f, 3.7f, 5.4f, 0.1f); // Bedroom 2 DOOR
 
     // Triangle Walls
     drawCustomTriangleWallWithStartHeight(0.0f, 3.0f, 0.0f, 11.0f, 0.1f, 2.8f, 1.2f);

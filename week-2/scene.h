@@ -35,4 +35,8 @@ void drawGlassSlidingDoor(float startX, float startZ, float endX, float endZ, fl
 
 void drawMainDoor(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
 
+void drawOuterWindowFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
+
+void drawOuterDoorFrame(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
+
 #endif

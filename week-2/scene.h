@@ -3,7 +3,7 @@
 
 #include <GL/glut.h>
 
-extern GLuint floorTextureID;
+extern GLuint floorTextureID, grassTextureID;
 
 void drawFloorWithGrid(float length, float width, float tileSize);
 
@@ -16,6 +16,8 @@ void drawCustomFloor(float startX, float startZ, float endX, float endZ, float s
 void drawCustomTriangleFloor(float x1, float z1, float x2, float z2, float x3, float z3, float startHeight, float endHeight);
 
 void drawTexturedFloor(float startX, float startZ, float endX, float endZ, float height);
+
+void drawTexturedGrass(float startX, float startZ, float endX, float endZ, float height);
 
 void drawCustomCeiling(float startX, float startZ, float endX, float endZ, float height, float thickness);
 
@@ -46,5 +48,7 @@ void drawDoorTypeC(float startX, float startZ, float endX, float endZ, float sta
 void drawSlidingDoor(float startX, float startZ, float endX, float endZ, float startY, float endY, float thickness);
 
 void drawQuadRoofSegment(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, float roofThickness, float colorRed, float colorGreen, float colorBlue);
+
+void drawTatamiFloor(float startX, float startZ, float endX, float endZ, float height);
 
 #endif

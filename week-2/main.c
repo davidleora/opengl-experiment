@@ -17,9 +17,16 @@ float cameraZ = 3.5f;
 float cameraYaw = 180.0f;
 float cameraPitch = 0.0f;
 
-GLuint textureID;
 bool keyStates[256] = {false};
 float movementSpeed = 0.1f;
+
+typedef struct
+{
+    float x, y, z;
+    float yaw, pitch;
+} Room;
+
+Room defaultRoom = {16.0f, 1.3f, 3.5f, 180.0f, 0.0f};
 
 void loadFloorTexture(const char *filename)
 {
@@ -42,6 +49,37 @@ void loadFloorTexture(const char *filename)
     glBindTexture(GL_TEXTURE_2D, floorTextureID);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXWIDTH, TEXHEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, floorTexture);
+
+    // Set filtering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    // Set wrap mode to repeat so the texture can tile
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+}
+
+void loadGrassTexture(const char *filename)
+{
+    GLubyte floorTexture[TEXHEIGHT][TEXWIDTH][4];
+    FILE *fp = fopen(filename, "rb");
+    if (!fp)
+    {
+        perror(filename);
+        return;
+    }
+
+    size_t bytesRead = fread(floorTexture, sizeof(floorTexture), 1, fp);
+    if (bytesRead != 1)
+    {
+        fprintf(stderr, "Error reading floor texture data.\n");
+    }
+    fclose(fp);
+
+    glGenTextures(1, &grassTextureID);
+    glBindTexture(GL_TEXTURE_2D, grassTextureID);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXWIDTH, TEXHEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, floorTexture);
 
     // Set filtering
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -87,9 +125,69 @@ void init()
 
     glMatrixMode(GL_MODELVIEW);
 
-    glutSetCursor(GLUT_CURSOR_NONE);
-    glutWarpPointer(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    // ライティング設定
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0); // 0番目の光源を有効化
+
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+
+    GLfloat light_position[] = {22.0f, 10.0f, 0.0f, 1.0f}; // 光源の位置
+    GLfloat light_ambient[] = {0.4f, 0.4f, 0.4f, 0.5f};    // 環境光
+    GLfloat light_diffuse[] = {0.7f, 0.7f, 0.7f, 1.0f};    // 拡散光
+    GLfloat light_specular[] = {0.7f, 0.7f, 0.7f, 1.0f};   // 鏡面反射光
+
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+
+    // マテリアル設定
+    GLfloat mat_ambient[] = {0.7f, 0.7f, 0.7f, 1.0f};  // 環境光反射
+    GLfloat mat_diffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};  // 拡散反射
+    GLfloat mat_specular[] = {0.0f, 0.0f, 0.0f, 0.0f}; // 鏡面反射
+    GLfloat mat_shininess[] = {50.0f};                 // 鏡面反射の強度
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+
     loadFloorTexture("assets/textures/flooring.raw");
+    loadGrassTexture("assets/textures/grass.raw");
+}
+
+Room rooms[] = {
+    {13.5f, 1.55f, 3.5f, 180.0f, 0.0f},     // 廊下
+    {11.37f, 1.55f, 5.782f, 45.0f, 0.0f},   // 会議室
+    {9.2625f, 1.55f, 5.715f, 135.0f, 0.0f}, // リビング
+    {9.765f, 1.55f, 1.807f, 270.0f, 0.0f},  // トイレ
+    {8.25f, 1.55f, 1.77f, 225.0f, 0.0f},    // 化粧室
+    {5.925f, 1.55f, 1.77f, 225.0f, 0.0f},   // お風呂
+    {3.75f, 1.55f, 3.15f, 150.0f, 0.0f},    // キッチン
+    {6.15f, 5.0f, 4.875f, 50.0f, 0.0f}      // のびたの部屋
+};
+
+void teleportToRoom(int roomIndex)
+{
+    if (roomIndex >= 0 && roomIndex < (sizeof(rooms) / sizeof(Room)))
+    {
+        cameraX = rooms[roomIndex].x;
+        cameraY = rooms[roomIndex].y;
+        cameraZ = rooms[roomIndex].z;
+        cameraYaw = rooms[roomIndex].yaw;
+        cameraPitch = rooms[roomIndex].pitch;
+        printf("Teleported to Room %d\n", roomIndex + 1);
+    }
+    else if (roomIndex == -1)
+    {
+        cameraX = defaultRoom.x;
+        cameraY = defaultRoom.y;
+        cameraZ = defaultRoom.z;
+        cameraYaw = defaultRoom.yaw;
+        cameraPitch = defaultRoom.pitch;
+        printf("Teleported to Spawn Point\n");
+    }
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -97,6 +195,37 @@ void keyboard(unsigned char key, int x, int y)
     if (key == 27)
         exit(0);
     keyStates[key] = true;
+
+    switch (key)
+    {
+    case '1':
+        teleportToRoom(0);
+        break;
+    case '2':
+        teleportToRoom(1);
+        break;
+    case '3':
+        teleportToRoom(2);
+        break;
+    case '4':
+        teleportToRoom(3);
+        break;
+    case '5':
+        teleportToRoom(4);
+        break;
+    case '6':
+        teleportToRoom(5);
+        break;
+    case '7':
+        teleportToRoom(6);
+        break;
+    case '8':
+        teleportToRoom(7);
+        break;
+    case '0':
+        teleportToRoom(-1);
+        break;
+    }
 }
 
 void keyboardUp(unsigned char key, int x, int y)
@@ -107,7 +236,7 @@ void keyboardUp(unsigned char key, int x, int y)
 void update()
 {
     float radYaw = cameraYaw * M_PI / 180.0f;
-    float rotationSpeed = 1.0f;
+    float rotationSpeed = 1.5f;
 
     float dirX = cos(radYaw);
     float dirZ = sin(radYaw);
@@ -190,35 +319,14 @@ void update()
     glutPostRedisplay();
 }
 
-void drawTexturedCube(float size)
-{
-    float half = size / 2.0f;
-    glBindTexture(GL_TEXTURE_2D, textureID);
-    glEnable(GL_TEXTURE_2D);
-
-    glBegin(GL_QUADS);
-
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-half, -half, half);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(half, -half, half);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(half, half, half);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-half, half, half);
-    glEnd();
-
-    glDisable(GL_TEXTURE_2D);
-}
-
 void renderScene()
 {
     glPushMatrix();
     glScalef(0.75f, 1.0f, 0.75f);
 
     // Main Grid
-    drawFloorWithGrid(22.0f, 13.0f, 1.0f);
-    drawCustomFloor(18.5f, 3.0f, 22.0f, 6.0f, 0.0f, 0.01f);
+    // drawFloorWithGrid(22.0f, 13.0f, 1.0f);
+    drawCustomFloor(18.5f, 3.0f, 22.0f, 6.0f, 0.0f, 0.02f);
 
     // First Floor Main Door
     drawMainDoorFrame(18.5f, 3.4f, 18.5f, 5.6f, -0.089f, 2.3f, 0.2f);
@@ -279,6 +387,8 @@ void renderScene()
     drawCustomWall(15.2f, 6.0f, 18.5f, 6.0f, 0.1f, 2.8f);                      // 52
     drawCustomWallWithStartHeight(14.0f, 6.0f, 15.2f, 6.0f, 0.1f, 2.0f, 0.8f); // 53
     drawCustomWallWithStartHeight(6.0f, 3.0f, 6.0f, 4.6f, 0.1f, 2.0f, 0.8f);   // 54
+    drawCustomWall(6.0f, 9.575f, 8.0f, 9.575f, 0.1f, 2.8f);                    // 84
+    drawCustomWallWithStartHeight(7.95f, 6.0f, 7.95f, 9.6f, 0.1f, 2.0f, 0.8f); // 85
 
     // First Floor Floors & Ceilings
     drawCustomCeiling(0.0f, 3.0f, 6.0f, 11.0f, 2.6f, 0.1f);   // Dining Room CEILING
@@ -288,19 +398,32 @@ void renderScene()
     drawCustomCeiling(6.0f, 6.0f, 13.8f, 12.4f, 2.6f, 0.1f);  // Living Room CEILING
     drawCustomCeiling(13.8f, 6.0f, 18.5f, 12.4, 2.6f, 0.1f);  // Meeting Room CEILING
     drawCustomFloor(0.0f, 3.0f, 2.0f, 4.5f, 0.0f, 0.125f);    // Dining Room FLOOR 1
-    drawCustomFloor(2.0f, 3.0f, 6.0f, 11.0f, 0.0f, 0.25f);    // Dining Room FLOOR 2
-    drawCustomFloor(0.0f, 4.5f, 2.0f, 11.0f, 0.0f, 0.25f);    // Dining Room FLOOR 3
+    drawCustomFloor(2.0f, 3.0f, 6.0f, 11.0f, 0.0f, 0.24f);    // Dining Room FLOOR 2
+    drawCustomFloor(0.0f, 4.5f, 2.0f, 11.0f, 0.0f, 0.24f);    // Dining Room FLOOR 3
     drawCustomFloor(6.0f, 0.0f, 13.8f, 3.0f, 0.0f, 0.25f);    // Shower Room, Powder Room, Toilet FLOOR
     drawCustomFloor(6.0f, 3.0f, 17.0f, 6.0f, 0.0f, 0.25f);    // Hallway FLOOR
-    drawCustomFloor(17.0f, 3.0f, 18.5f, 6.0f, 0.0f, 0.01f);   // Hallway FLOOR 2
+    drawCustomFloor(17.0f, 3.0f, 18.5f, 6.0f, 0.0f, 0.011f);  // Hallway FLOOR 2
     drawCustomFloor(6.0f, 6.0f, 18.5f, 12.4f, 0.0f, 0.25f);   // Living Room & Meeting Room FLOOR
     drawCustomFloor(1.8f, 11.0f, 4.4f, 11.6f, 0.0f, 0.25f);   // Kitchen Backyard FLOOR
     drawCustomFloor(0.5, 2.4f, 2.0f, 3.0f, 0.0f, 0.125f);     // Kitchen Backyard FLOOR 2
     drawCustomFloor(8.0f, 12.4f, 11.0f, 13.0f, 0.0f, 0.25f);  // Living Room Backyard FLOOR
     drawCustomFloor(14.8f, 12.4f, 17.8f, 13.0f, 0.0f, 0.25f); // Meeting Room Backyard FLOOR
 
+    // Living Room Tatami Mats
+    drawTatamiFloor(8.0f, 6.05f, 9.575f, 8.925f, 0.251f);        // Tatami Mat 1
+    drawTatamiFloor(8.0f, 8.925f, 9.575f, 12.35f, 0.251f);       // Tatami Mat 2
+    drawTatamiFloor(9.575f, 6.05f, 12.725f, 7.4875f, 0.251f);    // Tatami Mat 3
+    drawTatamiFloor(12.725f, 6.05f, 13.75f, 8.925f, 0.251f);     // Tatami Mat 4
+    drawTatamiFloor(12.725f, 8.925f, 13.75f, 12.35f, 0.251f);    // Tatami Mat 5
+    drawTatamiFloor(9.575f, 7.4875f, 11.15f, 10.3625f, 0.251f);  // Tatami Mat 6
+    drawTatamiFloor(11.15f, 7.4875f, 12.725f, 10.3625f, 0.251f); // Tatami Mat 7
+    drawTatamiFloor(9.575f, 10.3625f, 12.725f, 12.35f, 0.251f);  // Tatami Mat 8
+
     drawTexturedFloor(6.0f, 3.0f, 17.0f, 6.0f, 0.251f);   // Hallway Floor TEXTURE
     drawTexturedFloor(13.8f, 6.0f, 18.5f, 12.4f, 0.251f); // Living Room TEXTURE
+    drawTexturedFloor(0.0f, 4.5f, 6.0f, 11.0f, 0.252f);   // Dining Room TEXTURE 1
+    drawTexturedFloor(2.0f, 3.0f, 6.0f, 4.5f, 0.252f);    // Dining Room TEXTURE 2
+    drawTexturedGrass(-3.0f, -3.0f, 22.0f, 16.0f, 0.01f); // Grass TEXTURE
 
     // First Floor Glass Sliding Doors
     drawGlassSlidingDoor(1.8f, 11.0f, 4.4f, 11.0f, 0.15f, 2.0f, 0.1f);   // Kitchen Backyard SLIDING DOOR
@@ -325,7 +448,9 @@ void renderScene()
     drawDoorTypeC(14.0f, 6.0f, 15.2f, 6.0f, 0.25f, 1.9f, 0.1f);   // Meeting Room DOOR
     drawDoorTypeB(0.6f, 3.0f, 1.9f, 3.0f, 0.125f, 1.9f, 0.1f);    // Dining Room Backyard DOOR
     drawSlidingDoor(10.7f, 6.0f, 13.3f, 6.0f, 0.25f, 1.9f, 0.1f); // Living Room DOOR
+    drawSlidingDoor(7.9f, 6.1f, 7.9f, 9.475f, 0.25f, 2.0f, 0.1f); // Living Room DOOR 2
     drawDoorTypeA(9.1f, 1.6f, 9.1f, 2.9f, 0.25f, 1.9f, 0.1f);     // Shower DOOR
+
     // Stair
     drawCustomFloor(10.2f, 4.6f, 10.599f, 6.0f, 0.0f, 0.5375f);
     drawCustomFloor(9.8f, 4.6f, 10.2f, 6.0f, 0.0f, 0.825f);
@@ -448,10 +573,6 @@ void renderScene()
 
 void display()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glLoadIdentity();
-
     float radYaw = cameraYaw * M_PI / 180.0f;
     float radPitch = cameraPitch * M_PI / 180.0f;
     float dirX = cos(radYaw) * cos(radPitch);
@@ -461,7 +582,15 @@ void display()
     float targetY = cameraY + dirY;
     float targetZ = cameraZ + dirZ;
 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glLoadIdentity();
+
     gluLookAt(cameraX, cameraY, cameraZ, targetX, targetY, targetZ, 0.0f, 1.0f, 0.0f);
+
+    // Update light position in camera space
+    GLfloat light_position[] = {5.0f, 10.0f, 10.0f, 1.0f};
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
     glEnable(GL_POLYGON_OFFSET_FILL);
     glPolygonOffset(1.0, 1.0);

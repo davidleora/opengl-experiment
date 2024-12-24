@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <math.h>
+#include <float.h>
 #include "scene.h"
 
 #define _USE_MATH_DEFINES
@@ -18,6 +19,7 @@ float cameraY = 1.3f;
 float cameraZ = 3.5f;
 float cameraYaw = 180.0f;
 float cameraPitch = 0.0f;
+static float lastX, lastZ;
 
 bool keyStates[256] = {false};
 float movementSpeed = 0.1f;
@@ -30,7 +32,25 @@ typedef struct
     float yaw, pitch;
 } Room;
 
+typedef struct
+{
+    float minX, minZ;
+    float maxX, maxZ;
+} RoomArea;
+
 Room defaultRoom = {16.0f, 1.3f, 3.5f, 180.0f, 0.0f};
+
+RoomArea roomAreas[] = {
+    {6.5f, 3.5f, 18.0f, 5.5f},
+    {14.3f, 6.5f, 18.0f, 11.9f},
+    {8.5f, 6.5f, 13.3f, 11.9f},
+    {12.7f, 0.5f, 13.3f, 2.5f},
+    {9.6f, 0.5f, 11.7f, 2.5f},
+    {6.5f, 0.5f, 8.7f, 2.5f},
+    {0.5f, 3.5f, 5.5f, 10.5f},
+    {7.9f, 6.5f, 13.3f, 10.7f}};
+
+int currentRoomIndex = -1;
 
 void loadUITexture(const char *filename)
 {
@@ -226,7 +246,7 @@ void init()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    gluPerspective(90.0, (double)WINDOW_WIDTH / (double)WINDOW_HEIGHT, 0.1, 100.0);
+    gluPerspective(95.0, (double)WINDOW_WIDTH / (double)WINDOW_HEIGHT, 0.1, 100.0);
 
     glMatrixMode(GL_MODELVIEW);
 
@@ -283,6 +303,7 @@ void teleportToRoom(int roomIndex)
         cameraZ = rooms[roomIndex].z;
         cameraYaw = rooms[roomIndex].yaw;
         cameraPitch = rooms[roomIndex].pitch;
+        currentRoomIndex = roomIndex;
         printf("Teleported to Room %d\n", roomIndex + 1);
     }
     else if (roomIndex == -1)
@@ -292,6 +313,7 @@ void teleportToRoom(int roomIndex)
         cameraZ = defaultRoom.z;
         cameraYaw = defaultRoom.yaw;
         cameraPitch = defaultRoom.pitch;
+        currentRoomIndex = -1;
         printf("Teleported to Spawn Point\n");
     }
 }
@@ -328,7 +350,7 @@ void keyboard(unsigned char key, int x, int y)
     case '8':
         teleportToRoom(7);
         break;
-    case '0':
+    case '9':
         teleportToRoom(-1);
         break;
     }
@@ -342,54 +364,125 @@ void keyboardUp(unsigned char key, int x, int y)
 void update()
 {
     float radYaw = cameraYaw * M_PI / 180.0f;
-    float rotationSpeed = 1.5f;
-
     float dirX = cos(radYaw);
     float dirZ = sin(radYaw);
-
     float rightX = -sin(radYaw);
     float rightZ = cos(radYaw);
 
+    float newX = cameraX;
+    float newZ = cameraZ;
+
+    // Handle movement
     if (keyStates['w'])
     {
-        cameraX += dirX * movementSpeed;
-        cameraZ += dirZ * movementSpeed;
+        newX += dirX * movementSpeed;
+        newZ += dirZ * movementSpeed;
     }
     if (keyStates['s'])
     {
-        cameraX -= dirX * movementSpeed;
-        cameraZ -= dirZ * movementSpeed;
+        newX -= dirX * movementSpeed;
+        newZ -= dirZ * movementSpeed;
     }
     if (keyStates['a'])
     {
-        cameraX -= rightX * movementSpeed;
-        cameraZ -= rightZ * movementSpeed;
+        newX -= rightX * movementSpeed;
+        newZ -= rightZ * movementSpeed;
     }
     if (keyStates['d'])
     {
-        cameraX += rightX * movementSpeed;
-        cameraZ += rightZ * movementSpeed;
+        newX += rightX * movementSpeed;
+        newZ += rightZ * movementSpeed;
     }
-    if (keyStates['j']) // Rotate left
+    if (currentRoomIndex >= 0)
     {
-        cameraYaw -= rotationSpeed;
+        RoomArea activeArea = roomAreas[currentRoomIndex];
+
+        if (newX < activeArea.minX * 0.75)
+            newX = activeArea.minX * 0.75;
+        if (newX > activeArea.maxX * 0.75)
+            newX = activeArea.maxX * 0.75;
+        if (newZ < activeArea.minZ * 0.75)
+            newZ = activeArea.minZ * 0.75;
+        if (newZ > activeArea.maxZ * 0.75)
+            newZ = activeArea.maxZ * 0.75;
+
+        if (currentRoomIndex == 0)
+        {
+            if (newX >= 6.5f * 0.75 && newX <= 11.1f * 0.75)
+            {
+                if (newZ < 3.5f * 0.75)
+                    newZ = 3.5f * 0.75;
+                if (newZ > 4.1f * 0.75)
+                    newZ = 4.1f * 0.75;
+            }
+            if (newZ > 4.1f * 0.75f && newX > 11.1f * 0.75f)
+            {
+                if (newX <= 11.6f * 0.75)
+                    newX = 11.6f * 0.75;
+            }
+        }
     }
-    if (keyStates['l']) // Rotate right
+    else if (currentRoomIndex == -1)
     {
-        cameraYaw += rotationSpeed;
+        RoomArea walkableAreas[] = {
+            {.minX = 19.0f * 0.75f, .maxX = 21.5f * 0.75f, .minZ = -2.0f * 0.75f, .maxZ = 15.5f * 0.75f},
+            {.minX = 14.3f * 0.75f, .maxX = 19.0f * 0.75f, .minZ = -2.0f * 0.75f, .maxZ = 2.5f * 0.75f},
+            {.minX = 5.5f * 0.75f, .maxX = 14.3f * 0.75f, .minZ = -2.0f * 0.75f, .maxZ = -0.5f * 0.75f},
+            {.minX = -2.0f * 0.75f, .maxX = 5.5f * 0.75f, .minZ = -2.0f * 0.75f, .maxZ = 2.5f * 0.75f},
+            {.minX = -2.0f * 0.75f, .maxX = -0.5f * 0.75f, .minZ = 2.5f * 0.75f, .maxZ = 11.5f * 0.75f},
+            {.minX = -2.0f * 0.75f, .maxX = 5.5f * 0.75f, .minZ = 11.5f * 0.75f, .maxZ = 15.5f * 0.75f},
+            {.minX = 5.5f * 0.75f, .maxX = 19.0f * 0.75f, .minZ = 12.9f * 0.75f, .maxZ = 15.5f * 0.75f}};
+
+        int numWalkableAreas = sizeof(walkableAreas) / sizeof(RoomArea);
+        bool isInValidArea = false;
+
+        for (int i = 0; i < numWalkableAreas; i++)
+        {
+            RoomArea area = walkableAreas[i];
+            if (newX >= area.minX && newX <= area.maxX &&
+                newZ >= area.minZ && newZ <= area.maxZ)
+            {
+                isInValidArea = true;
+                break;
+            }
+        }
+
+        if (!isInValidArea)
+        {
+            float closestDist = FLT_MAX;
+            RoomArea closestArea;
+
+            for (int i = 0; i < numWalkableAreas; i++)
+            {
+                RoomArea area = walkableAreas[i];
+
+                float clampedX = fmin(fmax(newX, area.minX), area.maxX);
+                float clampedZ = fmin(fmax(newZ, area.minZ), area.maxZ);
+                float dist = pow(newX - clampedX, 2) + pow(newZ - clampedZ, 2);
+
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    closestArea = area;
+                }
+            }
+
+            newX = fmin(fmax(newX, closestArea.minX), closestArea.maxX);
+            newZ = fmin(fmax(newZ, closestArea.minZ), closestArea.maxZ);
+        }
     }
-    if (keyStates['i']) // Look up
-    {
-        cameraPitch += rotationSpeed;
-        if (cameraPitch > 89.0f)
-            cameraPitch = 89.0f;
-    }
-    if (keyStates['k']) // Look down
-    {
-        cameraPitch -= rotationSpeed;
-        if (cameraPitch < -89.0f)
-            cameraPitch = -89.0f;
-    }
+
+    cameraX = newX;
+    cameraZ = newZ;
+
+    if (keyStates['j'])
+        cameraYaw -= 1.5f;
+    if (keyStates['l'])
+        cameraYaw += 1.5f;
+    if (keyStates['i'])
+        cameraPitch = fmin(cameraPitch + 1.5f, 89.0f);
+    if (keyStates['k'])
+        cameraPitch = fmax(cameraPitch - 1.5f, -89.0f);
     if (keyStates['[']) // Move up
     {
         cameraY += movementSpeed;
@@ -397,30 +490,6 @@ void update()
     if (keyStates[']']) // Move down
     {
         cameraY -= movementSpeed;
-    }
-    if (cameraY < 1.3f)
-    {
-        cameraY = 1.3f;
-    }
-    if (cameraY > 6.0f)
-    {
-        cameraY = 6.0f;
-    }
-    if (cameraX < -1.0f)
-    {
-        cameraX = -1.0f;
-    }
-    if (cameraX > 16.5f)
-    {
-        cameraX = 16.5f;
-    }
-    if (cameraZ < -1.0f)
-    {
-        cameraZ = -1.0f;
-    }
-    if (cameraZ > 11.5f)
-    {
-        cameraZ = 11.5f;
     }
     glutPostRedisplay();
 }

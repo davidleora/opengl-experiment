@@ -796,6 +796,7 @@ void renderScene()
     drawCustomFloor(6.0f, 6.0f, 13.8f, 12.4f, 2.8f, 3.7f);
     drawCustomCeiling(6.0f, 6.0f, 13.8f, 12.4f, 5.95f, 0.1f);
     drawCustomCeiling(6.0f, 4.6f, 9.9f, 6.0f, 5.95f, 0.1f);
+    drawTatamiFloor(7.45f, 6.05f, 13.75f, 11.15f, 3.71f);
 
     // Second Floor Door Frames
     drawOuterDoorFrame(7.4f, 7.8f, 7.4f, 9.4f, 3.61f, 5.5f, 0.2f);

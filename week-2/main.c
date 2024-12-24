@@ -9,6 +9,8 @@
 #define WINDOW_HEIGHT 860
 #define TEXWIDTH 256
 #define TEXHEIGHT 256
+#define UI_TEXWIDTH 256
+#define UI_TEXHEIGHT 256
 // #define M_PI 3.14159265358979323846
 
 float cameraX = 16.0f;
@@ -20,6 +22,8 @@ float cameraPitch = 0.0f;
 bool keyStates[256] = {false};
 float movementSpeed = 0.1f;
 
+GLuint uiTextureID;
+
 typedef struct
 {
     float x, y, z;
@@ -27,6 +31,38 @@ typedef struct
 } Room;
 
 Room defaultRoom = {16.0f, 1.3f, 3.5f, 180.0f, 0.0f};
+
+void loadUITexture(const char *filename)
+{
+    GLubyte uiTexture[UI_TEXHEIGHT][UI_TEXWIDTH][1]; // グレースケール（単一チャンネル）
+
+    FILE *fp = fopen(filename, "rb");
+    if (!fp)
+    {
+        perror(filename);
+        return;
+    }
+
+    size_t bytesRead = fread(uiTexture, sizeof(uiTexture), 1, fp);
+    if (bytesRead != 1)
+    {
+        fprintf(stderr, "Error reading UI texture data.\n");
+    }
+    fclose(fp);
+
+    glGenTextures(1, &uiTextureID);
+    glBindTexture(GL_TEXTURE_2D, uiTextureID);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, UI_TEXWIDTH, UI_TEXHEIGHT, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, uiTexture);
+
+    // フィルタリングの設定
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    // テクスチャのラップモードを設定（繰り返し）
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+}
 
 void loadFloorTexture(const char *filename)
 {
@@ -88,6 +124,75 @@ void loadGrassTexture(const char *filename)
     // Set wrap mode to repeat so the texture can tile
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+}
+
+void renderUI()
+{
+    // UIのサイズと画面端からの余白を定義
+    float rectWidth = UI_TEXWIDTH;
+    float rectHeight = UI_TEXHEIGHT;
+    float padding = 10.0f;
+
+    float rectX = WINDOW_WIDTH - rectWidth - padding;
+    float rectY = WINDOW_HEIGHT - rectHeight - padding;
+
+    // プロジェクションとモデルビューのマトリックスを保存
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    // 深度テストを無効化
+    glDisable(GL_DEPTH_TEST);
+
+    // 現在のライティング状態を保存
+    glPushAttrib(GL_LIGHTING_BIT | GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT);
+
+    // ライティングを無効化
+    glDisable(GL_LIGHTING);
+
+    // 必要な他の状態も設定（例：テクスチャ、ブレンディング）
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, uiTextureID);
+
+    // アルファブレンディングを有効化（透明部分がある場合）
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // UIの色を白に設定（テクスチャの色をそのまま表示）
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+    // UIを描画する四角形
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex2f(rectX, rectY);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex2f(rectX + rectWidth, rectY);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex2f(rectX + rectWidth, rectY + rectHeight);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex2f(rectX, rectY + rectHeight);
+    glEnd();
+
+    // テクスチャとブレンディングを無効化
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
+
+    // ライティング状態を復元
+    glPopAttrib();
+
+    // 深度テストを再度有効化
+    glEnable(GL_DEPTH_TEST);
+
+    // マトリックスを復元
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
 }
 
 void renderText(float x, float y, const char *text)
@@ -155,6 +260,7 @@ void init()
 
     loadFloorTexture("assets/textures/flooring.raw");
     loadGrassTexture("assets/textures/grass.raw");
+    loadUITexture("assets/textures/UI.raw");
 }
 
 Room rooms[] = {
@@ -597,13 +703,6 @@ void display()
     renderScene();
     glDisable(GL_POLYGON_OFFSET_FILL);
 
-    // Render the outlines
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glLineWidth(1.5);
-    glColor3f(0.0f, 0.0f, 0.0f);
-
-    renderScene();
-
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     // Coordinates UI
@@ -620,6 +719,7 @@ void display()
     char cameraInfo[128];
     snprintf(cameraInfo, sizeof(cameraInfo), "Position: (%.2f, %.2f, %.2f)", cameraX * 4.0f / 3.0f, cameraY, cameraZ * 4.0f / 3.0f);
     renderText(10, WINDOW_HEIGHT - 20, cameraInfo);
+    renderUI();
 
     // Restore the original projection matrix
     glPopMatrix();

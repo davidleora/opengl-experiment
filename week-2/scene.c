@@ -728,9 +728,7 @@ void drawCustomTriangleWallWithStartHeight(float startX, float startZ, float end
     glEnd();
 }
 
-void calculateNormal(float ax, float ay, float az,
-                     float bx, float by, float bz,
-                     float cx, float cy, float cz)
+void calculateNormal(float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz)
 {
     float ux = bx - ax, uy = by - ay, uz = bz - az;
     float vx = cx - ax, vy = cy - ay, vz = cz - az;
@@ -750,9 +748,7 @@ void calculateNormal(float ax, float ay, float az,
     glNormal3f(nx, ny, nz);
 }
 
-void drawQuadRoofSegment(float x1, float y1, float z1, float x2, float y2, float z2,
-                         float x3, float y3, float z3, float x4, float y4, float z4,
-                         float roofThickness, float colorRed, float colorGreen, float colorBlue)
+void drawQuadRoofSegment(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, float roofThickness, float colorRed, float colorGreen, float colorBlue)
 {
     float x1t = x1, y1t = y1 + roofThickness, z1t = z1;
     float x2t = x2, y2t = y2 + roofThickness, z2t = z2;

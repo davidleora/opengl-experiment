@@ -1,3 +1,0 @@
-コンパイルコマンド：
-・Linuxの場合：gcc -o main main.c scene.c -lGL -lGLU -lglut -lm && ./main
-・Macの場合：gcc -o main main.c scene.c-framework GLUT -framework OpenGL -lm && ./main

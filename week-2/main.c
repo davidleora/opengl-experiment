@@ -55,7 +55,7 @@ int currentRoomIndex = -1;
 
 void loadUITexture(const char *filename)
 {
-    GLubyte uiTexture[UI_TEXHEIGHT][UI_TEXWIDTH][1]; // グレースケール（単一チャンネル）
+    GLubyte uiTexture[UI_TEXHEIGHT][UI_TEXWIDTH][1];
 
     FILE *fp = fopen(filename, "rb");
     if (!fp)
@@ -72,18 +72,15 @@ void loadUITexture(const char *filename)
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, UI_TEXWIDTH, UI_TEXHEIGHT, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, uiTexture);
 
-    // フィルタリングの設定
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-    // テクスチャのラップモードを設定（繰り返し）
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
 void loadControlTexture(const char *filename)
 {
-    GLubyte controlTexture[UI_TEXHEIGHT][UI_TEXWIDTH][1]; // グレースケール（単一チャンネル）
+    GLubyte controlTexture[UI_TEXHEIGHT][UI_TEXWIDTH][1];
 
     FILE *fp = fopen(filename, "rb");
     if (!fp)
@@ -100,11 +97,8 @@ void loadControlTexture(const char *filename)
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, UI_TEXWIDTH, UI_TEXHEIGHT, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, controlTexture);
 
-    // フィルタリングの設定
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-    // テクスチャのラップモードを設定（繰り返し）
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
@@ -127,11 +121,8 @@ void loadFloorTexture(const char *filename)
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXWIDTH, TEXHEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, floorTexture);
 
-    // Set filtering
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-    // Set wrap mode to repeat so the texture can tile
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
@@ -154,18 +145,14 @@ void loadGrassTexture(const char *filename)
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TEXWIDTH, TEXHEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, floorTexture);
 
-    // Set filtering
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-    // Set wrap mode to repeat so the texture can tile
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
 void renderUI()
 {
-    // UIのサイズと画面端からの余白を定義
     float rectWidth = UI_TEXWIDTH;
     float rectHeight = UI_TEXHEIGHT;
     float padding = 10.0f;
@@ -173,7 +160,6 @@ void renderUI()
     float rectX = WINDOW_WIDTH - rectWidth - padding;
     float rectY = WINDOW_HEIGHT - rectHeight - padding;
 
-    // プロジェクションとモデルビューのマトリックスを保存
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -183,27 +169,17 @@ void renderUI()
     glPushMatrix();
     glLoadIdentity();
 
-    // 深度テストを無効化
     glDisable(GL_DEPTH_TEST);
-
-    // 現在のライティング状態を保存
     glPushAttrib(GL_LIGHTING_BIT | GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT);
-
-    // ライティングを無効化
     glDisable(GL_LIGHTING);
 
-    // 必要な他の状態も設定（例：テクスチャ、ブレンディング）
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, uiTextureID);
-
-    // アルファブレンディングを有効化（透明部分がある場合）
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // UIの色を白に設定（テクスチャの色をそのまま表示）
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-    // UIを描画する四角形
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 1.0f);
     glVertex2f(rectX, rectY);
@@ -215,17 +191,10 @@ void renderUI()
     glVertex2f(rectX, rectY + rectHeight);
     glEnd();
 
-    // テクスチャとブレンディングを無効化
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);
-
-    // ライティング状態を復元
     glPopAttrib();
-
-    // 深度テストを再度有効化
     glEnable(GL_DEPTH_TEST);
-
-    // マトリックスを復元
     glPopMatrix();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -234,7 +203,6 @@ void renderUI()
 
 void renderControlGuide()
 {
-    // UIのサイズと画面端からの余白を定義
     float rectWidth = UI_TEXWIDTH;
     float rectHeight = UI_TEXHEIGHT;
     float padding = 10.0f;
@@ -242,7 +210,6 @@ void renderControlGuide()
     float rectX = 0 + padding;
     float rectY = WINDOW_HEIGHT - rectHeight - padding;
 
-    // プロジェクションとモデルビューのマトリックスを保存
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -251,28 +218,16 @@ void renderControlGuide()
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
-
-    // 深度テストを無効化
     glDisable(GL_DEPTH_TEST);
-
-    // 現在のライティング状態を保存
     glPushAttrib(GL_LIGHTING_BIT | GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT);
-
-    // ライティングを無効化
     glDisable(GL_LIGHTING);
-
-    // 必要な他の状態も設定（例：テクスチャ、ブレンディング）
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, controlTextureID);
-
-    // アルファブレンディングを有効化（透明部分がある場合）
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // UIの色を白に設定（テクスチャの色をそのまま表示）
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-    // UIを描画する四角形
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 1.0f);
     glVertex2f(rectX, rectY);
@@ -284,17 +239,11 @@ void renderControlGuide()
     glVertex2f(rectX, rectY + rectHeight);
     glEnd();
 
-    // テクスチャとブレンディングを無効化
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);
-
-    // ライティング状態を復元
     glPopAttrib();
-
-    // 深度テストを再度有効化
     glEnable(GL_DEPTH_TEST);
 
-    // マトリックスを復元
     glPopMatrix();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -355,7 +304,6 @@ void init()
 
     glMatrixMode(GL_MODELVIEW);
 
-    // ライティング設定
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
@@ -409,7 +357,6 @@ void teleportToRoom(int roomIndex)
         cameraYaw = rooms[roomIndex].yaw;
         cameraPitch = rooms[roomIndex].pitch;
         currentRoomIndex = roomIndex;
-        // printf("Teleported to Room %d\n", roomIndex + 1);
     }
     else if (roomIndex == -1)
     {
@@ -419,7 +366,6 @@ void teleportToRoom(int roomIndex)
         cameraYaw = defaultRoom.yaw;
         cameraPitch = defaultRoom.pitch;
         currentRoomIndex = -1;
-        // printf("Teleported to Spawn Point\n");
     }
 }
 
@@ -477,7 +423,6 @@ void update()
     float newX = cameraX;
     float newZ = cameraZ;
 
-    // Handle movement
     if (keyStates['w'])
     {
         newX += dirX * movementSpeed;
@@ -604,11 +549,7 @@ void renderScene()
     glPushMatrix();
     glScalef(0.75f, 1.0f, 0.75f);
 
-    // Main Grid
-    // drawFloorWithGrid(22.0f, 13.0f, 1.0f);
     drawCustomFloor(18.5f, 3.0f, 22.0f, 6.0f, 0.0f, 0.02f);
-
-    // First Floor Main Door
     drawMainDoorFrame(18.5f, 3.4f, 18.5f, 5.6f, -0.089f, 2.3f, 0.2f);
     drawDoorTypeB(18.5f, 4.16f, 18.5f, 5.5f, 0.0f, 1.8f, 0.1f);
 
@@ -807,7 +748,6 @@ void renderScene()
     drawQuadRoofSegment(5.5f, 7.2f, 9.2f, 14.3f, 7.2f, 9.2f, 14.3f, 5.825f, 12.9f, 5.5f, 5.825f, 12.9f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
     drawQuadRoofSegment(7.95f, 7.0f, 4.1f, 10.241f, 5.825f, 4.1f, 10.241f, 5.825f, 5.5f, 7.95f, 7.0f, 8.661f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
     drawQuadRoofSegment(5.659f, 5.825f, 4.1f, 7.95f, 7.0f, 4.1f, 7.95f, 7.0f, 8.661f, 5.659f, 5.825f, 5.5f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
-
     drawQuadRoofSegment(5.5f, 2.647f, -0.5f, 9.9f, 3.566f, -0.5f, 9.9f, 3.566f, 4.6f, 5.5f, 2.647f, 4.6f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
     drawQuadRoofSegment(9.9f, 3.566f, -0.5f, 9.9f, 3.566f, 6.0f, 14.3f, 2.647f, 2.5f, 14.3f, 2.647f, -0.5f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
     drawQuadRoofSegment(9.9f, 3.566f, 6.0f, 14.3f, 2.647f, 2.5f, 19.0f, 2.647f, 2.5f, 19.0f, 3.566f, 6.0f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
@@ -817,7 +757,6 @@ void renderScene()
     drawQuadRoofSegment(6.0f, 4.0f, 7.0f, 6.0f, 2.647f, 11.5f, -0.5f, 2.647f, 11.5f, -0.5f, 4.0f, 7.0f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
     drawQuadRoofSegment(6.0f, 2.647f, 2.5f, -0.5f, 2.647f, 2.5f, -0.5f, 4.0f, 7.0f, 6.0f, 4.0f, 7.0f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
     drawQuadRoofSegment(-0.5f, 2.647f, 2.5f, 6.0f, 2.647f, 2.5f, 9.9f, 3.28f, 4.6f, -0.5f, 3.28f, 4.6f, 0.1f, 255.0f / 255.0f, 253.0f / 255.0f, 208.0f / 255.0f);
-
     drawQuadRoofSegment(9.9f, 7.31f, 9.2f, 14.3f, 7.31f, 9.2f, 14.3f, 5.935f, 5.5f, 9.9f, 5.935f, 5.5f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
     drawQuadRoofSegment(5.5f, 7.31f, 9.2f, 6.0f, 7.31f, 9.2f, 6.0f, 5.935f, 5.5f, 5.5f, 5.935f, 5.5f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
     drawQuadRoofSegment(6.0f, 7.31f, 9.2f, 9.9f, 7.31f, 9.2f, 9.9f, 6.11f, 5.971f, 6.0f, 6.11f, 5.971f, 0.03f, 133.0f / 255.0f, 41.0f / 255.0f, 40.0f / 255.0f);
@@ -869,7 +808,6 @@ void display()
 
     gluLookAt(cameraX, cameraY, cameraZ, targetX, targetY, targetZ, 0.0f, 1.0f, 0.0f);
 
-    // Update light position in camera space
     GLfloat light_position[] = {5.0f, 10.0f, 10.0f, 1.0f};
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
@@ -877,11 +815,8 @@ void display()
     glPolygonOffset(1.0, 1.0);
     renderScene();
     glDisable(GL_POLYGON_OFFSET_FILL);
-
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    // Coordinates UI
-    // Reset transformations for UI rendering
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -890,14 +825,12 @@ void display()
     glPushMatrix();
     glLoadIdentity();
 
-    // Render UI text without scaling issues
     char cameraInfo[128];
     snprintf(cameraInfo, sizeof(cameraInfo), "Position: (%.2f, %.2f, %.2f)", cameraX * 4.0f / 3.0f, cameraY, cameraZ * 4.0f / 3.0f);
     renderText(15, WINDOW_HEIGHT - 300, cameraInfo);
     renderUI();
     renderControlGuide();
 
-    // Restore the original projection matrix
     glPopMatrix();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();

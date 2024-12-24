@@ -362,7 +362,7 @@ void drawCustomTriangleFloor(float x1, float z1, float x2, float z2, float x3, f
 
     glEnd();
 
-    // glColor3f(0.0f, 0.0f, 0.0f); // Black outline
+    // glColor3f(0.0f, 0.0f, 0.0f);
     // glLineWidth(2.0f);
     // glBegin(GL_LINES);
 
@@ -470,14 +470,11 @@ void drawTexturedFloor(float startX, float startZ, float endX, float endZ, float
     float uRepeat = length / tileWidth;
     float vRepeat = width / tileLength;
 
-    // Set color to white so we see the texture unmodified
     glColor3f(1.0f, 1.0f, 1.0f);
 
-    // Enable texturing
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, floorTextureID);
 
-    // Draw the floor with the correct texture coordinates
     glBegin(GL_QUADS);
     // Bottom-left corner
     glTexCoord2f(0.0f, 0.0f);
@@ -496,7 +493,6 @@ void drawTexturedFloor(float startX, float startZ, float endX, float endZ, float
     glVertex3f(endX, height, endZ);
     glEnd();
 
-    // Disable texturing (so subsequent objects won’t be textured)
     glDisable(GL_TEXTURE_2D);
 }
 
@@ -510,10 +506,8 @@ void drawTexturedGrass(float startX, float startZ, float endX, float endZ, float
     float uRepeat = length / tileWidth;
     float vRepeat = width / tileLength;
 
-    // Set color to white so we see the texture unmodified
     glColor3f(1.0f, 1.0f, 1.0f);
 
-    // Enable texturing
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, grassTextureID);
 
@@ -536,29 +530,25 @@ void drawTexturedGrass(float startX, float startZ, float endX, float endZ, float
     glVertex3f(endX, height, endZ);
     glEnd();
 
-    // Disable texturing (so subsequent objects won’t be textured)
     glDisable(GL_TEXTURE_2D);
 }
 
 void drawGlassPanel(float startX, float startZ, float endX, float endZ, float bottomHeight, float topHeight)
 {
-    // Set glass color (opaque)
-    glColor3f(0.7f, 0.85f, 1.0f); // Solid color, no transparency
+    glColor3f(0.7f, 0.85f, 1.0f);
 
     // Calculate normal vector
     float dx = endX - startX;
     float dz = endZ - startZ;
     float length = sqrt(dx * dx + dz * dz);
-    float normalX = dz / length; // Perpendicular to the plane
-    float normalY = 0.0f;        // Glass is vertical, so Y-component is 0
+    float normalX = dz / length;
+    float normalY = 0.0f;
     float normalZ = -dx / length;
 
     glBegin(GL_QUADS);
 
-    // Assign the normal before defining the vertices
     glNormal3f(normalX, normalY, normalZ);
 
-    // Define the vertices of the glass panel
     glVertex3f(startX, bottomHeight, startZ); // Bottom-left
     glVertex3f(startX, topHeight, startZ);    // Top-left
     glVertex3f(endX, topHeight, endZ);        // Top-right
@@ -571,7 +561,6 @@ void drawOpaquePanel(float startX, float startZ, float endX, float endZ, float b
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    // glDepthMask(GL_FALSE);
     glColor4f(0.9f, 0.9f, 0.9f, 1.0f);
     glBegin(GL_QUADS);
     glVertex3f(startX, bottomHeight, startZ);
@@ -579,7 +568,6 @@ void drawOpaquePanel(float startX, float startZ, float endX, float endZ, float b
     glVertex3f(endX, topHeight, endZ);
     glVertex3f(endX, bottomHeight, endZ);
     glEnd();
-    // glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
 }
 
@@ -697,7 +685,6 @@ void drawCustomTriangleWallWithStartHeight(float startX, float startZ, float end
 
     glColor3f(1.0f, 1.0f, 1.0f);
 
-    // Draw the two side faces (triangles)
     glBegin(GL_TRIANGLES);
 
     // Left side face normal
@@ -730,10 +717,8 @@ void drawCustomTriangleWallWithStartHeight(float startX, float startZ, float end
 
     glEnd();
 
-    // Draw the base face (optional)
     glBegin(GL_QUADS);
 
-    // Base normal (facing downward)
     glNormal3f(0.0f, -1.0f, 0.0f);
     glVertex3f(startX + perpX, startHeight, startZ + perpZ); // Bottom-left at start
     glVertex3f(startX - perpX, startHeight, startZ - perpZ); // Bottom-right at start
@@ -747,18 +732,13 @@ void calculateNormal(float ax, float ay, float az,
                      float bx, float by, float bz,
                      float cx, float cy, float cz)
 {
-    // Vector U = B - A
     float ux = bx - ax, uy = by - ay, uz = bz - az;
-
-    // Vector V = C - A
     float vx = cx - ax, vy = cy - ay, vz = cz - az;
 
-    // Cross product U × V
     float nx = uy * vz - uz * vy;
     float ny = uz * vx - ux * vz;
     float nz = ux * vy - uy * vx;
 
-    // Normalize the normal
     float length = sqrt(nx * nx + ny * ny + nz * nz);
     if (length > 0.0f)
     {
@@ -767,7 +747,6 @@ void calculateNormal(float ax, float ay, float az,
         nz /= length;
     }
 
-    // Set the normal for OpenGL
     glNormal3f(nx, ny, nz);
 }
 

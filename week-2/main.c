@@ -12,7 +12,7 @@
 #define TEXHEIGHT 256
 #define UI_TEXWIDTH 256
 #define UI_TEXHEIGHT 256
-// #define M_PI 3.14159265358979323846
+#define M_PI 3.14159265358979323846
 
 float cameraX = 16.0f;
 float cameraY = 1.3f;
@@ -65,10 +65,6 @@ void loadUITexture(const char *filename)
     }
 
     size_t bytesRead = fread(uiTexture, sizeof(uiTexture), 1, fp);
-    if (bytesRead != 1)
-    {
-        fprintf(stderr, "Error reading UI texture data.\n");
-    }
     fclose(fp);
 
     glGenTextures(1, &uiTextureID);
@@ -97,10 +93,6 @@ void loadControlTexture(const char *filename)
     }
 
     size_t bytesRead = fread(controlTexture, sizeof(controlTexture), 1, fp);
-    if (bytesRead != 1)
-    {
-        fprintf(stderr, "Error reading UI texture data.\n");
-    }
     fclose(fp);
 
     glGenTextures(1, &controlTextureID);
@@ -128,10 +120,6 @@ void loadFloorTexture(const char *filename)
     }
 
     size_t bytesRead = fread(floorTexture, sizeof(floorTexture), 1, fp);
-    if (bytesRead != 1)
-    {
-        fprintf(stderr, "Error reading floor texture data.\n");
-    }
     fclose(fp);
 
     glGenTextures(1, &floorTextureID);
@@ -159,10 +147,6 @@ void loadGrassTexture(const char *filename)
     }
 
     size_t bytesRead = fread(floorTexture, sizeof(floorTexture), 1, fp);
-    if (bytesRead != 1)
-    {
-        fprintf(stderr, "Error reading floor texture data.\n");
-    }
     fclose(fp);
 
     glGenTextures(1, &grassTextureID);
@@ -425,7 +409,7 @@ void teleportToRoom(int roomIndex)
         cameraYaw = rooms[roomIndex].yaw;
         cameraPitch = rooms[roomIndex].pitch;
         currentRoomIndex = roomIndex;
-        printf("Teleported to Room %d\n", roomIndex + 1);
+        // printf("Teleported to Room %d\n", roomIndex + 1);
     }
     else if (roomIndex == -1)
     {
@@ -435,7 +419,7 @@ void teleportToRoom(int roomIndex)
         cameraYaw = defaultRoom.yaw;
         cameraPitch = defaultRoom.pitch;
         currentRoomIndex = -1;
-        printf("Teleported to Spawn Point\n");
+        // printf("Teleported to Spawn Point\n");
     }
 }
 

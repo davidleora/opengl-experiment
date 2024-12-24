@@ -25,6 +25,7 @@ bool keyStates[256] = {false};
 float movementSpeed = 0.1f;
 
 GLuint uiTextureID;
+GLuint controlTextureID;
 
 typedef struct
 {
@@ -74,6 +75,38 @@ void loadUITexture(const char *filename)
     glBindTexture(GL_TEXTURE_2D, uiTextureID);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, UI_TEXWIDTH, UI_TEXHEIGHT, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, uiTexture);
+
+    // フィルタリングの設定
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    // テクスチャのラップモードを設定（繰り返し）
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+}
+
+void loadControlTexture(const char *filename)
+{
+    GLubyte controlTexture[UI_TEXHEIGHT][UI_TEXWIDTH][1]; // グレースケール（単一チャンネル）
+
+    FILE *fp = fopen(filename, "rb");
+    if (!fp)
+    {
+        perror(filename);
+        return;
+    }
+
+    size_t bytesRead = fread(controlTexture, sizeof(controlTexture), 1, fp);
+    if (bytesRead != 1)
+    {
+        fprintf(stderr, "Error reading UI texture data.\n");
+    }
+    fclose(fp);
+
+    glGenTextures(1, &controlTextureID);
+    glBindTexture(GL_TEXTURE_2D, controlTextureID);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, UI_TEXWIDTH, UI_TEXHEIGHT, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, controlTexture);
 
     // フィルタリングの設定
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -215,8 +248,84 @@ void renderUI()
     glMatrixMode(GL_MODELVIEW);
 }
 
+void renderControlGuide()
+{
+    // UIのサイズと画面端からの余白を定義
+    float rectWidth = UI_TEXWIDTH;
+    float rectHeight = UI_TEXHEIGHT;
+    float padding = 10.0f;
+
+    float rectX = 0 + padding;
+    float rectY = WINDOW_HEIGHT - rectHeight - padding;
+
+    // プロジェクションとモデルビューのマトリックスを保存
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    // 深度テストを無効化
+    glDisable(GL_DEPTH_TEST);
+
+    // 現在のライティング状態を保存
+    glPushAttrib(GL_LIGHTING_BIT | GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT);
+
+    // ライティングを無効化
+    glDisable(GL_LIGHTING);
+
+    // 必要な他の状態も設定（例：テクスチャ、ブレンディング）
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, controlTextureID);
+
+    // アルファブレンディングを有効化（透明部分がある場合）
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // UIの色を白に設定（テクスチャの色をそのまま表示）
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+    // UIを描画する四角形
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex2f(rectX, rectY);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex2f(rectX + rectWidth, rectY);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex2f(rectX + rectWidth, rectY + rectHeight);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex2f(rectX, rectY + rectHeight);
+    glEnd();
+
+    // テクスチャとブレンディングを無効化
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
+
+    // ライティング状態を復元
+    glPopAttrib();
+
+    // 深度テストを再度有効化
+    glEnable(GL_DEPTH_TEST);
+
+    // マトリックスを復元
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+}
+
 void renderText(float x, float y, const char *text)
 {
+    float textWidth = 0.0f;
+    for (const char *c = text; *c != '\0'; c++)
+    {
+        textWidth += glutBitmapWidth(GLUT_BITMAP_HELVETICA_18, *c);
+    }
+    float textHeight = 18.0f;
+
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -226,12 +335,24 @@ void renderText(float x, float y, const char *text)
     glPushMatrix();
     glLoadIdentity();
 
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBegin(GL_QUADS);
+    glVertex2f(x - 1.7f, y - 3.0f);
+    glVertex2f(x + textWidth + 27.0f, y - 3.0f);
+    glVertex2f(x + textWidth + 27.0f, y + textHeight + 2.0f);
+    glVertex2f(x - 1.7f, y + textHeight + 2.0f);
+    glEnd();
+
+    glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
     glRasterPos2f(x, y);
     for (const char *c = text; *c != '\0'; c++)
     {
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
     }
-
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
     glPopMatrix();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -252,26 +373,25 @@ void init()
 
     // ライティング設定
     glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0); // 0番目の光源を有効化
+    glEnable(GL_LIGHT0);
 
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
-    GLfloat light_position[] = {22.0f, 10.0f, 0.0f, 1.0f}; // 光源の位置
-    GLfloat light_ambient[] = {0.4f, 0.4f, 0.4f, 0.5f};    // 環境光
-    GLfloat light_diffuse[] = {0.7f, 0.7f, 0.7f, 1.0f};    // 拡散光
-    GLfloat light_specular[] = {0.7f, 0.7f, 0.7f, 1.0f};   // 鏡面反射光
+    GLfloat light_position[] = {22.0f, 10.0f, 0.0f, 1.0f};
+    GLfloat light_ambient[] = {0.4f, 0.4f, 0.4f, 0.5f};
+    GLfloat light_diffuse[] = {0.7f, 0.7f, 0.7f, 1.0f};
+    GLfloat light_specular[] = {0.7f, 0.7f, 0.7f, 1.0f};
 
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 
-    // マテリアル設定
-    GLfloat mat_ambient[] = {0.7f, 0.7f, 0.7f, 1.0f};  // 環境光反射
-    GLfloat mat_diffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};  // 拡散反射
-    GLfloat mat_specular[] = {0.0f, 0.0f, 0.0f, 0.0f}; // 鏡面反射
-    GLfloat mat_shininess[] = {50.0f};                 // 鏡面反射の強度
+    GLfloat mat_ambient[] = {0.7f, 0.7f, 0.7f, 1.0f};
+    GLfloat mat_diffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};
+    GLfloat mat_specular[] = {0.0f, 0.0f, 0.0f, 0.0f};
+    GLfloat mat_shininess[] = {50.0f};
 
     glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
@@ -281,6 +401,7 @@ void init()
     loadFloorTexture("assets/textures/flooring.raw");
     loadGrassTexture("assets/textures/grass.raw");
     loadUITexture("assets/textures/UI.raw");
+    loadControlTexture("assets/textures/guide.raw");
 }
 
 Room rooms[] = {
@@ -787,8 +908,9 @@ void display()
     // Render UI text without scaling issues
     char cameraInfo[128];
     snprintf(cameraInfo, sizeof(cameraInfo), "Position: (%.2f, %.2f, %.2f)", cameraX * 4.0f / 3.0f, cameraY, cameraZ * 4.0f / 3.0f);
-    renderText(10, WINDOW_HEIGHT - 20, cameraInfo);
+    renderText(15, WINDOW_HEIGHT - 300, cameraInfo);
     renderUI();
+    renderControlGuide();
 
     // Restore the original projection matrix
     glPopMatrix();
